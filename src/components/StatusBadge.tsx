@@ -11,7 +11,7 @@ const TONE_CLASSES: Record<string, string> = {
   neutral: "bg-line/10 text-line border-line/30",
 };
 
-function inferTone(status: string): StatusBadgeProps["tone"] {
+function inferTone(status: string): NonNullable<StatusBadgeProps["tone"]> {
   const s = status.toUpperCase();
   if (s.includes("COMPLETED") || s === "VERIFIED" || s === "LIVE") return "live";
   if (s.includes("PROGRESS")) return "progress";
