@@ -30,7 +30,6 @@ export default function MeridianField({ className = "", dense = false }: Meridia
           </linearGradient>
         </defs>
         {lines.map((i) => {
-          const spread = 620 + i * 46;
           const topX = 600 + (i - lineCount / 2) * 26;
           return (
             <path
@@ -43,7 +42,7 @@ export default function MeridianField({ className = "", dense = false }: Meridia
           );
         })}
         {/* equatorial arcs */}
-        {[220, 340, 460].map((ry, i) => (
+        {[220, 340, 460].map((ry) => (
           <ellipse
             key={ry}
             cx="600"
