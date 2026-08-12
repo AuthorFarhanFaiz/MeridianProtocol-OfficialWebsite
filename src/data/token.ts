@@ -25,7 +25,7 @@ export const SITE_CONFIG = {
   githubUrl: "https://github.com/MeridianProtocol-Official", // update once repo is public
   twitterUrl: "https://x.com/Meridian_MRDN",
   twitterHandle: "@Meridian_MRDN",
-  discordUrl: "https://discord.gg/2K3B69k3A",
+  discordUrl: "https://discord.gg/ymBr23ppCq",
   telegramUrl: "https://t.me/MeridianProtocolMRDN",
   linkedinUrl: "https://www.linkedin.com/in/meridianprotocol-mrdn",
 } as const;
