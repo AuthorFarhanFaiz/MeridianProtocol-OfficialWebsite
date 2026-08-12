@@ -22,7 +22,7 @@ export const SITE_CONFIG = {
   domain: "meridianprotocol.site",
   url: "https://meridianprotocol.site",
   contactEmail: "admin@meridianprotocol.site",
-  githubUrl: "https://github.com/meridian-protocol", // update once repo is public
+  githubUrl: "https://github.com/MeridianProtocol-Official", // update once repo is public
   twitterUrl: "https://x.com/Meridian_MRDN",
   twitterHandle: "@Meridian_MRDN",
   discordUrl: "https://discord.gg/2K3B69k3A",
