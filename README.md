@@ -105,7 +105,7 @@ belong in `VITE_*` variables, since anything with that prefix is bundled into
 the client-side build. See [SECURITY.md](./SECURITY.md) for the vulnerability
 disclosure process.
 
-## Contributing 
+## Contributing
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
