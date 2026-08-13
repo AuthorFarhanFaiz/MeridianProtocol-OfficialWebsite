@@ -1,0 +1,18 @@
+name = "meridianprotocol-officialwebsite"
+type = "javascript"
+main = "dist/index.js"
+compatibility_date = "2024-01-01"
+
+[env.production]
+routes = [
+  { pattern = "meridianprotocol.site/*", zone_name = "meridianprotocol.site" }
+]
+
+[build]
+command = "npm run build"
+cwd = "."
+watch_paths = ["src/**/*.ts", "src/**/*.tsx"]
+
+[build.upload]
+format = "modules"
+dir = "dist"
