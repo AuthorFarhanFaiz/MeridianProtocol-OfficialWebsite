@@ -2,30 +2,38 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
+
+permissions:
+  contents: read
 
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: 9
+          run_install: false
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
-
-      - name: Audit dependencies
-        run: pnpm audit --audit-level=high || true
 
       - name: Typecheck
         run: pnpm typecheck
@@ -36,37 +44,50 @@ jobs:
       - name: Build
         run: pnpm build
 
+      - name: Verify build output
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "ERROR: dist directory was not created."
+            exit 1
+          fi
+
+          echo "Build successful."
+          echo "Contents of dist:"
+          ls -lah dist
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist
+          if-no-files-found: error
 
   deploy:
+    name: Deploy to Cloudflare Pages
     needs: build
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
         with:
-          version: 9
+          name: dist
+          path: dist
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: "pnpm"
+      - name: Verify deployment files
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "ERROR: dist directory is missing."
+            exit 1
+          fi
 
-      - name: Install dependencies
-        run: pnpm install --no-frozen-lockfile
-
-      - name: Build
-        run: pnpm build
+          echo "Deployment files:"
+          ls -lah dist
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy
+          command: pages deploy dist --project-name=meridianprotocol-officialwebsite
