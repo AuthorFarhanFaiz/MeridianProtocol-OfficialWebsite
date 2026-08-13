@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: read
+  deployments: write
 
 jobs:
   build:
@@ -17,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup pnpm
@@ -44,18 +45,13 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Verify build output
+      - name: Verify dist
         run: |
-          if [ ! -d "dist" ]; then
-            echo "ERROR: dist directory was not created."
-            exit 1
-          fi
-
-          echo "Build successful."
-          echo "Contents of dist:"
+          test -d dist
+          echo "Build output:"
           ls -lah dist
 
-      - name: Upload build artifact
+      - name: Upload dist
         uses: actions/upload-artifact@v4
         with:
           name: dist
@@ -69,21 +65,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download build artifact
+      - name: Download dist
         uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist
 
-      - name: Verify deployment files
+      - name: Verify downloaded dist
         run: |
-          if [ ! -d "dist" ]; then
-            echo "ERROR: dist directory is missing."
-            exit 1
-          fi
-
-          echo "Deployment files:"
+          test -d dist
+          echo "Files ready for deployment:"
           ls -lah dist
+
+      - name: Check Cloudflare Pages projects
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages project list
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
@@ -91,3 +90,4 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=meridianprotocol-officialwebsite
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
