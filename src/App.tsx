@@ -5,6 +5,7 @@ import Home from "@/pages/Home";
 import About from "@/pages/About";
 import Technology from "@/pages/Technology";
 import Token from "@/pages/Token";
+import Staking from "@/pages/Staking";
 import Tokenomics from "@/pages/Tokenomics";
 import Roadmap from "@/pages/Roadmap";
 import Security from "@/pages/Security";
@@ -48,6 +49,7 @@ export default function App() {
         <Route path="/about" element={<About />} />
         <Route path="/technology" element={<Technology />} />
         <Route path="/token" element={<Token />} />
+        <Route path="/staking" element={<Staking />} />
         <Route path="/tokenomics" element={<Tokenomics />} />
         <Route path="/roadmap" element={<Roadmap />} />
         <Route path="/security" element={<Security />} />
