@@ -42,7 +42,14 @@ export default function DocumentPage({ eyebrow, title, pages, updated, href }: D
         </p>
 
         <div className="mt-8 overflow-hidden rounded-lg border border-surface-border bg-surface/30" style={{ height: "80vh" }}>
-          <iframe title={title} src={href} className="h-full w-full" loading="lazy" />
+          <iframe
+            title={title}
+            src={`https://docs.google.com/viewer?url=${encodeURIComponent(
+              window.location.origin + href
+            )}&embedded=true`}
+            className="h-full w-full"
+            loading="lazy"
+          />
         </div>
       </div>
     </div>
