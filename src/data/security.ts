@@ -28,6 +28,13 @@ export const SECURITY_ITEMS: SecurityItem[] = [
       "SolidityScan automated score: 90.77/100 — 0 Critical, 0 High, 1 Medium, 4 Low, 24 Informational, 26 Gas findings. This is an automated static-analysis tool, not a substitute for the independent manual audit.",
   },
   {
+    id: "vesting-verification",
+    status: "VERIFIED",
+    title: "Founder/Team vesting contract (MeridianVesting)",
+    description:
+      "18% of total supply (180,000,000 MRDN) is locked in a fully immutable, ownerless vesting contract — 10-month cliff, then 3-year linear release. No admin function of any kind exists; nobody, including the beneficiary, can access funds ahead of schedule. Verified and funded on BSC Mainnet.",
+  },
+  {
     id: "audit",
     status: "PLANNED / IN PROGRESS",
     title: "Independent security audit",
