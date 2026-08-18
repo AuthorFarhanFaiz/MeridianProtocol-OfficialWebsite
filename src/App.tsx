@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import RootLayout from "@/layouts/RootLayout";
-
+import Dashboard from "@/pages/Dashboard";
 import Home from "@/pages/Home";
 import About from "@/pages/About";
 import Technology from "@/pages/Technology";
@@ -65,6 +65,7 @@ export default function App() {
         <Route path="/whitepaper" element={<Whitepaper />} />
         <Route path="/litepaper" element={<Litepaper />} />
         <Route path="/faq" element={<Faq />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/legal" element={<LegalHub />} />
         <Route path="/document-index" element={<DocumentIndex />} />
