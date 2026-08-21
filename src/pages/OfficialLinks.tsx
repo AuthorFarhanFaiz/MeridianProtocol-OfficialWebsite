@@ -1,6 +1,5 @@
 import { ExternalLink, ShieldAlert, Copy, Check } from "lucide-react";
 import { useState } from "react";
-
 const SOCIAL_LINKS = [
   { label: "Website", value: SITE_CONFIG.domain, href: SITE_CONFIG.url },
   { label: "X (Twitter)", value: SITE_CONFIG.twitterHandle, href: SITE_CONFIG.twitterUrl },
