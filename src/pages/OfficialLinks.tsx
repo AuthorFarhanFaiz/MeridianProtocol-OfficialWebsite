@@ -1,6 +1,5 @@
 import { ExternalLink, ShieldAlert, Copy, Check } from "lucide-react";
 import { useState } from "react";
-import { TOKEN_CONFIG, SITE_CONFIG, CONTRACTS } from "@/data/token";
 
 const SOCIAL_LINKS = [
   { label: "Website", value: SITE_CONFIG.domain, href: SITE_CONFIG.url },
