@@ -15,23 +15,23 @@ export const ROADMAP: RoadmapPhase[] = [
     status: "COMPLETED",
     title: "Foundation",
     description:
-      "Smart contract development, automated unit tests, testnet and mainnet deployment on BNB Smart Chain, contract verification, core website infrastructure.",
+      "Smart contract development, automated unit tests, testnet and mainnet deployment on BNB Smart Chain, contract verification, core website infrastructure, MeridianStaking, MeridianVesting, and MeridianTreasuryTimelock deployment.",
   },
   {
     id: "phase-2",
     phase: "Phase 2",
     status: "IN PROGRESS",
-    title: "Security & documentation",
+    title: "Security & Documentation",
     description:
-      "Independent smart-contract audit, whitepaper, litepaper, legal documentation, risk disclosure, tokenomics finalization.",
+      "Independent smart-contract audit, whitepaper, litepaper, legal documentation, risk disclosure, and tokenomics distribution mechanisms.",
   },
   {
     id: "phase-3",
     phase: "Phase 3",
     status: "PLANNED",
-    title: "Liquidity & market infrastructure",
+    title: "Liquidity & Market Infrastructure",
     description:
-      "Liquidity deployment, liquidity-lock implementation with public proof, trading infrastructure, community expansion — only after Phase 2 is complete.",
+      "Liquidity deployment, liquidity-lock implementation with public proof, trading infrastructure, and community expansion — only after Phase 2 is complete.",
   },
   {
     id: "phase-4",
@@ -39,7 +39,7 @@ export const ROADMAP: RoadmapPhase[] = [
     status: "PLANNED",
     title: "Ecosystem",
     description:
-      "Utility development, applications, developer ecosystem, governance research, broader ecosystem integrations — scoped to what can actually be delivered.",
+      "Utility development, applications, developer ecosystem, governance research, and broader integrations — scoped to what can actually be delivered.",
   },
   {
     id: "phase-5",
