@@ -7,15 +7,20 @@ export default function RootLayout() {
   const location = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen flex-col bg-base">
+    <div className="relative flex min-h-screen flex-col bg-base text-ink">
+      {/* Optional subtle background glow */}
+      <div className="pointer-events-none fixed inset-0 hero-glow opacity-60" />
+
       <Header />
-      <main className="flex-1">
+
+      <main className="relative z-10 flex-1">
         <Outlet />
       </main>
+
       <Footer />
     </div>
   );
