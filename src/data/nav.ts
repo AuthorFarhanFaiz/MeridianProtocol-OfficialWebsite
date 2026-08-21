@@ -5,22 +5,19 @@ export interface NavLink {
 
 export const PRIMARY_NAV: NavLink[] = [
   { label: "Overview", href: "/about" },
-  { label: "Technology", href: "/technology" },
-  { label: "MRDN", href: "/token" },
+  { label: "Token", href: "/token" },
   { label: "Staking", href: "/staking" },
-  { label: "Dashboard", href: "/dashboard" },
   { label: "Tokenomics", href: "/tokenomics" },
   { label: "Roadmap", href: "/roadmap" },
   { label: "Security", href: "/security" },
-  { label: "Documentation", href: "/documentation" },
-  { label: "Community", href: "/community" },
+  { label: "Docs", href: "/documentation" },
 ];
 
 export const FOOTER_NAV = {
   protocol: [
     { label: "Overview", href: "/about" },
     { label: "Technology", href: "/technology" },
-    { label: "MRDN", href: "/token" },
+    { label: "Token", href: "/token" },
     { label: "Staking", href: "/staking" },
     { label: "Dashboard", href: "/dashboard" },
     { label: "Tokenomics", href: "/tokenomics" },
@@ -41,21 +38,21 @@ export const FOOTER_NAV = {
     { label: "Security Center", href: "/security" },
     { label: "Transparency Center", href: "/transparency" },
     { label: "Official Links", href: "/official-links" },
-    { label: "Investors", href: "/investor-disclosure" },
+    { label: "Investor Disclosure", href: "/investor-disclosure" },
   ],
   community: [
-    { label: "X", href: "https://x.com/Meridian_MRDN" },
+    { label: "X / Twitter", href: "https://x.com/Meridian_MRDN" },
     { label: "Telegram", href: "https://t.me/MeridianProtocolMRDN" },
-    { label: "Discord", href: "https://discord.gg/7DxG75Ajt8" },
+    { label: "Discord", href: "https://discord.gg/ymBr23ppCq" },
     { label: "Contact", href: "/contact" },
   ],
   legal: [
-    { label: "Legal & Compliance Center", href: "/legal" },
+    { label: "Legal Hub", href: "/legal" },
     { label: "Document Index", href: "/document-index" },
     { label: "Terms of Use", href: "/terms" },
     { label: "Privacy Policy", href: "/privacy" },
+    { label: "Cookie Policy", href: "/cookie-policy" },
     { label: "Risk Disclosure", href: "/risk-disclosure" },
-    { label: "Token Disclosure", href: "/token-disclosure" },
-    { label: "Regulatory Review", href: "/regulatory-review" },
+    { label: "Disclaimer", href: "/disclaimer" },
   ],
 };
