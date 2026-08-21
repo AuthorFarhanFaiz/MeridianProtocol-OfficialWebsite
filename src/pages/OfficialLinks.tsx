@@ -1,5 +1,7 @@
 import { ExternalLink, ShieldAlert, Copy, Check } from "lucide-react";
 import { useState } from "react";
+import { SITE_CONFIG, CONTRACTS } from "@/data/token";
+
 const SOCIAL_LINKS = [
   { label: "Website", value: SITE_CONFIG.domain, href: SITE_CONFIG.url },
   { label: "X (Twitter)", value: SITE_CONFIG.twitterHandle, href: SITE_CONFIG.twitterUrl },
@@ -32,9 +34,10 @@ function CopyButton({ text }: { text: string }) {
 }
 
 export default function OfficialLinks() {
+  const contractList = Object.values(CONTRACTS);
+
   return (
     <div>
-      {/* Header */}
       <section className="border-b border-surface-border">
         <div className="container-page py-16 sm:py-20">
           <div className="mx-auto max-w-2xl">
@@ -52,7 +55,6 @@ export default function OfficialLinks() {
         </div>
       </section>
 
-      {/* Social & Channels */}
       <section className="border-b border-surface-border">
         <div className="container-page py-12">
           <div className="mx-auto max-w-2xl">
@@ -60,7 +62,6 @@ export default function OfficialLinks() {
               Channels
             </p>
             <h2 className="mt-2 text-xl font-medium text-ink">Official Channels</h2>
-
             <div className="mt-6 divide-y divide-surface-border overflow-hidden rounded-2xl border border-surface-border">
               {SOCIAL_LINKS.map((l) => (
                 <a
@@ -84,19 +85,15 @@ export default function OfficialLinks() {
         </div>
       </section>
 
-      {/* Contracts */}
       <section className="border-b border-surface-border bg-surface/10">
         <div className="container-page py-12">
           <div className="mx-auto max-w-2xl">
             <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-line">
               On-Chain
             </p>
-            <h2 className="mt-2 text-xl font-medium text-ink">
-              Verified Contracts
-            </h2>
-
+            <h2 className="mt-2 text-xl font-medium text-ink">Verified Contracts</h2>
             <div className="mt-6 space-y-4">
-              {Object.values(CONTRACTS).map((c) => (
+              {contractList.map((c) => (
                 <div
                   key={c.address}
                   className="rounded-2xl border border-surface-border bg-base/60 p-5"
@@ -127,7 +124,6 @@ export default function OfficialLinks() {
         </div>
       </section>
 
-      {/* Warning */}
       <section>
         <div className="container-page py-12">
           <div className="mx-auto max-w-2xl">
@@ -149,4 +145,4 @@ export default function OfficialLinks() {
       </section>
     </div>
   );
-      }
+                  }
