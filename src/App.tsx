@@ -64,7 +64,6 @@ export default function App() {
         <Route path="/whitepaper" element={<Whitepaper />} />
         <Route path="/litepaper" element={<Litepaper />} />
         <Route path="/faq" element={<Faq />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/legal" element={<LegalHub />} />
         <Route path="/document-index" element={<DocumentIndex />} />
