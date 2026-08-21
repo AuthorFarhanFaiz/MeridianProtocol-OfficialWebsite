@@ -2,6 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import CookieConsent from "@/components/CookieConsent";
 
 export default function RootLayout() {
   const location = useLocation();
@@ -22,6 +23,8 @@ export default function RootLayout() {
       </main>
 
       <Footer />
+
+      <CookieConsent />
     </div>
   );
 }
