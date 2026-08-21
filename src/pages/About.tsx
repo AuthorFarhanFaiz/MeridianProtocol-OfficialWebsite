@@ -1,4 +1,3 @@
-import { TOKEN_CONFIG, PROJECT_STATUS, CONTRACTS } from "@/data/token";
 import StatusBadge from "@/components/StatusBadge";
 import { Link } from "react-router-dom";
 import { ArrowRight, ShieldCheck, FileText, Eye } from "lucide-react";
