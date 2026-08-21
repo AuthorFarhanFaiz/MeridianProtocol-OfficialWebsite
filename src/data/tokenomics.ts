@@ -3,7 +3,8 @@ export type AllocationStatus =
   | "Locked"
   | "Vesting"
   | "Planned"
-  | "TBD";
+  | "TBD"
+  | "Live";
 
 export interface AllocationCategory {
   id: string;
@@ -14,11 +15,6 @@ export interface AllocationCategory {
   note?: string;
 }
 
-// Allocation percentages were finalized following industry-standard
-// research (team allocations typically 15-25%, community 40%+). On-chain
-// distribution mechanisms are being deployed progressively — each
-// category's status reflects exactly what is live today, not what is
-// merely planned.
 export const ALLOCATION_CATEGORIES: AllocationCategory[] = [
   {
     id: "team",
@@ -27,7 +23,7 @@ export const ALLOCATION_CATEGORIES: AllocationCategory[] = [
     percent: "18%",
     tokens: "180,000,000",
     note:
-      "Live and funded on BSC Mainnet — MeridianVesting contract (0xCb89849805B44A9D8Ee11B5D40cd6962d4fF93f7). 10-month cliff, then 3-year linear release. Fully immutable, no admin function of any kind.",
+      "Live and funded — MeridianVesting (0xCb89849805B44A9D8Ee11B5D40cd6962d4fF93f7). 10-month cliff + 3-year linear release. Fully immutable.",
   },
   {
     id: "community",
@@ -48,10 +44,11 @@ export const ALLOCATION_CATEGORIES: AllocationCategory[] = [
   {
     id: "treasury",
     name: "Treasury",
-    status: "Confirmed",
+    status: "Live",
     percent: "15%",
     tokens: "150,000,000",
-    note: "Allocation finalized. Recommended custody: multisig (not yet established).",
+    note:
+      "Live and funded — MeridianTreasuryTimelock (0x921B238633241e14606217b9bFa2e2dE0Db67033). 3-day minimum delay.",
   },
   {
     id: "marketing",
@@ -72,4 +69,4 @@ export const ALLOCATION_CATEGORIES: AllocationCategory[] = [
 ];
 
 export const TOKENOMICS_NOTE =
-  "Total supply is a fact about the contract. Circulating supply depends on which wallets are actually distributed and unlocked. The Founder/Team allocation is 0% liquid at any point — it is entirely subject to the MeridianVesting schedule. The remaining 82% stays in its current holding pattern until each category's own distribution mechanism goes live.";
+  "Total supply is fixed and verifiable on-chain. Circulating supply remains undefined until public distribution and liquidity deployment occur. The Founder/Team allocation is locked under an immutable vesting schedule. The Treasury allocation is secured in a live timelock contract.";
