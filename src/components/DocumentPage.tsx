@@ -16,11 +16,6 @@ export default function DocumentPage({
   updated,
   href,
 }: DocPageProps) {
-  const absoluteUrl =
-    typeof window !== "undefined"
-      ? `${window.location.origin}${href}`
-      : href;
-
   return (
     <div>
       <section className="border-b border-surface-border">
@@ -102,18 +97,28 @@ export default function DocumentPage({
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4 text-[13.5px] text-ink-dim">
-              <Link to="/documentation" className="underline underline-offset-2 hover:text-ink">
+              <Link
+                to="/documentation"
+                className="underline underline-offset-2 hover:text-ink"
+              >
                 ← Documentation index
               </Link>
               <Link
-                to={title.toLowerCase().includes("white") ? "/litepaper" : "/whitepaper"}
+                to={
+                  title.toLowerCase().includes("white")
+                    ? "/litepaper"
+                    : "/whitepaper"
+                }
                 className="underline underline-offset-2 hover:text-ink"
               >
                 {title.toLowerCase().includes("white")
                   ? "Read Litepaper →"
                   : "Read Whitepaper →"}
               </Link>
-              <Link to="/security" className="underline underline-offset-2 hover:text-ink">
+              <Link
+                to="/security"
+                className="underline underline-offset-2 hover:text-ink"
+              >
                 Security status
               </Link>
             </div>
