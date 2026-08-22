@@ -22,7 +22,7 @@ export default {
           DEFAULT: "#F1F4F9",
           dim: "#94A0B8",
           faint: "#5E6A82",
-          muted: "# rec 3E485C",
+          muted: "#3E485C",
         },
         line: {
           DEFAULT: "#C9A227",
@@ -116,3 +116,4 @@ export default {
   },
   plugins: [],
 } satisfies Config;
+                   
