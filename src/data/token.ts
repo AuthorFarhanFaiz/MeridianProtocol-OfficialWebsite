@@ -54,7 +54,7 @@ export const CONTRACTS = {
     verified: true,
     status: "Live",
     allocation: "150,000,000 MRDN (15%)",
-    minDelay: "3 days (259200 seconds)",
+    minDelay: "3 days (72 hours / 259200 seconds)",
   },
 } as const;
 
