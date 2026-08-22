@@ -25,6 +25,11 @@ interface Env {
   SITE_URL?: string;
 }
 
+interface RequestContext {
+  request: Request;
+  env: Env;
+}
+
 // Ordered fallback list — first one that responds successfully wins.
 // Update this list from https://openrouter.ai/models?fmt=cards&order=pricing-low-to-high
 // whenever a model gets delisted (OpenRouter returns 404/429 for dead ones,
@@ -67,14 +72,14 @@ function buildKnowledgeContext(): string {
   );
 }
 
-export const onRequestOptions: PagesFunction<Env> = async ({ request }) => {
+export const onRequestOptions = async ({ request }: RequestContext): Promise<Response> => {
   return new Response(null, {
     status: 204,
     headers: corsHeaders(request.headers.get("Origin")),
   });
 };
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+export const onRequestPost = async ({ request, env }: RequestContext): Promise<Response> => {
   const origin = request.headers.get("Origin");
 
   let body: { q?: string };
@@ -169,4 +174,4 @@ ${buildKnowledgeContext()}
   // Every model candidate failed — let the client fall back gracefully.
   return json({ answer: FALLBACK_ANSWER }, 200, origin);
 };
-      
+    
