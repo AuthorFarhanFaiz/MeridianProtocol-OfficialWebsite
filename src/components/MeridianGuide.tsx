@@ -55,9 +55,9 @@ export default function MeridianGuide() {
     setBusy(true);
 
     try {
-      // Offline-first. Add webEndpoint later when Worker is ready:
-      // await askMeridianGuide(text, { webEndpoint: "/api/guide" })
-      const answer = await askMeridianGuide(text);
+      // Canned facts answer instantly offline; anything else goes to
+      // the live AI backend at /api/guide (Cloudflare Pages Function).
+      const answer = await askMeridianGuide(text, { webEndpoint: "/api/guide" });
       setMessages((m) => [
         ...m,
         { id: `g-${Date.now()}`, role: "guide", text: answer },
@@ -197,3 +197,4 @@ export default function MeridianGuide() {
     </>
   );
         }
+        
