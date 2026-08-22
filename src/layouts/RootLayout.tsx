@@ -2,7 +2,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import CookieConsent from "@/components/CookieConsent";
+import MeridianGuide from "@/components/MeridianGuide";
 
 export default function RootLayout() {
   const location = useLocation();
@@ -13,7 +13,6 @@ export default function RootLayout() {
 
   return (
     <div className="relative flex min-h-screen flex-col bg-base text-ink">
-      {/* Optional subtle background glow */}
       <div className="pointer-events-none fixed inset-0 hero-glow opacity-60" />
 
       <Header />
@@ -24,7 +23,8 @@ export default function RootLayout() {
 
       <Footer />
 
-      <CookieConsent />
+      {/* Official chatbot — har page pe */}
+      <MeridianGuide />
     </div>
   );
 }
