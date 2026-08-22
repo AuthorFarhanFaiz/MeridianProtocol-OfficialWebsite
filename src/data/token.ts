@@ -84,12 +84,12 @@ export const PROJECT_STATUS = {
 export const DOCUMENTS = {
   whitepaper: {
     href: "/documents/meridian-whitepaper.pdf",
-    pages: 22,
+    pages: 26,
     updated: "2026",
   },
   litepaper: {
     href: "/documents/meridian-litepaper.pdf",
-    pages: 13,
+    pages: 14,
     updated: "2026",
   },
 } as const;
