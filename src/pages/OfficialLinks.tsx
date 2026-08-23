@@ -69,7 +69,7 @@ export default function OfficialLinks() {
                   href={l.href}
                   target={l.href.startsWith("http") ? "_blank" : undefined}
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between bg-base/50 px-5 py-4 transition hover:bg-surface/40"
+                  className="flex items-center justify-between bg-base/50 px-5 py-4 transition-all duration-300 hover:translate-x-1 hover:bg-surface/40"
                 >
                   <div>
                     <p className="font-mono text-[11px] uppercase tracking-wider text-ink-faint">
@@ -77,7 +77,7 @@ export default function OfficialLinks() {
                     </p>
                     <p className="mt-0.5 text-[14px] text-ink">{l.value}</p>
                   </div>
-                  <ExternalLink className="h-4 w-4 text-ink-faint" />
+                  <ExternalLink className="h-4 w-4 text-ink-faint transition-colors group-hover:text-line" />
                 </a>
               ))}
             </div>
@@ -96,7 +96,7 @@ export default function OfficialLinks() {
               {contractList.map((c) => (
                 <div
                   key={c.address}
-                  className="rounded-2xl border border-surface-border bg-base/60 p-5"
+                  className="rounded-2xl border border-surface-border bg-base/60 p-5 transition-all duration-300 hover:border-line/20 hover:shadow-glow-sm"
                 >
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                     <div>
@@ -127,7 +127,7 @@ export default function OfficialLinks() {
       <section>
         <div className="container-page py-12">
           <div className="mx-auto max-w-2xl">
-            <div className="flex items-start gap-4 rounded-2xl border border-status-danger/30 bg-status-danger/10 p-6">
+            <div className="flex items-start gap-4 rounded-2xl border border-status-danger/30 bg-status-danger/10 p-6 shadow-[0_0_24px_-8px_rgba(255,69,58,0.35)]">
               <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-status-danger" />
               <div className="text-[14px] leading-relaxed text-ink">
                 <p>
@@ -146,3 +146,4 @@ export default function OfficialLinks() {
     </div>
   );
                   }
+                  
