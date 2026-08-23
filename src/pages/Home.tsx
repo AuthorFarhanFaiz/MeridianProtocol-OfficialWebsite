@@ -124,8 +124,11 @@ export default function Home() {
               label: "Contract Status",
               value: TOKEN_CONFIG.contractVerified ? "Verified" : "Unverified",
             },
-          ].map((item) => (
-            <div key={item.label}>
+          ].map((item, i) => (
+            <div
+              key={item.label}
+              className={i > 0 ? "sm:border-l sm:border-surface-border sm:pl-8" : ""}
+            >
               <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-faint">
                 {item.label}
               </p>
@@ -196,9 +199,11 @@ export default function Home() {
           ].map((f) => (
             <div
               key={f.title}
-              className="rounded-2xl border border-surface-border bg-surface/30 p-7 transition-all duration-300 hover:border-line/20 hover:bg-surface/50"
+              className="group rounded-2xl border border-surface-border bg-surface/30 p-7 transition-all duration-300 hover:border-line/20 hover:bg-surface/50 hover:shadow-glow-sm"
             >
-              <f.icon className="h-5 w-5 text-line" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-line/10 transition-all duration-300 group-hover:scale-110 group-hover:bg-line/20">
+                <f.icon className="h-5 w-5 text-line" />
+              </div>
               <h3 className="mt-5 text-[16px] font-medium text-ink">{f.title}</h3>
               <p className="mt-3 text-[14px] leading-relaxed text-ink-dim">{f.body}</p>
             </div>
@@ -228,7 +233,7 @@ export default function Home() {
             {ROADMAP.map((phase) => (
               <div
                 key={phase.id}
-                className="rounded-2xl border border-surface-border bg-base/80 p-6 transition-all hover:border-line/20"
+                className="rounded-2xl border border-surface-border bg-base/80 p-6 transition-all duration-300 hover:border-line/20 hover:shadow-glow-sm"
               >
                 <StatusBadge status={phase.status} />
                 <p className="mt-4 font-mono text-[11px] text-ink-faint">{phase.phase}</p>
@@ -248,21 +253,25 @@ export default function Home() {
 
       {/* Final CTA */}
       <section className="container-page py-24">
-        <div className="rounded-3xl border border-surface-border bg-surface/40 p-12 text-center sm:p-16">
-          <h2 className="text-2xl font-medium text-ink sm:text-3xl">
-            Read the documentation before anything else.
-          </h2>
-          <p className="mx-auto mt-4 max-w-lg text-[15px] text-ink-dim">
-            The whitepaper, litepaper, and security page describe exactly what exists today and what’s still planned.
-          </p>
-          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button href="/documentation">Browse documentation</Button>
-            <Button href="/security" variant="secondary">
-              Security status
-            </Button>
+        <div className="relative overflow-hidden rounded-3xl border border-surface-border bg-surface/40 p-12 text-center sm:p-16">
+          <div className="pointer-events-none absolute inset-0 card-glow" aria-hidden="true" />
+          <div className="relative">
+            <h2 className="text-2xl font-medium text-ink sm:text-3xl">
+              Read the documentation before anything else.
+            </h2>
+            <p className="mx-auto mt-4 max-w-lg text-[15px] text-ink-dim">
+              The whitepaper, litepaper, and security page describe exactly what exists today and what’s still planned.
+            </p>
+            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Button href="/documentation">Browse documentation</Button>
+              <Button href="/security" variant="secondary">
+                Security status
+              </Button>
+            </div>
           </div>
         </div>
       </section>
     </div>
   );
-              }
+          }
+          
