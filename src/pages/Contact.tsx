@@ -46,8 +46,10 @@ export default function Contact() {
       <section className="border-b border-surface-border">
         <div className="container-page py-12">
           <div className="mx-auto max-w-xl">
-            <div className="flex flex-col items-center gap-4 rounded-2xl border border-surface-border bg-surface/40 p-8 text-center">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-line/20 bg-line/10">
+            <div className="relative overflow-hidden rounded-2xl border border-surface-border bg-surface/40 p-8 text-center">
+              <div className="pointer-events-none absolute inset-0 card-glow" aria-hidden="true" />
+              <div className="relative flex flex-col items-center gap-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-line/20 bg-line/10 transition-transform duration-300 hover:scale-110">
                 <Mail className="h-5 w-5 text-line" />
               </div>
               <div>
@@ -65,6 +67,7 @@ export default function Contact() {
                 This is the only official contact email. Use this exact address
                 anywhere you list or submit the project.
               </p>
+              </div>
             </div>
           </div>
         </div>
@@ -157,7 +160,7 @@ export default function Contact() {
 
                 <button
                   type="submit"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-line px-6 py-3.5 text-[14px] font-semibold text-base-deep transition-all hover:bg-line-soft hover:shadow-glow-sm"
+                  className="shine-sweep inline-flex w-full items-center justify-center gap-2 rounded-full bg-line px-6 py-3.5 text-[14px] font-semibold text-base-deep transition-all hover:bg-line-soft hover:shadow-glow-sm"
                 >
                   Send Message
                   <Send className="h-4 w-4" />
@@ -174,4 +177,5 @@ export default function Contact() {
       </section>
     </div>
   );
-                    }
+                  }
+                    
