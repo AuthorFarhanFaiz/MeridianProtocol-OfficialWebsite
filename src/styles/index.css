@@ -92,6 +92,51 @@
   .card-glow {
     background: radial-gradient(circle at top center, rgba(201, 162, 39, 0.06), transparent 70%);
   }
+
+  /* Premium shine sweep — used on primary CTAs to catch the eye on hover */
+  .shine-sweep {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .shine-sweep::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      115deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.35) 45%,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 70%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.7s ease;
+    pointer-events: none;
+  }
+
+  .shine-sweep:hover::after {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* Reduced motion support */
@@ -104,4 +149,5 @@
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-                                }
+  }
+      
