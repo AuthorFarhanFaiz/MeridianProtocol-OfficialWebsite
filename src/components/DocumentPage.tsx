@@ -43,7 +43,7 @@ export default function DocumentPage({
                 <a
                   href={href}
                   download
-                  className="inline-flex items-center gap-1.5 rounded-md border border-surface-border px-4 py-2.5 text-[13px] text-ink transition hover:border-line/50"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-surface-border px-4 py-2.5 text-[13px] text-ink transition-all duration-300 hover:border-line/50 hover:bg-surface/40"
                 >
                   <Download className="h-3.5 w-3.5" />
                   Download PDF
@@ -52,7 +52,7 @@ export default function DocumentPage({
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-md bg-line px-4 py-2.5 text-[13px] font-semibold text-base-deep transition hover:bg-line-soft"
+                  className="shine-sweep inline-flex items-center gap-1.5 rounded-full bg-line px-4 py-2.5 text-[13px] font-semibold text-base-deep transition-all duration-300 hover:bg-line-soft hover:shadow-glow-sm"
                 >
                   Open PDF
                   <ExternalLink className="h-3.5 w-3.5" />
@@ -66,7 +66,7 @@ export default function DocumentPage({
       <section className="border-b border-surface-border bg-surface/10">
         <div className="container-page py-10">
           <div className="mx-auto max-w-3xl">
-            <div className="overflow-hidden rounded-2xl border border-surface-border bg-base shadow-sm">
+            <div className="overflow-hidden rounded-2xl border border-surface-border bg-base shadow-[0_0_40px_-15px_rgba(201,162,39,0.15)]">
               <div className="flex items-center gap-2 border-b border-surface-border px-4 py-3">
                 <FileText className="h-4 w-4 text-line" />
                 <span className="font-mono text-[11px] uppercase tracking-wider text-ink-faint">
