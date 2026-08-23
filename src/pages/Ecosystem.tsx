@@ -24,7 +24,7 @@ export default function Ecosystem() {
           {ECOSYSTEM_ITEMS.map((item) => (
             <div
               key={item.name}
-              className="flex items-center justify-between rounded-md border border-surface-border bg-surface/30 px-4 py-3"
+              className="flex items-center justify-between rounded-2xl border border-surface-border bg-surface/30 px-5 py-4 transition-all duration-300 hover:border-line/20 hover:bg-surface/50"
             >
               <span className="text-[13.5px] text-ink">{item.name}</span>
               <StatusBadge status={item.status} tone="planned" />
