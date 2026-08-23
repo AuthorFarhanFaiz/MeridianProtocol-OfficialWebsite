@@ -26,15 +26,16 @@ export default function Tokenomics() {
       <section className="border-b border-surface-border">
         <div className="container-page py-12">
           <div className="mx-auto max-w-3xl">
-            <div className="rounded-2xl border border-surface-border bg-surface/40 p-8 text-center">
-              <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-faint">
+            <div className="relative overflow-hidden rounded-2xl border border-surface-border bg-surface/40 p-8 text-center">
+              <div className="pointer-events-none absolute inset-0 card-glow" aria-hidden="true" />
+              <p className="relative font-mono text-[11px] uppercase tracking-[0.15em] text-ink-faint">
                 Total Supply
               </p>
-              <p className="mt-3 font-display text-3xl font-medium text-ink sm:text-4xl">
+              <p className="relative mt-3 font-display text-3xl font-medium text-ink sm:text-4xl">
                 {TOKEN_CONFIG.totalSupply}{" "}
                 <span className="text-ink-dim">{TOKEN_CONFIG.symbol}</span>
               </p>
-              <p className="mt-2 text-[13.5px] text-ink-faint">
+              <p className="relative mt-2 text-[13.5px] text-ink-faint">
                 Fixed at deployment · No mint function exists
               </p>
             </div>
@@ -59,9 +60,9 @@ export default function Tokenomics() {
               {ALLOCATION_CATEGORIES.map((c) => (
                 <div
                   key={c.id}
-                  className="flex flex-col gap-3 bg-base/60 px-5 py-5 sm:flex-row sm:items-center sm:justify-between"
+                  className="group flex flex-col gap-3 bg-base/60 px-5 py-5 transition-colors duration-300 hover:bg-surface/40 sm:flex-row sm:items-center sm:justify-between"
                 >
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-3">
                       <span className="text-[15px] font-medium text-ink">
                         {c.name}
@@ -79,6 +80,14 @@ export default function Tokenomics() {
                     )}
                     {c.note && (
                       <p className="mt-1 text-[12.5px] text-ink-faint">{c.note}</p>
+                    )}
+                    {c.percent && (
+                      <div className="mt-3 h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-surface-border/60">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-line to-line-bright transition-all duration-700 ease-out"
+                          style={{ width: c.percent }}
+                        />
+                      </div>
                     )}
                   </div>
                   <StatusBadge
@@ -113,4 +122,5 @@ export default function Tokenomics() {
       </section>
     </div>
   );
-      }
+                    }
+                  
