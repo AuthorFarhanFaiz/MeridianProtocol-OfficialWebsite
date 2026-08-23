@@ -13,7 +13,7 @@ export type ChatEntry = {
 
 export const BOT_NAME = "Meridian Guide";
 export const BOT_TAGLINE = "Official help · Public facts only";
-export const DAILY_MSG_LIMIT = 6;
+export const DAILY_AI_LIMIT = 8; // per-day live-AI calls per visitor IP (local knowledge-base answers stay unlimited for everyone); the owner-unlock code is NOT stored here — see functions/api/guide.ts and the OWNER_UNLOCK_CODE Cloudflare secret
 
 export const CHAT_SYSTEM_PROMPT = `
 You are Meridian Guide, the official on-site assistant for Meridian Protocol (MRDN).
@@ -357,9 +357,10 @@ export const CHAT_KNOWLEDGE: ChatEntry[] = [
     id: "help",
     patterns: ["help", "what can you do", "commands", "menu"],
     answer:
-      "You can ask me about: MRDN token facts, contract addresses, staking, vesting, treasury, tokenomics, audit status, roadmap, docs, risks, and official links. I answer from public information only. Daily message limits apply.",
+      "You can ask me about: MRDN token facts, contract addresses, staking, vesting, treasury, tokenomics, audit status, roadmap, docs, risks, and official links. I answer from public information only.",
   },
 ];
 
 export const FALLBACK_ANSWER =
   "I don’t have a specific entry for that in the official knowledge base. Please check Documentation, FAQ, Security, or Official Links on meridianprotocol.site — or email admin@meridianprotocol.site for serious inquiries.";
+      
