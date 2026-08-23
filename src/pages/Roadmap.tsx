@@ -28,17 +28,22 @@ export default function Roadmap() {
           <div className="mx-auto max-w-3xl">
             <div className="relative space-y-12 border-l border-surface-border pl-8 sm:pl-10">
               {ROADMAP.map((phase) => (
-                <div key={phase.id} className="relative">
+                <div key={phase.id} className="group relative rounded-xl transition-all duration-300 hover:bg-surface/20 hover:pl-3 sm:hover:pl-4">
                   {/* Dot */}
-                  <span
-                    className={`absolute -left-[41px] top-1.5 h-3.5 w-3.5 rounded-full border-2 border-base sm:-left-[49px] ${
-                      phase.status === "COMPLETED"
-                        ? "bg-status-live"
-                        : phase.status === "IN PROGRESS"
-                        ? "bg-status-progress"
-                        : "bg-line/40"
-                    }`}
-                  />
+                  <span className="absolute -left-[41px] top-1.5 flex h-3.5 w-3.5 sm:-left-[49px]">
+                    {phase.status === "IN PROGRESS" && (
+                      <span className="pulse-ring absolute inline-flex h-full w-full rounded-full bg-status-progress" />
+                    )}
+                    <span
+                      className={`relative inline-flex h-3.5 w-3.5 rounded-full border-2 border-base transition-shadow duration-300 ${
+                        phase.status === "COMPLETED"
+                          ? "bg-status-live shadow-[0_0_10px_rgba(52,199,89,0.5)]"
+                          : phase.status === "IN PROGRESS"
+                          ? "bg-status-progress"
+                          : "bg-line/40"
+                      }`}
+                    />
+                  </span>
 
                   <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-faint">
                     {phase.phase}
