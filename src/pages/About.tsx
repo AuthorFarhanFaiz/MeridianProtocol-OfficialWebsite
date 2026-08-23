@@ -78,7 +78,7 @@ export default function About() {
               ].map((item) => (
                 <div
                   key={item.title}
-                  className="rounded-2xl border border-surface-border bg-base/60 p-6"
+                  className="rounded-2xl border border-surface-border bg-base/60 p-6 transition-all duration-300 hover:border-line/20 hover:shadow-glow-sm"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <h3 className="text-[15px] font-medium text-ink">{item.title}</h3>
@@ -121,8 +121,8 @@ export default function About() {
                   body: "Whitepaper and litepaper describe the design without guaranteed-return language.",
                 },
               ].map((item) => (
-                <div key={item.title} className="flex gap-5">
-                  <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-surface-border bg-surface/40">
+                <div key={item.title} className="group flex gap-5">
+                  <div className="mt-1 flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-surface-border bg-surface/40 transition-all duration-300 group-hover:scale-110 group-hover:border-line/40 group-hover:shadow-glow-sm">
                     <item.icon className="h-4 w-4 text-line" />
                   </div>
                   <div>
@@ -167,4 +167,5 @@ export default function About() {
       </section>
     </div>
   );
-                    }
+                  }
+      
