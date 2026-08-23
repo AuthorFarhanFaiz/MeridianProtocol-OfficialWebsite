@@ -19,7 +19,7 @@ export default function Header() {
           <img
             src="/favicon/token-icon.png"
             alt="Meridian Protocol"
-            className="h-8 w-8 rounded-full ring-1 ring-line/20 transition-all group-hover:ring-line/50"
+            className="h-8 w-8 rounded-full ring-1 ring-line/20 transition-all duration-300 group-hover:ring-line/60 group-hover:shadow-glow-sm"
           />
           <div className="flex flex-col leading-none">
             <span className="font-display text-[15px] font-semibold tracking-wide text-ink">
@@ -116,4 +116,5 @@ export default function Header() {
       )}
     </header>
   );
-                }
+          }
+      
