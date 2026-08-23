@@ -58,7 +58,9 @@ export default function Token() {
       <section className="border-b border-surface-border">
         <div className="container-page py-12">
           <div className="mx-auto max-w-3xl">
-            <div className="rounded-2xl border border-surface-border bg-surface/40 p-6 backdrop-blur-sm">
+            <div className="relative overflow-hidden rounded-2xl border border-surface-border bg-surface/40 p-6 backdrop-blur-sm">
+              <div className="pointer-events-none absolute inset-0 card-glow" aria-hidden="true" />
+              <div className="relative">
               <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-faint">
                 Contract Address
               </p>
@@ -78,11 +80,12 @@ export default function Token() {
                     href={TOKEN_CONFIG.explorerUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-line px-5 py-2.5 text-[13px] font-semibold text-base-deep transition-all hover:bg-line-soft"
+                    className="shine-sweep inline-flex items-center gap-1.5 rounded-full bg-line px-5 py-2.5 text-[13px] font-semibold text-base-deep transition-all hover:bg-line-soft hover:shadow-glow-sm"
                   >
                     BscScan <ExternalLink className="h-3.5 w-3.5" />
                   </a>
                 </div>
+              </div>
               </div>
             </div>
 
@@ -103,7 +106,7 @@ export default function Token() {
                     href={`${TOKEN_CONFIG.explorerUrl}${l.suffix}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-surface-border px-4 py-2 text-[12.5px] text-ink-dim transition-all hover:border-line/40 hover:text-ink"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-surface-border px-4 py-2 text-[12.5px] text-ink-dim transition-all duration-300 hover:border-line/40 hover:bg-surface/40 hover:text-ink"
                   >
                     {l.label} <ExternalLink className="h-3 w-3 opacity-70" />
                   </a>
@@ -125,7 +128,7 @@ export default function Token() {
 
             <div className="mt-8 grid gap-x-10 gap-y-6 sm:grid-cols-2">
               {FACTS.map((f) => (
-                <div key={f.label} className="border-b border-surface-border pb-4">
+                <div key={f.label} className="border-b border-surface-border pb-4 transition-colors duration-300 hover:border-line/30">
                   <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-faint">
                     {f.label}
                   </p>
@@ -153,7 +156,7 @@ export default function Token() {
               {UTILITY.map((u) => (
                 <div
                   key={u.label}
-                  className="flex items-center justify-between rounded-2xl border border-surface-border bg-base/70 px-5 py-4"
+                  className="flex items-center justify-between rounded-2xl border border-surface-border bg-base/70 px-5 py-4 transition-all duration-300 hover:border-line/20 hover:bg-surface/40"
                 >
                   <span className="text-[14.5px] text-ink">{u.label}</span>
                   <StatusBadge
@@ -188,7 +191,7 @@ export default function Token() {
               {Object.values(CONTRACTS).map((c) => (
                 <div
                   key={c.address}
-                  className="rounded-2xl border border-surface-border bg-surface/30 p-5"
+                  className="rounded-2xl border border-surface-border bg-surface/30 p-5 transition-all duration-300 hover:border-line/20 hover:bg-surface/50"
                 >
                   <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
@@ -217,4 +220,5 @@ export default function Token() {
       </section>
     </div>
   );
-                    }
+                  }
+                
