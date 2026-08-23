@@ -1,49 +1,49 @@
 import {
   CHAT_KNOWLEDGE,
   SAFETY_BLOCK_PATTERNS,
-  DAILY_MSG_LIMIT,
   FALLBACK_ANSWER,
 } from "@/data/chatKnowledge";
 
-const STORAGE_KEY = "mrdn_guide_daily_v1";
+const OWNER_CODE_KEY = "mrdn_guide_code_v1";
+const OWNER_CONFIRMED_KEY = "mrdn_guide_owner_confirmed_v1";
 
-function todayKey(): string {
-  return new Date().toISOString().slice(0, 10);
-}
-
-export function getRemainingMessages(): number {
-  if (typeof window === "undefined") return DAILY_MSG_LIMIT;
+/** The code the user typed via /unlock (unverified until the server confirms it). */
+function getStoredCode(): string | null {
+  if (typeof window === "undefined") return null;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return DAILY_MSG_LIMIT;
-    const data = JSON.parse(raw) as { day: string; count: number };
-    if (data.day !== todayKey()) return DAILY_MSG_LIMIT;
-    return Math.max(0, DAILY_MSG_LIMIT - (data.count || 0));
+    return localStorage.getItem(OWNER_CODE_KEY);
   } catch {
-    return DAILY_MSG_LIMIT;
+    return null;
   }
 }
 
-export function consumeMessage(): boolean {
-  if (typeof window === "undefined") return true;
-  const left = getRemainingMessages();
-  if (left <= 0) return false;
-  const day = todayKey();
+function setStoredCode(code: string) {
+  if (typeof window === "undefined") return;
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    let count = 0;
-    if (raw) {
-      const data = JSON.parse(raw) as { day: string; count: number };
-      if (data.day === day) count = data.count || 0;
-    }
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({ day, count: count + 1 })
-    );
+    localStorage.setItem(OWNER_CODE_KEY, code);
   } catch {
     /* ignore storage errors */
   }
-  return true;
+}
+
+/** True only after the server has actually confirmed the code once. */
+export function isOwnerConfirmed(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return localStorage.getItem(OWNER_CONFIRMED_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function setOwnerConfirmed(v: boolean) {
+  if (typeof window === "undefined") return;
+  try {
+    if (v) localStorage.setItem(OWNER_CONFIRMED_KEY, "1");
+    else localStorage.removeItem(OWNER_CONFIRMED_KEY);
+  } catch {
+    /* ignore storage errors */
+  }
 }
 
 export function checkSafety(input: string): string | null {
@@ -94,7 +94,19 @@ export type AskOptions = {
 };
 
 /**
- * Main entry: safety → daily limit → offline knowledge → optional web → fallback
+ * Owner unlock: stores the typed code locally and sends it with the next
+ * request. The server (functions/api/guide.ts) is the only place that
+ * actually knows the real code (a Cloudflare secret) — this function
+ * never validates it client-side.
+ */
+export function storeOwnerCode(code: string) {
+  setStoredCode(code);
+  setOwnerConfirmed(false); // unconfirmed until the server says otherwise
+}
+
+/**
+ * Main entry: safety → offline knowledge (always free) → live AI
+ * (server enforces the daily per-IP limit; the owner code bypasses it) → fallback.
  */
 export async function askMeridianGuide(
   input: string,
@@ -108,22 +120,22 @@ export async function askMeridianGuide(
   const safety = checkSafety(trimmed);
   if (safety) return safety;
 
-  if (!consumeMessage()) {
-    return `You’ve reached today’s limit (${DAILY_MSG_LIMIT} messages). Please try again tomorrow, or read the docs at meridianprotocol.site/documentation.`;
-  }
-
   const local = matchKnowledge(trimmed);
   if (local) return local;
 
   if (opts.webEndpoint) {
     try {
+      const code = getStoredCode();
       const res = await fetch(opts.webEndpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ q: trimmed }),
+        body: JSON.stringify({ q: trimmed, code: code ?? undefined }),
       });
       if (res.ok) {
-        const data = (await res.json()) as { answer?: string };
+        const data = (await res.json()) as { answer?: string; ownerVerified?: boolean };
+        if (typeof data.ownerVerified === "boolean") {
+          setOwnerConfirmed(data.ownerVerified);
+        }
         if (data.answer && data.answer.trim()) {
           return data.answer.trim();
         }
@@ -134,4 +146,4 @@ export async function askMeridianGuide(
   }
 
   return FALLBACK_ANSWER;
-  }
+}
