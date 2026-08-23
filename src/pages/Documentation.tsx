@@ -47,9 +47,9 @@ export default function Documentation() {
               href={DOCUMENTS.whitepaper.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group rounded-2xl border border-line/30 bg-line/5 p-6 transition-all hover:border-line/50 hover:bg-line/10"
+              className="group rounded-2xl border border-line/30 bg-line/5 p-6 transition-all duration-300 hover:border-line/50 hover:bg-line/10 hover:shadow-glow-sm"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-line/20 bg-line/10">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-line/20 bg-line/10 transition-transform duration-300 group-hover:scale-110">
                 <FileText className="h-4 w-4 text-line" />
               </div>
               <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-line">
@@ -68,9 +68,9 @@ export default function Documentation() {
               href={DOCUMENTS.litepaper.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="group rounded-2xl border border-surface-border bg-surface/30 p-6 transition-all hover:border-line/30"
+              className="group rounded-2xl border border-surface-border bg-surface/30 p-6 transition-all duration-300 hover:border-line/30 hover:bg-surface/50"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-surface-border bg-surface/50">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-surface-border bg-surface/50 transition-transform duration-300 group-hover:scale-110">
                 <BookOpen className="h-4 w-4 text-ink-dim" />
               </div>
               <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-faint">
@@ -120,4 +120,5 @@ export default function Documentation() {
       </section>
     </div>
   );
-              }
+                }
+                           
