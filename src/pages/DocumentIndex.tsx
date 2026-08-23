@@ -14,7 +14,7 @@ export default function DocumentIndex() {
           required and has occurred — one table, nothing hidden.
         </p>
 
-        <div className="mt-10 overflow-x-auto rounded-lg border border-surface-border">
+        <div className="mt-10 overflow-x-auto rounded-2xl border border-surface-border">
           <table className="w-full min-w-[720px] text-left text-[13px]">
             <thead>
               <tr className="border-b border-surface-border bg-surface/40 text-[11px] uppercase tracking-wider text-ink-faint">
@@ -28,10 +28,10 @@ export default function DocumentIndex() {
             </thead>
             <tbody>
               {DOCUMENT_INDEX.map((d) => (
-                <tr key={d.id} className="border-b border-surface-border last:border-0 hover:bg-surface/30">
+                <tr key={d.id} className="border-b border-surface-border transition-colors duration-300 last:border-0 hover:bg-surface/30">
                   <td className="px-4 py-3 font-mono text-[11px] text-ink-faint">{d.id}</td>
                   <td className="px-4 py-3">
-                    <Link to={d.href} className="text-ink hover:text-line">
+                    <Link to={d.href} className="text-ink transition-colors hover:text-line">
                       {d.name}
                     </Link>
                   </td>
@@ -51,7 +51,7 @@ export default function DocumentIndex() {
         <div className="relative mt-6 space-y-8 border-l border-surface-border pl-8">
           {LEGAL_CHANGELOG.map((entry) => (
             <div key={entry.version} className="relative">
-              <span className="absolute -left-[38px] top-1 h-3 w-3 rounded-full border-2 border-base bg-line" />
+              <span className="absolute -left-[38px] top-1 h-3 w-3 rounded-full border-2 border-base bg-line shadow-[0_0_10px_rgba(201,162,39,0.5)]" />
               <div className="flex flex-wrap items-baseline gap-2.5">
                 <h3 className="font-mono text-[13px] text-line">{entry.version}</h3>
                 <span className="text-[12px] text-ink-faint">{entry.date}</span>
