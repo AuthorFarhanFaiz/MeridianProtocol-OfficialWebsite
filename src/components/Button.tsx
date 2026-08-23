@@ -12,7 +12,7 @@ interface ButtonProps {
 
 const VARIANT_CLASSES: Record<string, string> = {
   primary:
-    "bg-line text-base-deep border border-line font-semibold hover:bg-line-soft hover:shadow-glow-sm active:scale-[0.98]",
+    "shine-sweep bg-line text-base-deep border border-line font-semibold hover:bg-line-soft hover:shadow-glow-md active:scale-[0.98]",
   secondary:
     "bg-surface/40 text-ink border border-surface-border hover:border-line/40 hover:bg-surface-raised hover:text-white",
   ghost:
