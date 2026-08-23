@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { MessageCircle, X, Send, Shield } from "lucide-react";
-import { BOT_NAME, BOT_TAGLINE, DAILY_MSG_LIMIT } from "@/data/chatKnowledge";
-import {
-  askMeridianGuide,
-  getRemainingMessages,
-} from "@/lib/meridianChat";
+import { BOT_NAME, BOT_TAGLINE } from "@/data/chatKnowledge";
+import { askMeridianGuide, isOwnerConfirmed, storeOwnerCode } from "@/lib/meridianChat";
 
 type Msg = {
   id: string;
@@ -22,14 +19,9 @@ export default function MeridianGuide() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
-  const [remaining, setRemaining] = useState(DAILY_MSG_LIMIT);
   const [messages, setMessages] = useState<Msg[]>([WELCOME]);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    setRemaining(getRemainingMessages());
-  }, [open, messages]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -45,6 +37,34 @@ export default function MeridianGuide() {
     const text = input.trim();
     if (!text || busy) return;
 
+    // Hidden owner-unlock command — never treated as a normal question.
+    // The code is verified server-side on the next request; usage:
+    //   /unlock YOUR-CODE
+    if (text.toLowerCase().startsWith("/unlock")) {
+      const code = text.slice(7).trim();
+      setInput("");
+      if (!code) return;
+      storeOwnerCode(code);
+      setBusy(true);
+      try {
+        await askMeridianGuide("ping", { webEndpoint: "/api/guide" });
+      } catch {
+        /* ignore — isOwnerConfirmed() below reflects the real result */
+      }
+      setBusy(false);
+      setMessages((m) => [
+        ...m,
+        {
+          id: `g-${Date.now()}`,
+          role: "guide",
+          text: isOwnerConfirmed()
+            ? "Unlocked — this device now has unlimited live AI access."
+            : "That code didn’t match.",
+        },
+      ]);
+      return;
+    }
+
     const userMsg: Msg = {
       id: `u-${Date.now()}`,
       role: "user",
@@ -55,8 +75,8 @@ export default function MeridianGuide() {
     setBusy(true);
 
     try {
-      // Canned facts answer instantly offline; anything else goes to
-      // the live AI backend at /api/guide (Cloudflare Pages Function).
+      // Canned facts answer instantly and are always free; anything else
+      // goes to the live AI backend at /api/guide (Cloudflare Pages Function).
       const answer = await askMeridianGuide(text, { webEndpoint: "/api/guide" });
       setMessages((m) => [
         ...m,
@@ -73,7 +93,6 @@ export default function MeridianGuide() {
       ]);
     } finally {
       setBusy(false);
-      setRemaining(getRemainingMessages());
     }
   }
 
@@ -123,11 +142,11 @@ export default function MeridianGuide() {
                 {BOT_TAGLINE}
               </p>
             </div>
-            <div className="text-right">
-              <p className="font-mono text-[11px] text-ink-dim">
-                {remaining}/{DAILY_MSG_LIMIT} today
-              </p>
-            </div>
+            {isOwnerConfirmed() && (
+              <span className="mt-0.5 rounded-full border border-line/40 px-2 py-0.5 font-mono text-[9px] uppercase tracking-wider text-line">
+                Unlimited
+              </span>
+            )}
           </div>
 
           {/* Messages */}
@@ -172,12 +191,8 @@ export default function MeridianGuide() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onKeyDown}
-              disabled={busy || remaining <= 0}
-              placeholder={
-                remaining <= 0
-                  ? "Daily limit reached — see docs"
-                  : "Ask about MRDN, staking, contracts…"
-              }
+              disabled={busy}
+              placeholder="Ask about MRDN, staking, contracts…"
               className="min-w-0 flex-1 rounded-xl border border-surface-border bg-base px-3 py-2.5 text-[13.5px] text-ink outline-none placeholder:text-ink-faint focus:border-line/50"
               maxLength={500}
               autoComplete="off"
@@ -185,7 +200,7 @@ export default function MeridianGuide() {
             <button
               type="button"
               onClick={() => void send()}
-              disabled={busy || remaining <= 0 || !input.trim()}
+              disabled={busy || !input.trim()}
               className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-line text-base-deep transition hover:bg-line-soft disabled:opacity-40"
               aria-label="Send"
             >
@@ -197,4 +212,4 @@ export default function MeridianGuide() {
     </>
   );
         }
-        
+    
