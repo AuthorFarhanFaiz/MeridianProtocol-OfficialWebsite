@@ -23,14 +23,14 @@ function FooterColumn({
                 href={l.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[13.5px] text-ink-dim transition-colors duration-300 hover:text-ink"
+                className="inline-block text-[13.5px] text-ink-dim transition-all duration-300 hover:translate-x-0.5 hover:text-ink"
               >
                 {l.label}
               </a>
             ) : (
               <Link
                 to={l.href}
-                className="text-[13.5px] text-ink-dim transition-colors duration-300 hover:text-ink"
+                className="inline-block text-[13.5px] text-ink-dim transition-all duration-300 hover:translate-x-0.5 hover:text-ink"
               >
                 {l.label}
               </Link>
@@ -44,16 +44,20 @@ function FooterColumn({
 
 export default function Footer() {
   return (
-    <footer className="border-t border-surface-border bg-base-deep">
+    <footer className="relative border-t border-surface-border bg-base-deep">
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-line/40 to-transparent"
+        aria-hidden="true"
+      />
       <div className="container-page py-16">
         <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 lg:grid-cols-6">
           {/* Brand Column */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-            <div className="flex items-center gap-2.5">
+            <div className="group flex items-center gap-2.5">
               <img
                 src="/favicon/token-icon.png"
                 alt="Meridian Protocol"
-                className="h-7 w-7 rounded-full ring-1 ring-line/20"
+                className="h-7 w-7 rounded-full ring-1 ring-line/20 transition-all duration-300 group-hover:ring-line/50"
               />
               <span className="font-display text-[14px] font-medium tracking-wide text-ink">
                 MERIDIAN PROTOCOL
@@ -102,4 +106,5 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+          }
+            
