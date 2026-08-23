@@ -14,7 +14,10 @@ export default function Governance() {
         <h2 className="mt-12 text-xl font-medium text-ink">Current model</h2>
         <div className="mt-5 space-y-4">
           {CURRENT_GOVERNANCE.map((c) => (
-            <div key={c.label} className="rounded-lg border border-surface-border bg-surface/40 p-5">
+            <div
+              key={c.label}
+              className="rounded-2xl border border-surface-border bg-surface/40 p-5 transition-all duration-300 hover:border-line/20 hover:bg-surface/60"
+            >
               <h3 className="text-[14px] font-medium text-ink">{c.label}</h3>
               <p className="mt-1.5 text-[13px] leading-relaxed text-ink-dim">{c.detail}</p>
             </div>
@@ -22,7 +25,9 @@ export default function Governance() {
         </div>
 
         <h2 className="mt-12 text-xl font-medium text-ink">Future governance</h2>
-        <p className="mt-3 text-[13.5px] leading-relaxed text-ink-dim">{FUTURE_GOVERNANCE}</p>
+        <p className="mt-3 rounded-2xl border border-surface-border bg-surface/20 p-5 text-[13.5px] leading-relaxed text-ink-dim">
+          {FUTURE_GOVERNANCE}
+        </p>
       </div>
     </div>
   );
