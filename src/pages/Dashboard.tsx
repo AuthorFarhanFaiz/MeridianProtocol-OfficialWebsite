@@ -40,7 +40,7 @@ function StatCard(props: {
 }) {
   const { label, value, sub, href } = props;
   return (
-    <div className="rounded-2xl border border-surface-border bg-surface/40 p-5">
+    <div className="rounded-2xl border border-surface-border bg-surface/40 p-5 transition-all duration-300 hover:border-line/20 hover:bg-surface/60 hover:shadow-glow-sm">
       <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-faint">
         {label}
       </p>
@@ -160,7 +160,11 @@ export default function Dashboard() {
       <section className="border-b border-surface-border">
         <div className="container-page py-16 sm:py-20">
           <div className="mx-auto max-w-4xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-line">
+            <p className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.15em] text-line">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="pulse-ring absolute inline-flex h-full w-full rounded-full bg-line" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-line" />
+              </span>
               Live Data
             </p>
             <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
@@ -228,7 +232,9 @@ export default function Dashboard() {
               </>
             ) : null}
 
-            <div className="mt-12 rounded-2xl border border-surface-border bg-surface/30 p-6 sm:p-8">
+            <div className="relative mt-12 overflow-hidden rounded-2xl border border-surface-border bg-surface/30 p-6 sm:p-8">
+              <div className="pointer-events-none absolute inset-0 card-glow" aria-hidden="true" />
+              <div className="relative">
               <h2 className="text-lg font-medium text-ink">Check Your Own Balance</h2>
               <p className="mt-2 text-[14px] text-ink-dim">
                 Connect your wallet to view your own MRDN balance and staking
@@ -239,7 +245,7 @@ export default function Dashboard() {
                 <button
                   onClick={connectWallet}
                   disabled={connecting || !ethersLib}
-                  className="mt-5 inline-flex items-center gap-2 rounded-full bg-line px-5 py-3 text-[13.5px] font-semibold text-base-deep transition hover:bg-line-soft disabled:opacity-50"
+                  className="shine-sweep mt-5 inline-flex items-center gap-2 rounded-full bg-line px-5 py-3 text-[13.5px] font-semibold text-base-deep transition hover:bg-line-soft disabled:opacity-50"
                 >
                   <Wallet className="h-4 w-4" />
                   {connecting ? "Connecting…" : "Connect Wallet (view-only)"}
@@ -277,6 +283,7 @@ export default function Dashboard() {
                   ) : null}
                 </div>
               )}
+              </div>
             </div>
 
             <p className="mt-10 text-[12px] leading-relaxed text-ink-faint">
@@ -288,4 +295,5 @@ export default function Dashboard() {
       </section>
     </div>
   );
-}
+                   }
+            
