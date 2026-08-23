@@ -61,7 +61,9 @@ export default function Staking() {
       <section className="border-b border-surface-border">
         <div className="container-page py-12">
           <div className="mx-auto max-w-3xl">
-            <div className="rounded-2xl border border-surface-border bg-surface/40 p-6">
+            <div className="relative overflow-hidden rounded-2xl border border-surface-border bg-surface/40 p-6">
+              <div className="pointer-events-none absolute inset-0 card-glow" aria-hidden="true" />
+              <div className="relative">
               <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-faint">
                 Staking Contract Address
               </p>
@@ -81,11 +83,12 @@ export default function Staking() {
                     href={STAKING.explorer}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full bg-line px-5 py-2.5 text-[13px] font-semibold text-base-deep transition-all hover:bg-line-soft"
+                    className="shine-sweep inline-flex items-center gap-1.5 rounded-full bg-line px-5 py-2.5 text-[13px] font-semibold text-base-deep transition-all hover:bg-line-soft hover:shadow-glow-sm"
                   >
                     BscScan <ExternalLink className="h-3.5 w-3.5" />
                   </a>
                 </div>
+              </div>
               </div>
             </div>
           </div>
@@ -103,7 +106,7 @@ export default function Staking() {
 
             <div className="mt-8 grid gap-x-10 gap-y-6 sm:grid-cols-2">
               {FACTS.map((f) => (
-                <div key={f.label} className="border-b border-surface-border pb-4">
+                <div key={f.label} className="border-b border-surface-border pb-4 transition-colors duration-300 hover:border-line/30">
                   <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-faint">
                     {f.label}
                   </p>
@@ -130,8 +133,8 @@ export default function Staking() {
                 "Stake any amount — rewards begin accruing continuously from that point.",
                 "Claim accrued rewards at any time. Unstake your full principal whenever you choose — there is no lock period.",
               ].map((step, i) => (
-                <li key={i} className="flex gap-4">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line/30 bg-line/10 font-mono text-[12px] text-line">
+                <li key={i} className="group flex gap-4">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-line/30 bg-line/10 font-mono text-[12px] text-line transition-all duration-300 group-hover:scale-110 group-hover:bg-line/20">
                     {i + 1}
                   </span>
                   <p className="pt-0.5 text-[15px] leading-relaxed text-ink-dim">
@@ -184,4 +187,5 @@ export default function Staking() {
       </section>
     </div>
   );
-      }
+                              }
+            
