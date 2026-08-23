@@ -34,7 +34,7 @@ export default function Security() {
             {SECURITY_ITEMS.map((item) => (
               <div
                 key={item.id}
-                className="rounded-2xl border border-surface-border bg-surface/30 p-6"
+                className="rounded-2xl border border-surface-border bg-surface/30 p-6 transition-all duration-300 hover:border-line/20 hover:bg-surface/50"
               >
                 <StatusBadge
                   status={item.status}
@@ -80,7 +80,7 @@ export default function Security() {
       <section>
         <div className="container-page py-14">
           <div className="mx-auto max-w-3xl">
-            <div className="flex items-start gap-4 rounded-2xl border border-status-danger/30 bg-status-danger/10 p-6">
+            <div className="relative flex items-start gap-4 overflow-hidden rounded-2xl border border-status-danger/30 bg-status-danger/10 p-6 shadow-[0_0_24px_-8px_rgba(255,69,58,0.35)]">
               <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-status-danger" />
               <p className="text-[14px] leading-relaxed text-ink">
                 {SEED_PHRASE_WARNING}
