@@ -42,16 +42,24 @@ export default function Faq() {
                         {item.q}
                       </span>
                       <ChevronDown
-                        className={`h-4 w-4 shrink-0 text-ink-faint transition-transform ${
+                        className={`h-4 w-4 shrink-0 text-line transition-transform duration-300 ${
                           open ? "rotate-180" : ""
                         }`}
                       />
                     </button>
-                    {open && (
-                      <p className="px-5 pb-5 text-[14px] leading-relaxed text-ink-dim">
-                        {item.a}
-                      </p>
-                    )}
+                    <div
+                      className="grid transition-all duration-300 ease-out"
+                      style={{
+                        gridTemplateRows: open ? "1fr" : "0fr",
+                        opacity: open ? 1 : 0,
+                      }}
+                    >
+                      <div className="overflow-hidden">
+                        <p className="px-5 pb-5 text-[14px] leading-relaxed text-ink-dim">
+                          {item.a}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 );
               })}
