@@ -10,7 +10,6 @@ on:
 
 permissions:
   contents: read
-  deployments: write
 
 jobs:
   build:
@@ -51,43 +50,10 @@ jobs:
           echo "Build output:"
           ls -lah dist
 
-      - name: Upload dist
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist
-          path: dist
-          if-no-files-found: error
+      - name: Audit dependencies
+        run: pnpm audit --audit-level=high || true
 
-  deploy:
-    name: Deploy to Cloudflare Pages
-    needs: build
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download dist
-        uses: actions/download-artifact@v4
-        with:
-          name: dist
-          path: dist
-
-      - name: Verify downloaded dist
-        run: |
-          test -d dist
-          echo "Files ready for deployment:"
-          ls -lah dist
-
-      - name: Check Cloudflare Pages projects
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages project list
-
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=meridianprotocol-officialwebsite
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+# Deployment is handled by Cloudflare's own Build & Deploy integration
+# (connected directly to this repo's `main` branch — see Cloudflare
+# dashboard → this Worker → Settings → Build). This workflow is a CI
+# quality gate only (typecheck / lint / build) and does not deploy.
