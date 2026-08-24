@@ -15,7 +15,7 @@ export default function RegulatoryReview() {
 
         <div className="mt-10 space-y-4">
           {REGULATORY_ITEMS.map((item) => (
-            <div key={item.id} className="rounded-lg border border-surface-border bg-surface/40 p-5">
+            <div key={item.id} className="rounded-2xl border border-surface-border bg-surface/40 p-5 transition-all duration-300 hover:border-line/20 hover:bg-surface/60">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="text-[14.5px] font-medium text-ink">{item.name}</h2>
                 <StatusBadge status={item.status} tone={statusTone(item.status as DocStatus)} />
