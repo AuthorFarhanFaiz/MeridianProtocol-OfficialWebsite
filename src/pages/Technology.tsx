@@ -91,15 +91,20 @@ export default function Technology() {
             <div className="relative mt-10 space-y-8 border-l border-surface-border pl-8 sm:pl-10">
               {ARCHITECTURE_LAYERS.map((l) => (
                 <div key={l.layer} className="relative">
-                  <span
-                    className={`absolute -left-[41px] top-1.5 h-3.5 w-3.5 rounded-full border-2 border-base sm:-left-[49px] ${
-                      l.status === "LIVE"
-                        ? "bg-status-live"
-                        : l.status === "IN DEVELOPMENT"
-                        ? "bg-status-progress"
-                        : "bg-line/40"
-                    }`}
-                  />
+                  <span className="absolute -left-[41px] top-1.5 flex h-3.5 w-3.5 sm:-left-[49px]">
+                    {l.status === "IN DEVELOPMENT" && (
+                      <span className="pulse-ring absolute inline-flex h-full w-full rounded-full bg-status-progress" />
+                    )}
+                    <span
+                      className={`relative inline-flex h-3.5 w-3.5 rounded-full border-2 border-base ${
+                        l.status === "LIVE"
+                          ? "bg-status-live shadow-[0_0_10px_rgba(52,199,89,0.5)]"
+                          : l.status === "IN DEVELOPMENT"
+                          ? "bg-status-progress"
+                          : "bg-line/40"
+                      }`}
+                    />
+                  </span>
                   <div className="flex flex-wrap items-center gap-2.5">
                     <h3 className="text-[15px] font-medium text-ink">{l.layer}</h3>
                     <StatusBadge
@@ -145,7 +150,7 @@ export default function Technology() {
                     : "Unverified",
                 },
               ].map((f) => (
-                <div key={f.label} className="border-b border-surface-border pb-4">
+                <div key={f.label} className="border-b border-surface-border pb-4 transition-colors duration-300 hover:border-line/30">
                   <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-faint">
                     {f.label}
                   </p>
@@ -187,9 +192,9 @@ export default function Technology() {
               {PRINCIPLES.map((p) => (
                 <div
                   key={p.title}
-                  className="rounded-2xl border border-surface-border bg-surface/30 p-6"
+                  className="group rounded-2xl border border-surface-border bg-surface/30 p-6 transition-all duration-300 hover:border-line/20 hover:shadow-glow-sm"
                 >
-                  <p.icon className="h-5 w-5 text-line" />
+                  <p.icon className="h-5 w-5 text-line transition-transform duration-300 group-hover:scale-110" />
                   <h3 className="mt-4 text-[15px] font-medium text-ink">{p.title}</h3>
                   <p className="mt-2 text-[13.5px] leading-relaxed text-ink-dim">
                     {p.body}
@@ -202,4 +207,5 @@ export default function Technology() {
       </section>
     </div>
   );
-                    }
+                      }
+                        
