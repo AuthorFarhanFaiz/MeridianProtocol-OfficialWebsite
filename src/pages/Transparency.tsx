@@ -13,7 +13,7 @@ function Row({
   href?: string;
 }) {
   return (
-    <div className="flex flex-col gap-1 border-b border-surface-border py-4 last:border-0 sm:flex-row sm:items-center sm:justify-between">
+    <div className="flex flex-col gap-1 border-b border-surface-border py-4 transition-colors duration-300 last:border-0 hover:border-line/30 sm:flex-row sm:items-center sm:justify-between">
       <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-faint">
         {label}
       </span>
@@ -101,7 +101,7 @@ export default function Transparency() {
               {Object.values(CONTRACTS).map((c) => (
                 <div
                   key={c.address}
-                  className="flex flex-col gap-2 rounded-2xl border border-surface-border bg-base/60 p-5 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-2 rounded-2xl border border-surface-border bg-base/60 p-5 transition-all duration-300 hover:border-line/20 hover:shadow-glow-sm sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div>
                     <p className="text-[14.5px] font-medium text-ink">{c.name}</p>
@@ -185,3 +185,4 @@ export default function Transparency() {
     </div>
   );
               }
+                
