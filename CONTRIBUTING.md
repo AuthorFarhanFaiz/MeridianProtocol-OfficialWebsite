@@ -12,7 +12,7 @@ This is currently a solo-maintained project. Simplified workflow:
    pnpm build
    ```
 4. Open a pull request against `main`. CI must pass before merge.
-5. `main` auto-deploys to Cloudflare Pages on merge.
+5. `main` auto-deploys via Cloudflare's Build & Deploy integration (Cloudflare Worker with static assets) on merge.
 
 ## Content accuracy
 
@@ -25,3 +25,4 @@ intent. If you're editing copy in `src/data/`:
   real and verifiable.
 - If a fact changes (contract, supply, links), update it once in `src/data/`
   — never duplicate it inside a component.
+  
