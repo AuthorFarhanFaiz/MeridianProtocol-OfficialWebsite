@@ -17,7 +17,7 @@ export default function RootLayout() {
 
       <Header />
 
-      <main className="relative z-10 flex-1">
+      <main key={location.pathname} className="relative z-10 flex-1 animate-page-in">
         <Outlet />
       </main>
 
