@@ -28,7 +28,7 @@ export default function OpenSource() {
           href={SITE_CONFIG.githubUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-8 inline-flex items-center gap-2 rounded-md border border-surface-border px-4 py-2.5 text-[13.5px] text-ink hover:border-line/50"
+          className="mt-8 inline-flex items-center gap-2 rounded-full border border-surface-border px-4 py-2.5 text-[13.5px] text-ink transition-all duration-300 hover:border-line/50 hover:shadow-glow-sm"
         >
           <Github className="h-4 w-4" /> View repository
         </a>
