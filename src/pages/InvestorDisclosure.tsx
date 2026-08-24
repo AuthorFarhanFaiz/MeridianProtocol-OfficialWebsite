@@ -25,7 +25,7 @@ export default function InvestorDisclosure() {
             </li>
           ))}
         </ul>
-        <div className="mt-8 rounded-lg border border-status-progress/30 bg-status-progress/10 p-5 text-[13.5px] leading-relaxed text-ink-dim">
+        <div className="mt-8 rounded-2xl border border-status-progress/30 bg-status-progress/10 p-5 text-[13.5px] leading-relaxed text-ink-dim">
           No funding, partnership, or investment commitment currently exists. This page will link to
           real documents as each one is actually completed — not before.
         </div>
