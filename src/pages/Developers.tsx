@@ -51,10 +51,10 @@ export default function Developers() {
               href={r.href}
               target={r.href.startsWith("http") ? "_blank" : undefined}
               rel={r.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="rounded-lg border border-surface-border bg-surface/40 p-5 transition-colors hover:border-line/50"
+              className="group rounded-2xl border border-surface-border bg-surface/40 p-5 transition-all duration-300 hover:border-line/40 hover:bg-surface/60 hover:shadow-glow-sm"
             >
               <div className="flex items-start justify-between">
-                <r.icon className="h-5 w-5 text-line" />
+                <r.icon className="h-5 w-5 text-line transition-transform duration-300 group-hover:scale-110" />
                 <StatusBadge status={r.status} />
               </div>
               <h3 className="mt-3 text-[14.5px] font-medium text-ink">{r.title}</h3>
@@ -63,7 +63,7 @@ export default function Developers() {
           ))}
         </div>
 
-        <div className="mt-10 flex items-start gap-3 rounded-lg border border-status-progress/30 bg-status-progress/10 p-5">
+        <div className="mt-10 flex items-start gap-3 rounded-2xl border border-status-progress/30 bg-status-progress/10 p-5">
           <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-status-progress" />
           <p className="text-[13.5px] leading-relaxed text-ink-dim">
             A dedicated SDK or public API is not currently planned or in development. If that changes,
