@@ -25,7 +25,7 @@ export default function Community() {
               href={c.href}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg border border-surface-border bg-surface/40 p-5 transition-colors hover:border-line/50"
+              className="rounded-2xl border border-surface-border bg-surface/40 p-5 transition-all duration-300 hover:border-line/50 hover:shadow-glow-sm"
             >
               <c.icon className="h-5 w-5 text-line" />
               <p className="mt-3 text-[14px] font-medium text-ink">{c.name}</p>
@@ -34,7 +34,7 @@ export default function Community() {
           ))}
         </div>
 
-        <div className="mt-8 flex items-start gap-3 rounded-lg border border-status-danger/30 bg-status-danger/10 p-5">
+        <div className="mt-8 flex items-start gap-3 rounded-2xl border border-status-danger/30 bg-status-danger/10 p-5 shadow-[0_0_24px_-8px_rgba(255,69,58,0.35)]">
           <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-status-danger" />
           <p className="text-[13.5px] leading-relaxed text-ink">
             Meridian Protocol will never DM you first, and will never ask for your seed phrase, private
