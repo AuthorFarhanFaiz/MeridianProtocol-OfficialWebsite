@@ -11,7 +11,7 @@ export default function Changelog() {
         <div className="relative mt-12 space-y-10 border-l border-surface-border pl-8">
           {CHANGELOG.map((entry) => (
             <div key={entry.version} className="relative">
-              <span className="absolute -left-[38px] top-1 h-3 w-3 rounded-full border-2 border-base bg-line" />
+              <span className="absolute -left-[38px] top-1 h-3 w-3 rounded-full border-2 border-base bg-line shadow-[0_0_10px_rgba(201,162,39,0.5)]" />
               <div className="flex flex-wrap items-baseline gap-2.5">
                 <h2 className="font-mono text-[13px] text-line">{entry.version}</h2>
                 <span className="text-[12px] text-ink-faint">{entry.date}</span>
@@ -31,4 +31,4 @@ export default function Changelog() {
       </div>
     </div>
   );
-}
+                    }
