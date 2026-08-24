@@ -1,17 +1,12 @@
 # Meridian Protocol — Website
 
-Production website for Meridian Protocol (MRDN), a fixed-supply BEP-20 token on
-BNB Smart Chain. Built with React, TypeScript, Vite, and Tailwind CSS.
+Production website for Meridian Protocol (MRDN), a fixed-supply BEP-20 token on BNB Smart Chain. Built with React, TypeScript, Vite, and Tailwind CSS — served by a Cloudflare Worker with static assets and a live AI-powered on-site guide (**MeridianGuide**).
 
 **Live at:** https://meridianprotocol.site
 
 ## Project status
 
-The token contract is deployed and verified. The rest of the ecosystem —
-independent audit, tokenomics allocation, liquidity, utility — is in active
-development. See [/roadmap](https://meridianprotocol.site/roadmap) and
-[/security](https://meridianprotocol.site/security) for the current, honest
-status of each.
+The token contract is deployed and verified. The rest of the ecosystem — independent audit, tokenomics allocation, liquidity, utility — is in active development. See `/roadmap` and `/security` for the current, honest status of each.
 
 ## Tech stack
 
@@ -20,100 +15,92 @@ status of each.
 - Tailwind CSS
 - React Router
 - Framer Motion (used sparingly)
-- Deployed to Cloudflare Pages via GitHub Actions
+- **Cloudflare Worker** (static assets + a custom Worker script) — deployed via `npx wrangler deploy`, not Cloudflare Pages
+- **MeridianGuide** — on-site AI assistant: answers common questions instantly and for free from a built-in knowledge base, and calls a live AI model (via OpenRouter, free tier) through the Worker's `/api/guide` route for anything outside that knowledge base
 
 ## Project structure
 
 ```
 src/
-  components/   Shared UI (Header, Footer, Button, StatusBadge, ...)
-  data/         Centralized facts — token config, roadmap, tokenomics, legal text
+  components/   Shared UI (Header, Footer, Button, StatusBadge, MeridianGuide chat widget, ...)
+  data/         Centralized facts — token config, roadmap, tokenomics, legal text, chatbot knowledge base
   layouts/      Root layout (header/footer wrapper)
   pages/        One file per route
   styles/       Global Tailwind entry point
+worker/
+  index.ts      Worker entry point — serves the built static site and routes /api/guide
+  guide.ts      MeridianGuide backend logic (OpenRouter call, per-IP rate limiting, owner unlock)
 public/
   documents/    Whitepaper / litepaper PDFs
   favicon/      Icon assets
 ```
 
-All project facts (contract address, supply, social links, roadmap status) are
-centralized in `src/data/`. Never hardcode these values inside a component —
-import them from the relevant data file instead.
+All project facts (contract address, supply, social links, roadmap status) are centralized in `src/data/`. Never hardcode these values inside a component — import them from the relevant data file instead.
 
 ## Development
 
-```bash
+```
 pnpm install
 pnpm dev
 ```
 
 ## Build
 
-```bash
+```
 pnpm build      # runs typecheck + Vite build, outputs to dist/
 pnpm preview    # preview the production build locally
 ```
 
 ## Deployment
 
-Deployment target is **Cloudflare Pages**.
+Deployment target is a **Cloudflare Worker with static assets** (configured in `wrangler.jsonc`), connected directly to this GitHub repository via Cloudflare's own Build & Deploy integration — pushing to `main` triggers a build and deploy automatically. No GitHub Actions workflow is used for deployment.
 
-- Build command: `pnpm build`
-- Output directory: `dist`
-- `public/_redirects` handles SPA fallback routing
-- CI/CD runs via `.github/workflows/ci.yml`: install → typecheck → lint →
-  build → (on `main`) deploy
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy`
+- Static assets are served from `./dist`; `worker/index.ts` handles everything else, including the `/api/guide` chatbot route
 
-Required GitHub Actions secrets for deployment:
+**Runtime secrets** (Cloudflare dashboard → this Worker → Settings → *Runtime* variables and secrets — not the build-time ones):
 
-- `CLOUDFLARE_API_TOKEN`
-- `CLOUDFLARE_ACCOUNT_ID`
+| Secret | Purpose |
+|---|---|
+| `OPENROUTER_API_KEY` | Powers MeridianGuide's live AI answers (OpenRouter, free tier) |
+| `OWNER_UNLOCK_CODE` | Private code that removes the daily live-AI limit for the site owner, typed in the chat as `/unlock <code>` |
+
+**KV binding:** `GUIDE_KV` (Workers KV namespace) — used to rate-limit live-AI calls per visitor IP. If unbound, the chatbot still works but the limit isn't enforced.
+
+`pnpm audit` runs in CI on every push to catch known vulnerable dependencies.
 
 ## Website security hardening
 
-This is a static site with no backend, database, or login form — that alone
-removes most common attack surfaces (no SQL injection, no server-side code
-to exploit, no user accounts to breach). What's implemented and what you
-still need to do:
+This is a static site plus one small serverless API route — no database, no login form, no user accounts. What's implemented and what you still need to do:
 
 **Already implemented in this repo:**
-- `public/_headers` — Content-Security-Policy, HSTS, X-Frame-Options,
-  X-Content-Type-Options, and other security headers (Cloudflare Pages
-  reads this file automatically)
-- No secrets in the codebase; `.env` is gitignored, `.env.example` has
-  placeholders only
-- `pnpm audit` runs in CI on every push to catch known vulnerable
-  dependencies
-- Contact page uses a plain `mailto:` link — no contact-form backend to
-  attack
+
+- Security headers via Cloudflare
+- No secrets in the codebase; `.env` is gitignored, `.env.example` has placeholders only — real secrets live only as Cloudflare Runtime secrets
+- `pnpm audit` runs in CI on every push
+- Contact page uses a plain `mailto:` link — no contact-form backend to attack
+- MeridianGuide's `/api/guide` route: input length limits, a safety filter that blocks seed-phrase/private-key/exploit requests, and per-IP rate limiting on the live-AI path
 
 **You need to do this yourself (account-level, can't be done in code):**
-- Enable **2FA** on your GitHub account and your Cloudflare account
-- In GitHub repo settings → Branches, add a branch protection rule on
-  `main` requiring CI to pass before merge
-- In Cloudflare → your domain → Security, turn on **Bot Fight Mode** and
-  **Always Use HTTPS**
-- Keep the `CLOUDFLARE_API_TOKEN` GitHub secret scoped to only the
-  permissions it needs (Pages edit), not a global API key
-- Rotate that token if it's ever exposed anywhere (logs, screenshots, etc.)
+
+- Enable 2FA on your GitHub account and your Cloudflare account
+- In GitHub repo settings → Branches, add a branch protection rule on `main` requiring CI to pass before merge
+- In Cloudflare → your domain → Security, turn on Bot Fight Mode and Always Use HTTPS
+- Rotate `OPENROUTER_API_KEY` or `OWNER_UNLOCK_CODE` immediately if either is ever exposed anywhere (logs, screenshots, etc.)
 
 ## Security
 
-Never commit `.env`, private keys, seed phrases, or API tokens. Copy
-`.env.example` to `.env` for local values — only public, non-secret values
-belong in `VITE_*` variables, since anything with that prefix is bundled into
-the client-side build. See [SECURITY.md](./SECURITY.md) for the vulnerability
-disclosure process.
+Never commit `.env`, private keys, seed phrases, or API tokens. Copy `.env.example` to `.env` for local values — only public, non-secret values belong in `VITE_*` variables, since anything with that prefix is bundled into the client-side build. See `SECURITY.md` for the vulnerability disclosure process.
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
+See `CONTRIBUTING.md`.
 
 ## Official links
 
 - Website: https://meridianprotocol.site
 - X: https://x.com/Meridian_MRDN
 - Telegram: https://t.me/MeridianProtocol
-- Discord: see [/community](https://meridianprotocol.site/community)
+- Discord: https://meridianprotocol.site/community
 - Contact: admin@meridianprotocol.site
-
