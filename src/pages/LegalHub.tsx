@@ -18,7 +18,7 @@ export default function LegalHub() {
 
         <Link
           to="/document-index"
-          className="mt-6 inline-flex items-center gap-2 rounded-md border border-line/40 bg-line/5 px-4 py-2.5 text-[13px] text-ink hover:border-line/70"
+          className="mt-6 inline-flex items-center gap-2 rounded-full border border-line/40 bg-line/5 px-4 py-2.5 text-[13px] text-ink transition-all duration-300 hover:border-line/70 hover:shadow-glow-sm"
         >
           <ClipboardList className="h-4 w-4" /> View full document index & status table
         </Link>
@@ -29,12 +29,12 @@ export default function LegalHub() {
           return (
             <div key={cat} className="mt-12">
               <h2 className="text-[13px] font-mono uppercase tracking-wider text-ink-faint">{cat}</h2>
-              <div className="mt-4 divide-y divide-surface-border rounded-lg border border-surface-border">
+              <div className="mt-4 divide-y divide-surface-border overflow-hidden rounded-2xl border border-surface-border">
                 {docs.map((d) => (
                   <Link
                     key={d.id}
                     to={d.href}
-                    className="group flex items-center justify-between gap-4 px-5 py-4 hover:bg-surface/40"
+                    className="group flex items-center justify-between gap-4 px-5 py-4 transition-colors duration-300 hover:bg-surface/40"
                   >
                     <div>
                       <p className="text-[14px] text-ink">{d.name}</p>
