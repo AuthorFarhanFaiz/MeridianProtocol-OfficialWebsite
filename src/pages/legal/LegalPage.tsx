@@ -14,7 +14,7 @@ export default function LegalPage({ doc, docId }: { doc: LegalDoc; docId?: strin
           <h1 className="text-3xl font-medium text-ink">{doc.title}</h1>
           <button
             onClick={() => window.print()}
-            className="inline-flex items-center gap-1.5 rounded-md border border-surface-border px-3 py-1.5 text-[12px] text-ink-dim hover:text-ink print:hidden"
+            className="inline-flex items-center gap-1.5 rounded-full border border-surface-border px-3.5 py-1.5 text-[12px] text-ink-dim transition-all duration-300 hover:border-line/40 hover:text-ink print:hidden"
           >
             <Printer className="h-3.5 w-3.5" /> Print / Save PDF
           </button>
@@ -29,7 +29,7 @@ export default function LegalPage({ doc, docId }: { doc: LegalDoc; docId?: strin
         )}
 
         {doc.notice && (
-          <div className="mt-6 rounded-lg border border-status-progress/30 bg-status-progress/10 p-4 text-[13.5px] leading-relaxed text-ink-dim">
+          <div className="mt-6 rounded-2xl border border-status-progress/30 bg-status-progress/10 p-4 text-[13.5px] leading-relaxed text-ink-dim">
             {doc.notice}
           </div>
         )}
@@ -44,7 +44,9 @@ export default function LegalPage({ doc, docId }: { doc: LegalDoc; docId?: strin
         </div>
 
         {meta && (
-          <div className="mt-14 rounded-lg border border-surface-border bg-surface/30 p-5 print:border-0 print:bg-transparent print:p-0">
+          <div className="relative mt-14 overflow-hidden rounded-2xl border border-surface-border bg-surface/30 p-5 print:border-0 print:bg-transparent print:p-0">
+            <div className="pointer-events-none absolute inset-0 card-glow print:hidden" aria-hidden="true" />
+            <div className="relative">
             <p className="font-mono text-[11px] uppercase tracking-wider text-ink-faint">Document metadata</p>
             <dl className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 text-[12.5px] sm:grid-cols-3">
               <div><dt className="text-ink-faint">Document ID</dt><dd className="text-ink">{meta.id}</dd></div>
@@ -54,6 +56,7 @@ export default function LegalPage({ doc, docId }: { doc: LegalDoc; docId?: strin
               <div><dt className="text-ink-faint">Next review</dt><dd className="text-ink">{meta.nextReview}</dd></div>
               <div><dt className="text-ink-faint">Owner</dt><dd className="text-ink">{meta.owner}</dd></div>
             </dl>
+            </div>
           </div>
         )}
       </div>
