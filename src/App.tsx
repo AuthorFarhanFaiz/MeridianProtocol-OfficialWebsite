@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import RootLayout from "@/layouts/RootLayout";
 import Home from "@/pages/Home";
+import Dashboard from "@/pages/Dashboard";
 import About from "@/pages/About";
 import Technology from "@/pages/Technology";
 import Token from "@/pages/Token";
@@ -45,6 +46,7 @@ export default function App() {
     <Routes>
       <Route element={<RootLayout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/about" element={<About />} />
         <Route path="/technology" element={<Technology />} />
         <Route path="/token" element={<Token />} />
@@ -85,4 +87,5 @@ export default function App() {
       </Route>
     </Routes>
   );
-}
+          }
+          
