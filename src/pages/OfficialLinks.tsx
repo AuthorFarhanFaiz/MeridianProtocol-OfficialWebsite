@@ -51,6 +51,10 @@ export default function OfficialLinks() {
               Bookmark this page. No other account, group, or website currently
               speaks for Meridian Protocol.
             </p>
+            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-status-live/30 bg-status-live/10 px-4 py-2 text-[13px] text-status-live">
+              <Check className="h-3.5 w-3.5" />
+              BscScan Token Info — Verified &amp; Approved
+            </div>
           </div>
         </div>
       </section>
@@ -146,4 +150,5 @@ export default function OfficialLinks() {
     </div>
   );
                   }
-                  
+
+                
