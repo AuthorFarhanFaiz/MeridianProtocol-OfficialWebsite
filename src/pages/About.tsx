@@ -96,6 +96,77 @@ export default function About() {
         </div>
       </section>
 
+      <section className="border-b border-surface-border bg-surface/15">
+        <div className="container-page py-16 sm:py-20">
+          <div className="mx-auto max-w-3xl">
+            <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-line">
+              Why Meridian
+            </p>
+            <h2 className="mt-2 text-2xl font-medium text-ink">
+              The problem, and why we built it this way
+            </h2>
+            <div className="mt-8 space-y-6 text-[15px] leading-relaxed text-ink-dim">
+              <p>
+                Most token holders have no reliable way to check whether a
+                project's claims are true. Founder allocations are often
+                unlocked and sellable on day one. Treasuries are frequently
+                single-signer wallets with no delay. Security is described
+                in marketing language rather than shown in code. The result
+                is an industry where trust is asked for constantly and
+                earned rarely — and where the cost of misplaced trust falls
+                entirely on holders, not on the teams asking for it.
+              </p>
+              <p>
+                Meridian Protocol's answer to this is structural, not
+                promotional. Founder tokens sit in a vesting contract with
+                no early-access path. Treasury funds require a public
+                72-hour notice before any withdrawal. The token contract has
+                no mint, pause, or blacklist function — not disabled, absent
+                entirely. None of this asks anyone to trust our intentions;
+                it removes the capability to act against holders in the
+                first place, and every claim is independently checkable on
+                BscScan rather than taken on faith.
+              </p>
+              <p>
+                We're not claiming this is the only way to build a
+                trustworthy token, or that verification alone guarantees
+                success. What we are doing is being explicit about what
+                exists on-chain today, what remains unbuilt, and why the
+                sequencing — audit and legal review before liquidity —
+                is deliberate rather than delayed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-surface-border">
+        <div className="container-page py-16 sm:py-20">
+          <div className="mx-auto max-w-3xl">
+            <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-line">
+              Team
+            </p>
+            <h2 className="mt-2 text-2xl font-medium text-ink">Founder</h2>
+            <div className="mt-8 rounded-2xl border border-surface-border bg-base/60 p-8">
+              <h3 className="text-[16px] font-medium text-ink">Farhan Faiz</h3>
+              <p className="mt-1 text-[13px] font-mono uppercase tracking-wider text-ink-faint">
+                Founder, Meridian Protocol
+              </p>
+              <p className="mt-4 text-[14.5px] leading-relaxed text-ink-dim">
+                Meridian Protocol is designed, built, and operated by a
+                single independent founder rather than a funded team. Smart
+                contract architecture, documentation, and day-to-day
+                operations are all handled directly, which is disclosed
+                here plainly rather than implied otherwise. Continuity and
+                pace of development are a function of this structure, and
+                that tradeoff is stated openly in the project's risk
+                disclosure rather than left unaddressed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="border-b border-surface-border">
         <div className="container-page py-16 sm:py-20">
           <div className="mx-auto max-w-3xl">
@@ -168,4 +239,5 @@ export default function About() {
     </div>
   );
                   }
+
       
