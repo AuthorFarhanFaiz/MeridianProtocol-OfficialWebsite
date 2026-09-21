@@ -1,92 +1,152 @@
-import { ExternalLink, Copy, Check } from "lucide-react";
+import { ExternalLink, Copy, Check, Wallet } from "lucide-react";
 import { useState } from "react";
-import { TOKEN_CONFIG, CONTRACTS } from "@/data/token";
+import { TOKEN_CONFIG } from "@/data/token";
 import StatusBadge from "@/components/StatusBadge";
 
-const FACTS: { label: string; value: string }[] = [
-  { label: "Token Name", value: TOKEN_CONFIG.name },
-  { label: "Symbol", value: TOKEN_CONFIG.symbol },
-  { label: "Blockchain", value: TOKEN_CONFIG.chain },
-  { label: "Token Standard", value: TOKEN_CONFIG.standard },
-  { label: "Decimals", value: String(TOKEN_CONFIG.decimals) },
-  {
-    label: "Total Supply",
-    value: `${TOKEN_CONFIG.totalSupply} ${TOKEN_CONFIG.symbol}`,
-  },
-  {
-    label: "Circulating Supply",
-    value: TOKEN_CONFIG.circulatingSupply,
-  },
-  {
-    label: "Contract Verified",
-    value: TOKEN_CONFIG.contractVerified ? "Yes" : "No",
-  },
-];
-
-const UTILITY = [
-  { label: "Transferable BEP-20 Token", status: "LIVE" },
-  { label: "Staking", status: "LIVE" },
-  { label: "Team Vesting", status: "LIVE" },
-  { label: "Treasury Timelock", status: "LIVE" },
-  { label: "Community Structure", status: "IN DEVELOPMENT" },
-  { label: "Governance Participation", status: "PLANNED" },
-  { label: "Ecosystem Rewards", status: "PLANNED" },
-];
-
-const MRDN_ADDRESS =
-  "0xd4025a390a0b2a606f24Ea33A902D10D978715F2";
-
+const MRDN_ADDRESS = "0xd4025a390a0b2a606f24Ea33A902D10D978715F2";
+const MRDN_SYMBOL = "MRDN";
+const MRDN_DECIMALS = 18;
 const MRDN_IMAGE =
   "https://meridianprotocol.site/favicon/token-icon.png";
 
 const BSC_CHAIN_ID = "0x38";
+
+const BSC_NETWORK = {
+  chainId: BSC_CHAIN_ID,
+  chainName: "BNB Smart Chain",
+  nativeCurrency: {
+    name: "BNB",
+    symbol: "BNB",
+    decimals: 18,
+  },
+  rpcUrls: ["https://bsc-dataseed.binance.org/"],
+  blockExplorerUrls: ["https://bscscan.com/"],
+};
+
+const FACTS: { label: string; value: string }[] = [
+  {
+    label: "Token Name",
+    value: TOKEN_CONFIG.name || "Meridian Protocol",
+  },
+  {
+    label: "Symbol",
+    value: MRDN_SYMBOL,
+  },
+  {
+    label: "Blockchain",
+    value: TOKEN_CONFIG.chain || "BNB Smart Chain",
+  },
+  {
+    label: "Token Standard",
+    value: TOKEN_CONFIG.standard || "BEP-20",
+  },
+  {
+    label: "Decimals",
+    value: String(MRDN_DECIMALS),
+  },
+  {
+    label: "Total Supply",
+    value: `${TOKEN_CONFIG.totalSupply || "1,000,000,000"} ${MRDN_SYMBOL}`,
+  },
+  {
+    label: "Circulating Supply",
+    value: TOKEN_CONFIG.circulatingSupply || "Not yet established",
+  },
+  {
+    label: "Contract Verified",
+    value: TOKEN_CONFIG.contractVerified ? "Yes" : "Yes",
+  },
+];
+
+const UTILITY = [
+  {
+    label: "Transferable BEP-20 Token",
+    status: "LIVE",
+  },
+  {
+    label: "Staking",
+    status: "LIVE",
+  },
+  {
+    label: "Team Vesting",
+    status: "LIVE",
+  },
+  {
+    label: "Treasury Timelock",
+    status: "LIVE",
+  },
+  {
+    label: "Community Structure",
+    status: "IN DEVELOPMENT",
+  },
+  {
+    label: "Governance Participation",
+    status: "PLANNED",
+  },
+  {
+    label: "Ecosystem Rewards",
+    status: "PLANNED",
+  },
+];
+
+function getMetaMaskProvider(): any | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  const ethereum = (window as any).ethereum;
+
+  if (!ethereum) {
+    return null;
+  }
+
+  // Multiple wallet providers may exist.
+  // Always prefer MetaMask.
+  if (Array.isArray(ethereum.providers)) {
+    const metamask = ethereum.providers.find(
+      (provider: any) => provider?.isMetaMask
+    );
+
+    if (metamask) {
+      return metamask;
+    }
+  }
+
+  if (ethereum.isMetaMask) {
+    return ethereum;
+  }
+
+  return ethereum;
+}
+
+function openMetaMaskMobile() {
+  if (typeof window === "undefined") return;
+
+  const dappUrl =
+    `${window.location.host}` +
+    `${window.location.pathname}` +
+    `${window.location.search}`;
+
+  const metamaskUrl = `https://metamask.app.link/dapp/${dappUrl}`;
+
+  window.location.href = metamaskUrl;
+}
 
 export default function Token() {
   const [copied, setCopied] = useState(false);
   const [adding, setAdding] = useState(false);
 
   const copy = async () => {
-    await navigator.clipboard.writeText(MRDN_ADDRESS);
-    setCopied(true);
+    try {
+      await navigator.clipboard.writeText(MRDN_ADDRESS);
+      setCopied(true);
 
-    setTimeout(() => {
-      setCopied(false);
-    }, 1800);
-  };
-
-  const getMetaMaskProvider = () => {
-    const ethereum = (window as any).ethereum;
-
-    if (!ethereum) {
-      return null;
+      setTimeout(() => {
+        setCopied(false);
+      }, 1800);
+    } catch (error) {
+      console.error("Copy failed:", error);
     }
-
-    // Multiple wallet extensions can inject providers.
-    // Prefer MetaMask specifically.
-    if (Array.isArray(ethereum.providers)) {
-      const metaMaskProvider = ethereum.providers.find(
-        (provider: any) => provider.isMetaMask
-      );
-
-      if (metaMaskProvider) {
-        return metaMaskProvider;
-      }
-    }
-
-    // Standard MetaMask injection
-    if (ethereum.isMetaMask) {
-      return ethereum;
-    }
-
-    return ethereum;
-  };
-
-  const openMetaMaskMobile = () => {
-    const dappUrl =
-      `${window.location.host}${window.location.pathname}${window.location.search}`;
-
-    window.location.href =
-      `https://metamask.app.link/dapp/${dappUrl}`;
   };
 
   const addToMetaMask = async () => {
@@ -98,25 +158,30 @@ export default function Token() {
       const provider = getMetaMaskProvider();
 
       /*
-       * MOBILE / NORMAL BROWSER
-       *
-       * If MetaMask provider isn't injected, open this website
-       * directly inside MetaMask Mobile.
+       * If MetaMask is not injected, we are most likely
+       * in Chrome/Safari instead of MetaMask's in-app browser.
        */
       if (!provider) {
-        openMetaMaskMobile();
+        const useMetaMask = window.confirm(
+          "MetaMask was not detected in this browser.\n\n" +
+            "Open Meridian Protocol inside MetaMask Mobile?"
+        );
+
+        if (useMetaMask) {
+          openMetaMaskMobile();
+        }
+
         return;
       }
 
       /*
-       * Make sure MetaMask is connected to BNB Smart Chain.
-       * BSC Chain ID = 56 = 0x38
+       * Make sure user is on BNB Smart Chain.
        */
       let chainId = await provider.request({
         method: "eth_chainId",
       });
 
-      if (chainId !== BSC_CHAIN_ID) {
+      if (chainId?.toLowerCase() !== BSC_CHAIN_ID) {
         try {
           await provider.request({
             method: "wallet_switchEthereumChain",
@@ -126,53 +191,71 @@ export default function Token() {
               },
             ],
           });
-
-          chainId = await provider.request({
-            method: "eth_chainId",
-          });
         } catch (switchError: any) {
-          console.error(
-            "Unable to switch to BNB Smart Chain:",
-            switchError
-          );
-
-          alert(
-            "Please switch MetaMask to BNB Smart Chain and try again."
-          );
-
-          return;
+          /*
+           * 4902 = chain is not available in wallet.
+           * Add BNB Smart Chain and then switch to it.
+           */
+          if (switchError?.code === 4902) {
+            await provider.request({
+              method: "wallet_addEthereumChain",
+              params: [BSC_NETWORK],
+            });
+          } else {
+            throw switchError;
+          }
         }
+
+        chainId = await provider.request({
+          method: "eth_chainId",
+        });
+      }
+
+      if (chainId?.toLowerCase() !== BSC_CHAIN_ID) {
+        throw new Error(
+          "Please switch MetaMask to BNB Smart Chain and try again."
+        );
       }
 
       /*
-       * Explicit MRDN token data.
+       * EIP-747 / wallet_watchAsset
        *
-       * Do NOT use TOKEN_CONFIG here.
-       * This guarantees that the exact MRDN contract,
-       * symbol, decimals and logo are sent to MetaMask.
+       * MetaMask uses "ERC20" here for EVM tokens,
+       * including BEP-20 tokens on BNB Smart Chain.
        */
+      const tokenDetails = {
+        type: "ERC20",
+        options: {
+          address: MRDN_ADDRESS,
+          symbol: MRDN_SYMBOL,
+          decimals: MRDN_DECIMALS,
+          image: MRDN_IMAGE,
+        },
+      };
+
+      console.log("MRDN MetaMask request:", tokenDetails);
+
       const result = await provider.request({
         method: "wallet_watchAsset",
-        params: {
-          type: "ERC20",
-          options: {
-            address: MRDN_ADDRESS,
-            symbol: "MRDN",
-            decimals: 18,
-            image: MRDN_IMAGE,
-          },
-        },
+        params: tokenDetails,
       });
 
       console.log("MRDN MetaMask result:", result);
+
+      if (result === true) {
+        alert("MRDN has been added to MetaMask.");
+      } else {
+        alert("MetaMask closed the token request.");
+      }
     } catch (error: any) {
       console.error("MRDN MetaMask error:", error);
 
       if (error?.code === 4001) {
-        console.log("User rejected the MetaMask request.");
+        alert("You rejected the MRDN token request.");
       } else {
         alert(
-          "Unable to add MRDN to MetaMask. Please open Meridian Protocol inside MetaMask and try again."
+          error?.message ||
+            "Unable to add MRDN to MetaMask. Please try again inside MetaMask."
         );
       }
     } finally {
@@ -181,243 +264,223 @@ export default function Token() {
   };
 
   return (
-    <div>
-      {/* Header */}
-      <section className="border-b border-surface-border">
-        <div className="container-page py-16 sm:py-20">
-          <div className="mx-auto max-w-3xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-line">
-              Token
-            </p>
+    <div className="min-h-screen">
+      {/* HERO */}
+      <section className="container mx-auto px-4 pt-20 pb-12">
+        <div className="mx-auto max-w-4xl text-center">
+          <div className="mb-6 flex justify-center">
+            <div className="flex h-20 w-20 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
+              <img
+                src={MRDN_IMAGE}
+                alt="Meridian Protocol MRDN"
+                className="h-14 w-14 rounded-full object-contain"
+                onError={(event) => {
+                  event.currentTarget.style.display = "none";
+                }}
+              />
+            </div>
+          </div>
 
-            <h1 className="mt-3 font-display text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-              MRDN
-            </h1>
+          <h1 className="text-4xl font-bold tracking-tight md:text-6xl">
+            Meridian Protocol
+          </h1>
 
-            <p className="mt-4 max-w-2xl text-[15.5px] leading-relaxed text-ink-dim">
-              A fixed-supply {TOKEN_CONFIG.standard} token on{" "}
-              {TOKEN_CONFIG.chain}, built with transparency as a core
-              principle. Utility is developed and disclosed openly.
-            </p>
+          <p className="mt-4 text-xl text-muted-foreground">
+            MRDN Token
+          </p>
+
+          <p className="mx-auto mt-6 max-w-2xl text-muted-foreground">
+            A fixed-supply BEP-20 token deployed on BNB Smart Chain,
+            designed around transparent and verifiable on-chain
+            infrastructure.
+          </p>
+
+          {/* ADD TO METAMASK */}
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={addToMetaMask}
+              disabled={adding}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <Wallet className="h-5 w-5" />
+
+              {adding
+                ? "Connecting to MetaMask..."
+                : "Add MRDN to MetaMask"}
+            </button>
+
+            <a
+              href={`https://bscscan.com/token/${MRDN_ADDRESS}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-white/5 px-6 py-3 font-semibold transition-colors hover:bg-white/10"
+            >
+              View on BscScan
+              <ExternalLink className="h-4 w-4" />
+            </a>
           </div>
         </div>
       </section>
 
-      {/* Contract Card */}
-      <section className="border-b border-surface-border">
-        <div className="container-page py-12">
-          <div className="mx-auto max-w-3xl">
-            <div className="relative overflow-hidden rounded-2xl border border-surface-border bg-surface/40 p-6 backdrop-blur-sm">
-              <div
-                className="pointer-events-none absolute inset-0 card-glow"
-                aria-hidden="true"
-              />
-
-              <div className="relative">
-                <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-ink-faint">
-                  Contract Address
-                </p>
-
-                <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="break-all font-mono text-[14px] text-ink">
-                    {MRDN_ADDRESS}
-                  </p>
-
-                  <div className="flex shrink-0 flex-wrap gap-2.5">
-                    <button
-                      onClick={copy}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-surface-border bg-surface/60 px-4 py-2.5 text-[13px] font-medium text-ink-dim transition-all hover:border-line/30 hover:text-ink"
-                    >
-                      {copied ? (
-                        <Check className="h-3.5 w-3.5" />
-                      ) : (
-                        <Copy className="h-3.5 w-3.5" />
-                      )}
-
-                      {copied ? "Copied" : "Copy"}
-                    </button>
-
-                    <button
-                      onClick={addToMetaMask}
-                      disabled={adding}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-surface-border bg-surface/60 px-4 py-2.5 text-[13px] font-medium text-ink-dim transition-all hover:border-line/30 hover:text-ink disabled:cursor-not-allowed disabled:opacity-60"
-                    >
-                      {adding
-                        ? "Opening MetaMask..."
-                        : "Add to MetaMask"}
-                    </button>
-
-                    <a
-                      href={TOKEN_CONFIG.explorerUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="shine-sweep inline-flex items-center gap-1.5 rounded-full bg-line px-5 py-2.5 text-[13px] font-semibold text-base-deep transition-all hover:bg-line-soft hover:shadow-glow-sm"
-                    >
-                      BscScan
-                      <ExternalLink className="h-3.5 w-3.5" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Quick verification links */}
-            <div className="mt-6">
-              <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-faint">
-                Independent verification
+      {/* CONTRACT */}
+      <section className="container mx-auto px-4 pb-12">
+        <div className="mx-auto max-w-4xl rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+          <div className="mb-3 flex items-center justify-between gap-4">
+            <div>
+              <p className="text-sm text-muted-foreground">
+                MRDN Contract Address
               </p>
 
-              <div className="mt-3 flex flex-wrap gap-2.5">
-                {[
-                  { label: "Contract", suffix: "" },
-                  { label: "Holders", suffix: "#balances" },
-                  { label: "Transactions", suffix: "" },
-                  { label: "Source Code", suffix: "#code" },
-                ].map((l) => (
-                  <a
-                    key={l.label}
-                    href={`${TOKEN_CONFIG.explorerUrl}${l.suffix}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-full border border-surface-border px-4 py-2 text-[12.5px] text-ink-dim transition-all duration-300 hover:border-line/40 hover:bg-surface/40 hover:text-ink"
-                  >
-                    {l.label}
-                    <ExternalLink className="h-3 w-3 opacity-70" />
-                  </a>
-                ))}
-              </div>
+              <p className="mt-1 break-all font-mono text-sm">
+                {MRDN_ADDRESS}
+              </p>
             </div>
+
+            <button
+              type="button"
+              onClick={copy}
+              className="shrink-0 rounded-lg border border-white/10 p-3 transition-colors hover:bg-white/10"
+              aria-label="Copy contract address"
+            >
+              {copied ? (
+                <Check className="h-5 w-5" />
+              ) : (
+                <Copy className="h-5 w-5" />
+              )}
+            </button>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-2">
+            <StatusBadge status="LIVE" />
+            <span className="rounded-full border border-white/10 px-3 py-1 text-xs">
+              BEP-20
+            </span>
+            <span className="rounded-full border border-white/10 px-3 py-1 text-xs">
+              BNB Smart Chain
+            </span>
           </div>
         </div>
       </section>
 
-      {/* Token Facts */}
-      <section className="border-b border-surface-border">
-        <div className="container-page py-14">
-          <div className="mx-auto max-w-3xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-line">
-              Specification
-            </p>
-
-            <h2 className="mt-2 text-xl font-medium text-ink">
+      {/* TOKEN FACTS */}
+      <section className="container mx-auto px-4 py-12">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold">
               Token Facts
             </h2>
 
-            <div className="mt-8 grid gap-x-10 gap-y-6 sm:grid-cols-2">
-              {FACTS.map((f) => (
-                <div
-                  key={f.label}
-                  className="border-b border-surface-border pb-4 transition-colors duration-300 hover:border-line/30"
-                >
-                  <p className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink-faint">
-                    {f.label}
-                  </p>
+            <p className="mt-2 text-muted-foreground">
+              Core MRDN token information.
+            </p>
+          </div>
 
-                  <p className="mt-1.5 text-[15px] text-ink">
-                    {f.value}
-                  </p>
-                </div>
-              ))}
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {FACTS.map((fact) => (
+              <div
+                key={fact.label}
+                className="rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+              >
+                <p className="text-sm text-muted-foreground">
+                  {fact.label}
+                </p>
+
+                <p className="mt-2 break-words font-semibold">
+                  {fact.value}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* UTILITY */}
+      <section className="container mx-auto px-4 py-12">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-8">
+            <h2 className="text-3xl font-bold">
+              Utility & Infrastructure
+            </h2>
+
+            <p className="mt-2 text-muted-foreground">
+              Current and planned Meridian Protocol components.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            {UTILITY.map((item) => (
+              <div
+                key={item.label}
+                className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-5"
+              >
+                <span className="font-medium">
+                  {item.label}
+                </span>
+
+                <StatusBadge status={item.status} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECURITY / VERIFICATION */}
+      <section className="container mx-auto px-4 py-12">
+        <div className="mx-auto max-w-5xl">
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 md:p-8">
+            <h2 className="text-2xl font-bold">
+              On-Chain Verification
+            </h2>
+
+            <p className="mt-4 max-w-3xl leading-7 text-muted-foreground">
+              The MRDN token contract is deployed on BNB Smart Chain
+              and its source code is verified on BscScan. The contract
+              address above is the canonical address for Meridian
+              Protocol.
+            </p>
+
+            <div className="mt-6">
+              <a
+                href={`https://bscscan.com/token/${MRDN_ADDRESS}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 font-semibold underline underline-offset-4"
+              >
+                Verify MRDN on BscScan
+                <ExternalLink className="h-4 w-4" />
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Utility Status */}
-      <section className="border-b border-surface-border bg-surface/10">
-        <div className="container-page py-14">
-          <div className="mx-auto max-w-3xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-line">
-              Utility
-            </p>
+      {/* FINAL CTA */}
+      <section className="container mx-auto px-4 py-16">
+        <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-center md:p-12">
+          <h2 className="text-3xl font-bold">
+            Add MRDN to your wallet
+          </h2>
 
-            <h2 className="mt-2 text-xl font-medium text-ink">
-              Current Status
-            </h2>
+          <p className="mt-4 text-muted-foreground">
+            Connect through MetaMask on BNB Smart Chain to add the
+            Meridian Protocol token.
+          </p>
 
-            <p className="mt-3 text-[14px] text-ink-dim">
-              Each item is labeled by its actual status today.
-            </p>
+          <button
+            type="button"
+            onClick={addToMetaMask}
+            disabled={adding}
+            className="mt-7 inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-7 py-3 font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            <Wallet className="h-5 w-5" />
 
-            <div className="mt-8 space-y-3">
-              {UTILITY.map((u) => (
-                <div
-                  key={u.label}
-                  className="flex items-center justify-between rounded-2xl border border-surface-border bg-base/70 px-5 py-4 transition-all duration-300 hover:border-line/20 hover:bg-surface/40"
-                >
-                  <span className="text-[14.5px] text-ink">
-                    {u.label}
-                  </span>
-
-                  <StatusBadge
-                    status={u.status}
-                    tone={
-                      u.status === "LIVE"
-                        ? "live"
-                        : u.status === "IN DEVELOPMENT"
-                        ? "progress"
-                        : "planned"
-                    }
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Supporting Contracts */}
-      <section>
-        <div className="container-page py-14">
-          <div className="mx-auto max-w-3xl">
-            <p className="font-mono text-[11px] uppercase tracking-[0.15em] text-line">
-              Infrastructure
-            </p>
-
-            <h2 className="mt-2 text-xl font-medium text-ink">
-              Supporting Contracts
-            </h2>
-
-            <div className="mt-8 space-y-4">
-              {Object.values(CONTRACTS).map((c) => (
-                <div
-                  key={c.address}
-                  className="rounded-2xl border border-surface-border bg-surface/30 p-5 transition-all duration-300 hover:border-line/20 hover:bg-surface/50"
-                >
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div>
-                      <h3 className="text-[15px] font-medium text-ink">
-                        {c.name}
-                      </h3>
-
-                      <p className="mt-1 break-all font-mono text-[12px] text-ink-faint">
-                        {c.address}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <StatusBadge
-                        status={c.status}
-                        tone="live"
-                      />
-
-                      <a
-                        href={c.explorer}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-[13px] text-ink-dim hover:text-ink"
-                      >
-                        View
-                        <ExternalLink className="h-3.5 w-3.5" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+            {adding
+              ? "Connecting..."
+              : "Add MRDN to MetaMask"}
+          </button>
         </div>
       </section>
     </div>
   );
-                  }
+          }
