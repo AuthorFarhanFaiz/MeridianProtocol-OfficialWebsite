@@ -33,6 +33,30 @@ export default function Token() {
     setTimeout(() => setCopied(false), 1800);
   };
 
+  const addToMetaMask = async () => {
+    const eth = (window as any).ethereum;
+    if (!eth) {
+      alert("MetaMask not detected. Please install MetaMask to add MRDN.");
+      return;
+    }
+    try {
+      await eth.request({
+        method: "wallet_watchAsset",
+        params: {
+          type: "ERC20",
+          options: {
+            address: TOKEN_CONFIG.contractAddress,
+            symbol: TOKEN_CONFIG.symbol,
+            decimals: TOKEN_CONFIG.decimals,
+            image: "https://meridianprotocol.site/favicon/token-icon.png",
+          },
+        },
+      });
+    } catch (err) {
+      console.error("Add to MetaMask failed:", err);
+    }
+  };
+
   return (
     <div>
       {/* Header */}
@@ -75,6 +99,12 @@ export default function Token() {
                   >
                     {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                     {copied ? "Copied" : "Copy"}
+                  </button>
+                  <button
+                    onClick={addToMetaMask}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-surface-border bg-surface/60 px-4 py-2.5 text-[13px] font-medium text-ink-dim transition-all hover:border-line/30 hover:text-ink"
+                  >
+                    Add to MetaMask
                   </button>
                   <a
                     href={TOKEN_CONFIG.explorerUrl}
