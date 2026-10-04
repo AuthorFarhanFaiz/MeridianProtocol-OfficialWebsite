@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.get_login_creds"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.meridianprotocol.app",
+      "sha256_cert_fingerprints": [
+        "BE:7B:F6:2D:3B:8E:6E:EF:A9:DB:EC:1E:4F:39:41:0D:07:5B:2B:67:B1:45:A7:A3:C9:F9:ED:7E:59:F6:7E:3C"
+      ]
+    }
+  }
+]
