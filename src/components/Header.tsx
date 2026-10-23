@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink as RouterNavLink } from "react-router-dom";
-import { Menu, X, ExternalLink } from "lucide-react";
+import { Menu, X, ExternalLink, ArrowRight } from "lucide-react";
 import { PRIMARY_NAV } from "@/data/nav";
 import { TOKEN_CONFIG } from "@/data/token";
 
@@ -59,6 +59,10 @@ export default function Header() {
 
         {/* Desktop CTA */}
         <div className="hidden items-center gap-3 lg:flex">
+          <a href="/app/" className="inline-flex items-center gap-2 rounded-full bg-line px-5 py-2.5 text-[13px] font-semibold text-base-deep transition-all hover:bg-line-soft hover:shadow-glow-sm">
+            Open Meridian App
+            <ArrowRight className="h-3.5 w-3.5" />
+          </a>
           <a
             href={TOKEN_CONFIG.explorerUrl}
             target="_blank"
@@ -101,6 +105,11 @@ export default function Header() {
                 {item.label}
               </RouterNavLink>
             ))}
+
+            <a href="/app/" onClick={() => setOpen(false)} className="mt-3 flex items-center justify-center gap-2 rounded-full bg-line px-4 py-3 text-[14px] font-semibold text-base-deep">
+              Open Meridian App
+              <ArrowRight className="h-4 w-4" />
+            </a>
 
             <a
               href={TOKEN_CONFIG.explorerUrl}
