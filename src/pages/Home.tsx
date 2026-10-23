@@ -85,7 +85,7 @@ export default function Home() {
               <Button href="/about" icon={<ArrowRight className="h-4 w-4" />}>
                 Explore Protocol
               </Button>
-              <a href="/app/" className="inline-flex items-center justify-center gap-2 rounded-full bg-line px-5 py-3 text-[14px] font-semibold text-base-deep transition-all hover:bg-line-soft hover:shadow-glow-sm">
+              <a href="https://meridianprotocol-officialwebsite.farhanfaiz-author.workers.dev/app/" className="inline-flex items-center justify-center gap-2 rounded-full bg-line px-5 py-3 text-[14px] font-semibold text-base-deep transition-all hover:bg-line-soft hover:shadow-glow-sm">
                 Open Meridian App
                 <ArrowRight className="h-4 w-4" />
               </a>
