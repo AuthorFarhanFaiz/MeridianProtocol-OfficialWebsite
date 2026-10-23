@@ -1,4 +1,88 @@
-import{N as v,v as _t,R as m,S,b as W,c as I,E as D,x as Ue,y as We,j as f,B as be,a as z,z as ve,D as xe,F as Rt,o as Xe,G as Vt,C as U,I as rt,J as st,K as at,M as O,L as Ot,e as A,r as X,i as T,d as c,k as qe,w as Ut,P as Ht,Q as Gt,U as P,V as Yt,H as V,O as E,X as yt,h as L,Y as Te,u as Ve,f as Qt,A as Re,T as Kt,Z as Xt,_ as Zt}from"./core-CSH1uYEM.js";import{c as x,n as d,o as k,r as h,a as Jt,U as He,b as Wt}from"./index-BH2bE4T0.js";import"./index-D8NixbLH.js";import"./index-Cu1-ClI8.js";const ne={getGasPriceInEther(e,t){const n=t*e;return Number(n)/1e18},getGasPriceInUSD(e,t,n){const o=ne.getGasPriceInEther(t,n);return v.bigNumber(e).times(o).toNumber()},getPriceImpact({sourceTokenAmount:e,sourceTokenPriceInUSD:t,toTokenPriceInUSD:n,toTokenAmount:o}){const r=v.bigNumber(e).times(t),i=v.bigNumber(o).times(n);return r.minus(i).div(r).times(100).toNumber()},getMaxSlippage(e,t){const n=v.bigNumber(e).div(100);return v.multiply(t,n).toNumber()},getProviderFee(e,t=.0085){return v.bigNumber(e).times(t).toString()},isInsufficientNetworkTokenForGas(e,t){const n=t||"0";return v.bigNumber(e).eq(0)?!0:v.bigNumber(v.bigNumber(n)).gt(e)},isInsufficientSourceTokenForSwap(e,t,n){const o=n?.find(i=>i.address===t)?.quantity?.numeric;return v.bigNumber(o||"0").lt(e)}},bt=15e4,en=6,R={initializing:!1,initialized:!1,loadingPrices:!1,loadingQuote:!1,loadingApprovalTransaction:!1,loadingBuildTransaction:!1,loadingTransaction:!1,switchingTokens:!1,fetchError:!1,approvalTransaction:void 0,swapTransaction:void 0,transactionError:void 0,sourceToken:void 0,sourceTokenAmount:"",sourceTokenPriceInUSD:0,toToken:void 0,toTokenAmount:"",toTokenPriceInUSD:0,networkPrice:"0",networkBalanceInUSD:"0",networkTokenSymbol:"",inputError:void 0,slippage:Xe.CONVERT_SLIPPAGE_TOLERANCE,tokens:void 0,popularTokens:void 0,suggestedTokens:void 0,foundTokens:void 0,myTokensWithBalance:void 0,tokensPriceMap:{},gasFee:"0",gasPriceInUSD:0,priceImpact:void 0,maxSlippage:void 0,providerFee:void 0},l=at({...R}),De={state:l,subscribe(e){return st(l,()=>e(l))},subscribeKey(e,t){return rt(l,e,t)},getParams(){const e=f.state.activeChain,t=f.getAccountData(e)?.caipAddress??f.state.activeCaipAddress,n=z.getPlainAddress(t),o=Vt(),r=U.getConnectorId(f.state.activeChain);if(!n)throw new Error("No address found to swap the tokens from.");const i=!l.toToken?.address||!l.toToken?.decimals,s=!l.sourceToken?.address||!l.sourceToken?.decimals||!v.bigNumber(l.sourceTokenAmount).gt(0),a=!l.sourceTokenAmount;return{networkAddress:o,fromAddress:n,fromCaipAddress:t,sourceTokenAddress:l.sourceToken?.address,toTokenAddress:l.toToken?.address,toTokenAmount:l.toTokenAmount,toTokenDecimals:l.toToken?.decimals,sourceTokenAmount:l.sourceTokenAmount,sourceTokenDecimals:l.sourceToken?.decimals,invalidToToken:i,invalidSourceToken:s,invalidSourceTokenAmount:a,availableToSwap:t&&!i&&!s&&!a,isAuthConnector:r===I.CONNECTOR_ID.AUTH}},async setSourceToken(e){if(!e){l.sourceToken=e,l.sourceTokenAmount="",l.sourceTokenPriceInUSD=0;return}l.sourceToken=e,await w.setTokenPrice(e.address,"sourceToken")},setSourceTokenAmount(e){l.sourceTokenAmount=e},async setToToken(e){if(!e){l.toToken=e,l.toTokenAmount="",l.toTokenPriceInUSD=0;return}l.toToken=e,await w.setTokenPrice(e.address,"toToken")},setToTokenAmount(e){l.toTokenAmount=e?v.toFixed(e,en):""},async setTokenPrice(e,t){let n=l.tokensPriceMap[e]||0;n||(l.loadingPrices=!0,n=await w.getAddressPrice(e)),t==="sourceToken"?l.sourceTokenPriceInUSD=n:t==="toToken"&&(l.toTokenPriceInUSD=n),l.loadingPrices&&(l.loadingPrices=!1),w.getParams().availableToSwap&&!l.switchingTokens&&w.swapTokens()},async switchTokens(){if(!(l.initializing||!l.initialized||l.switchingTokens)){l.switchingTokens=!0;try{const e=l.toToken?{...l.toToken}:void 0,t=l.sourceToken?{...l.sourceToken}:void 0,n=e&&l.toTokenAmount===""?"1":l.toTokenAmount;w.setSourceTokenAmount(n),w.setToTokenAmount(""),await w.setSourceToken(e),await w.setToToken(t),l.switchingTokens=!1,w.swapTokens()}catch(e){throw l.switchingTokens=!1,e}}},resetState(){l.myTokensWithBalance=R.myTokensWithBalance,l.tokensPriceMap=R.tokensPriceMap,l.initialized=R.initialized,l.initializing=R.initializing,l.switchingTokens=R.switchingTokens,l.sourceToken=R.sourceToken,l.sourceTokenAmount=R.sourceTokenAmount,l.sourceTokenPriceInUSD=R.sourceTokenPriceInUSD,l.toToken=R.toToken,l.toTokenAmount=R.toTokenAmount,l.toTokenPriceInUSD=R.toTokenPriceInUSD,l.networkPrice=R.networkPrice,l.networkTokenSymbol=R.networkTokenSymbol,l.networkBalanceInUSD=R.networkBalanceInUSD,l.inputError=R.inputError},resetValues(){const{networkAddress:e}=w.getParams(),t=l.tokens?.find(n=>n.address===e);w.setSourceToken(t),w.setToToken(void 0)},getApprovalLoadingState(){return l.loadingApprovalTransaction},clearError(){l.transactionError=void 0},async initializeState(){if(!l.initializing){if(l.initializing=!0,!l.initialized)try{await w.fetchTokens(),l.initialized=!0}catch{l.initialized=!1,S.showError("Failed to initialize swap"),m.goBack()}l.initializing=!1}},async fetchTokens(){const{networkAddress:e}=w.getParams();await w.getNetworkTokenPrice(),await w.getMyTokensWithBalance();const t=l.myTokensWithBalance?.find(n=>n.address===e);t&&(l.networkTokenSymbol=t.symbol,w.setSourceToken(t),w.setSourceTokenAmount("0"))},async getTokenList(){const e=f.state.activeCaipNetwork?.caipNetworkId;if(!(l.caipNetworkId===e&&l.tokens))try{l.tokensLoading=!0;const t=await ve.getTokenList(e);l.tokens=t,l.caipNetworkId=e,l.popularTokens=t.sort((s,a)=>s.symbol<a.symbol?-1:s.symbol>a.symbol?1:0);const o=(e&&Xe.SUGGESTED_TOKENS_BY_CHAIN?.[e]||[]).map(s=>t.find(a=>a.symbol===s)).filter(s=>!!s),i=(Xe.SWAP_SUGGESTED_TOKENS||[]).map(s=>t.find(a=>a.symbol===s)).filter(s=>!!s).filter(s=>!o.some(a=>a.address===s.address));l.suggestedTokens=[...o,...i]}catch{l.tokens=[],l.popularTokens=[],l.suggestedTokens=[]}finally{l.tokensLoading=!1}},async getAddressPrice(e){const t=l.tokensPriceMap[e];if(t)return t;const o=(await be.fetchTokenPrice({addresses:[e]}))?.fungibles||[],i=[...l.tokens||[],...l.myTokensWithBalance||[]]?.find(b=>b.address===e)?.symbol,s=o.find(b=>b.symbol.toLowerCase()===i?.toLowerCase())?.price||0,a=parseFloat(s.toString());return l.tokensPriceMap[e]=a,a},async getNetworkTokenPrice(){const{networkAddress:e}=w.getParams(),n=(await be.fetchTokenPrice({addresses:[e]}).catch(()=>(S.showError("Failed to fetch network token price"),{fungibles:[]}))).fungibles?.[0],o=n?.price.toString()||"0";l.tokensPriceMap[e]=parseFloat(o),l.networkTokenSymbol=n?.symbol||"",l.networkPrice=o},async getMyTokensWithBalance(e){const t=await Rt.getMyTokensWithBalance({forceUpdate:e,caipNetwork:f.state.activeCaipNetwork,address:f.getAccountData()?.address}),n=ve.mapBalancesToSwapTokens(t);n&&(await w.getInitialGasPrice(),w.setBalances(n))},setBalances(e){const{networkAddress:t}=w.getParams(),n=f.state.activeCaipNetwork;if(!n)return;const o=e.find(r=>r.address===t);e.forEach(r=>{l.tokensPriceMap[r.address]=r.price||0}),l.myTokensWithBalance=e.filter(r=>r.address.startsWith(n.caipNetworkId)),l.networkBalanceInUSD=o?v.multiply(o.quantity.numeric,o.price).toString():"0"},async getInitialGasPrice(){const e=await ve.fetchGasPrice();if(!e)return{gasPrice:null,gasPriceInUSD:null};switch(f.state?.activeCaipNetwork?.chainNamespace){case I.CHAIN.SOLANA:return l.gasFee=e.standard??"0",l.gasPriceInUSD=v.multiply(e.standard,l.networkPrice).div(1e9).toNumber(),{gasPrice:BigInt(l.gasFee),gasPriceInUSD:Number(l.gasPriceInUSD)};case I.CHAIN.EVM:default:const t=e.standard??"0",n=BigInt(t),o=BigInt(bt),r=ne.getGasPriceInUSD(l.networkPrice,o,n);return l.gasFee=t,l.gasPriceInUSD=r,{gasPrice:n,gasPriceInUSD:r}}},async swapTokens(){const e=f.getAccountData()?.address,t=l.sourceToken,n=l.toToken,o=v.bigNumber(l.sourceTokenAmount).gt(0);if(o||w.setToTokenAmount(""),!n||!t||l.loadingPrices||!o||!e)return;l.loadingQuote=!0;const r=v.bigNumber(l.sourceTokenAmount).times(10**t.decimals).round(0).toFixed(0);try{const i=await be.fetchSwapQuote({userAddress:e,from:t.address,to:n.address,gasPrice:l.gasFee,amount:r.toString()});l.loadingQuote=!1;const s=i?.quotes?.[0]?.toAmount;if(!s){xe.open({displayMessage:"Incorrect amount",debugMessage:"Please enter a valid amount"},"error");return}const a=v.bigNumber(s).div(10**n.decimals).toString();w.setToTokenAmount(a),w.hasInsufficientToken(l.sourceTokenAmount,t.address)?l.inputError="Insufficient balance":(l.inputError=void 0,w.setTransactionDetails())}catch(i){const s=await ve.handleSwapError(i);l.loadingQuote=!1,l.inputError=s||"Insufficient balance"}},async getTransaction(){const{fromCaipAddress:e,availableToSwap:t}=w.getParams(),n=l.sourceToken,o=l.toToken;if(!(!e||!t||!n||!o||l.loadingQuote))try{l.loadingBuildTransaction=!0;const r=await ve.fetchSwapAllowance({userAddress:e,tokenAddress:n.address,sourceTokenAmount:l.sourceTokenAmount,sourceTokenDecimals:n.decimals});let i;return r?i=await w.createSwapTransaction():i=await w.createAllowanceTransaction(),l.loadingBuildTransaction=!1,l.fetchError=!1,i}catch{m.goBack(),S.showError("Failed to check allowance"),l.loadingBuildTransaction=!1,l.approvalTransaction=void 0,l.swapTransaction=void 0,l.fetchError=!0;return}},async createAllowanceTransaction(){const{fromCaipAddress:e,sourceTokenAddress:t,toTokenAddress:n}=w.getParams();if(!(!e||!n)){if(!t)throw new Error("createAllowanceTransaction - No source token address found.");try{const o=await be.generateApproveCalldata({from:t,to:n,userAddress:e}),r=z.getPlainAddress(o.tx.from);if(!r)throw new Error("SwapController:createAllowanceTransaction - address is required");const i={data:o.tx.data,to:r,gasPrice:BigInt(o.tx.eip155.gasPrice),value:BigInt(o.tx.value),toAmount:l.toTokenAmount};return l.swapTransaction=void 0,l.approvalTransaction={data:i.data,to:i.to,gasPrice:i.gasPrice,value:i.value,toAmount:i.toAmount},{data:i.data,to:i.to,gasPrice:i.gasPrice,value:i.value,toAmount:i.toAmount}}catch{m.goBack(),S.showError("Failed to create approval transaction"),l.approvalTransaction=void 0,l.swapTransaction=void 0,l.fetchError=!0;return}}},async createSwapTransaction(){const{networkAddress:e,fromCaipAddress:t,sourceTokenAmount:n}=w.getParams(),o=l.sourceToken,r=l.toToken;if(!t||!n||!o||!r)return;const i=W.parseUnits(n,o.decimals)?.toString();try{const s=await be.generateSwapCalldata({userAddress:t,from:o.address,to:r.address,amount:i,disableEstimate:!0}),a=o.address===e,b=BigInt(s.tx.eip155.gas),he=BigInt(s.tx.eip155.gasPrice),_e=z.getPlainAddress(s.tx.to);if(!_e)throw new Error("SwapController:createSwapTransaction - address is required");const ye={data:s.tx.data,to:_e,gas:b,gasPrice:he,value:BigInt(a?i??"0":"0"),toAmount:l.toTokenAmount};return l.gasPriceInUSD=ne.getGasPriceInUSD(l.networkPrice,b,he),l.approvalTransaction=void 0,l.swapTransaction=ye,ye}catch{m.goBack(),S.showError("Failed to create transaction"),l.approvalTransaction=void 0,l.swapTransaction=void 0,l.fetchError=!0;return}},onEmbeddedWalletApprovalSuccess(){S.showLoading("Approve limit increase in your wallet"),m.replace("SwapPreview")},async sendTransactionForApproval(e){const{fromAddress:t,isAuthConnector:n}=w.getParams();l.loadingApprovalTransaction=!0,n?m.pushTransactionStack({onSuccess:w.onEmbeddedWalletApprovalSuccess}):S.showLoading("Approve limit increase in your wallet");try{await W.sendTransaction({address:t,to:e.to,data:e.data,value:e.value,chainNamespace:I.CHAIN.EVM}),await w.swapTokens(),await w.getTransaction(),l.approvalTransaction=void 0,l.loadingApprovalTransaction=!1}catch(r){const i=r;l.transactionError=i?.displayMessage,l.loadingApprovalTransaction=!1,S.showError(i?.displayMessage||"Transaction error"),D.sendEvent({type:"track",event:"SWAP_APPROVAL_ERROR",properties:{message:i?.displayMessage||i?.message||"Unknown",network:f.state.activeCaipNetwork?.caipNetworkId||"",swapFromToken:w.state.sourceToken?.symbol||"",swapToToken:w.state.toToken?.symbol||"",swapFromAmount:w.state.sourceTokenAmount||"",swapToAmount:w.state.toTokenAmount||"",isSmartAccount:Ue(I.CHAIN.EVM)===We.ACCOUNT_TYPES.SMART_ACCOUNT}})}},async sendTransactionForSwap(e){if(!e)return;const{fromAddress:t,toTokenAmount:n,isAuthConnector:o}=w.getParams();l.loadingTransaction=!0;const r=`Swapping ${l.sourceToken?.symbol} to ${v.formatNumberToLocalString(n,3)} ${l.toToken?.symbol}`,i=`Swapped ${l.sourceToken?.symbol} to ${v.formatNumberToLocalString(n,3)} ${l.toToken?.symbol}`;o?m.pushTransactionStack({onSuccess(){m.replace("Account"),S.showLoading(r),De.resetState()}}):S.showLoading("Confirm transaction in your wallet");try{const s=[l.sourceToken?.address,l.toToken?.address].join(","),a=await W.sendTransaction({address:t,to:e.to,data:e.data,value:e.value,chainNamespace:I.CHAIN.EVM});return l.loadingTransaction=!1,S.showSuccess(i),D.sendEvent({type:"track",event:"SWAP_SUCCESS",properties:{network:f.state.activeCaipNetwork?.caipNetworkId||"",swapFromToken:w.state.sourceToken?.symbol||"",swapToToken:w.state.toToken?.symbol||"",swapFromAmount:w.state.sourceTokenAmount||"",swapToAmount:w.state.toTokenAmount||"",isSmartAccount:Ue(I.CHAIN.EVM)===We.ACCOUNT_TYPES.SMART_ACCOUNT}}),De.resetState(),o||m.replace("Account"),De.getMyTokensWithBalance(s),a}catch(s){const a=s;l.transactionError=a?.displayMessage,l.loadingTransaction=!1,S.showError(a?.displayMessage||"Transaction error"),D.sendEvent({type:"track",event:"SWAP_ERROR",properties:{message:a?.displayMessage||a?.message||"Unknown",network:f.state.activeCaipNetwork?.caipNetworkId||"",swapFromToken:w.state.sourceToken?.symbol||"",swapToToken:w.state.toToken?.symbol||"",swapFromAmount:w.state.sourceTokenAmount||"",swapToAmount:w.state.toTokenAmount||"",isSmartAccount:Ue(I.CHAIN.EVM)===We.ACCOUNT_TYPES.SMART_ACCOUNT}});return}},hasInsufficientToken(e,t){return ne.isInsufficientSourceTokenForSwap(e,t,l.myTokensWithBalance)},setTransactionDetails(){const{toTokenAddn):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")i=Reflect.decorate(e,t,n,o);else for(var a=e.length-1;a>=0;a--)(s=e[a])&&(i=(r<3?s(i):r>3?s(t,n,i):s(t,n))||i);return r>3&&i&&Object.defineProperty(t,n,i),i};const sn={info:"info",success:"checkmark",warning:"warningCircle",error:"warning"};let Ae=class extends T{constructor(){super(...arguments),this.message="",this.type="info"}render(){return c`
+import{N as v,v as _t,R as m,S,b as W,c as I,E as D,x as Ue,y as We,j as f,B as be,a as z,z as ve,D as xe,F as Rt,o as Xe,G as Vt,C as U,I as rt,J as st,K as at,M as O,L as Ot,e as A,r as X,i as T,d as c,k as qe,w as Ut,P as Ht,Q as Gt,U as P,V as Yt,H as V,O as E,X as yt,h as L,Y as Te,u as Ve,f as Qt,A as Re,T as Kt,Z as Xt,_ as Zt}from"./core-CSH1uYEM.js";import{c as x,n as d,o as k,r as h,a as Jt,U as He,b as Wt}from"./index-BH2bE4T0.js";import"./index-D8NixbLH.js";import"./index-Cu1-ClI8.js";const ne={getGasPriceInEther(e,t){const n=t*e;return Number(n)/1e18},getGasPriceInUSD(e,t,n){const o=ne.getGasPriceInEther(t,n);return v.bigNumber(e).times(o).toNumber()},getPriceImpact({sourceTokenAmount:e,sourceTokenPriceInUSD:t,toTokenPriceInUSD:n,toTokenAmount:o}){const r=v.bigNumber(e).times(t),i=v.bigNumber(o).times(n);return r.minus(i).div(r).times(100).toNumber()},getMaxSlippage(e,t){const n=v.bigNumber(e).div(100);return v.multiply(t,n).toNumber()},getProviderFee(e,t=.0085){return v.bigNumber(e).times(t).toString()},isInsufficientNetworkTokenForGas(e,t){const n=t||"0";return v.bigNumber(e).eq(0)?!0:v.bigNumber(v.bigNumber(n)).gt(e)},isInsufficientSourceTokenForSwap(e,t,n){const o=n?.find(i=>i.address===t)?.quantity?.numeric;return v.bigNumber(o||"0").lt(e)}},bt=15e4,en=6,R={initializing:!1,initialized:!1,loadingPrices:!1,loadingQuote:!1,loadingApprovalTransaction:!1,loadingBuildTransaction:!1,loadingTransaction:!1,switchingTokens:!1,fetchError:!1,approvalTransaction:void 0,swapTransaction:void 0,transactionError:void 0,sourceToken:void 0,sourceTokenAmount:"",sourceTokenPriceInUSD:0,toToken:void 0,toTokenAmount:"",toTokenPriceInUSD:0,networkPrice:"0",networkBalanceInUSD:"0",networkTokenSymbol:"",inputError:void 0,slippage:Xe.CONVERT_SLIPPAGE_TOLERANCE,tokens:void 0,popularTokens:void 0,suggestedTokens:void 0,foundTokens:void 0,myTokensWithBalance:void 0,tokensPriceMap:{},gasFee:"0",gasPriceInUSD:0,priceImpact:void 0,maxSlippage:void 0,providerFee:void 0},l=at({...R}),De={state:l,subscribe(e){return st(l,()=>e(l))},subscribeKey(e,t){return rt(l,e,t)},getParams(){const e=f.state.activeChain,t=f.getAccountData(e)?.caipAddress??f.state.activeCaipAddress,n=z.getPlainAddress(t),o=Vt(),r=U.getConnectorId(f.state.activeChain);if(!n)throw new Error("No address found to swap the tokens from.");const i=!l.toToken?.address||!l.toToken?.decimals,s=!l.sourceToken?.address||!l.sourceToken?.decimals||!v.bigNumber(l.sourceTokenAmount).gt(0),a=!l.sourceTokenAmount;return{networkAddress:o,fromAddress:n,fromCaipAddress:t,sourceTokenAddress:l.sourceToken?.address,toTokenAddress:l.toToken?.address,toTokenAmount:l.toTokenAmount,toTokenDecimals:l.toToken?.decimals,sourceTokenAmount:l.sourceTokenAmount,sourceTokenDecimals:l.sourceToken?.decimals,invalidToToken:i,invalidSourceToken:s,invalidSourceTokenAmount:a,availableToSwap:t&&!i&&!s&&!a,isAuthConnector:r===I.CONNECTOR_ID.AUTH}},async setSourceToken(e){if(!e){l.sourceToken=e,l.sourceTokenAmount="",l.sourceTokenPriceInUSD=0;return}l.sourceToken=e,await w.setTokenPrice(e.address,"sourceToken")},setSourceTokenAmount(e){l.sourceTokenAmount=e},async setToToken(e){if(!e){l.toToken=e,l.toTokenAmount="",l.toTokenPriceInUSD=0;return}l.toToken=e,await w.setTokenPrice(e.address,"toToken")},setToTokenAmount(e){l.toTokenAmount=e?v.toFixed(e,en):""},async setTokenPrice(e,t){let n=l.tokensPriceMap[e]||0;n||(l.loadingPrices=!0,n=await w.getAddressPrice(e)),t==="sourceToken"?l.sourceTokenPriceInUSD=n:t==="toToken"&&(l.toTokenPriceInUSD=n),l.loadingPrices&&(l.loadingPrices=!1),w.getParams().availableToSwap&&!l.switchingTokens&&w.swapTokens()},async switchTokens(){if(!(l.initializing||!l.initialized||l.switchingTokens)){l.switchingTokens=!0;try{const e=l.toToken?{...l.toToken}:void 0,t=l.sourceToken?{...l.sourceToken}:void 0,n=e&&l.toTokenAmount===""?"1":l.toTokenAmount;w.setSourceTokenAmount(n),w.setToTokenAmount(""),await w.setSourceToken(e),await w.setToToken(t),l.switchingTokens=!1,w.swapTokens()}catch(e){throw l.switchingTokens=!1,e}}},resetState(){l.myTokensWithBalance=R.myTokensWithBalance,l.tokensPriceMap=R.tokensPriceMap,l.initialized=R.initialized,l.initializing=R.initializing,l.switchingTokens=R.switchingTokens,l.sourceToken=R.sourceToken,l.sourceTokenAmount=R.sourceTokenAmount,l.sourceTokenPriceInUSD=R.sourceTokenPriceInUSD,l.toToken=R.toToken,l.toTokenAmount=R.toTokenAmount,l.toTokenPriceInUSD=R.toTokenPriceInUSD,l.networkPrice=R.networkPrice,l.networkTokenSymbol=R.networkTokenSymbol,l.networkBalanceInUSD=R.networkBalanceInUSD,l.inputError=R.inputError},resetValues(){const{networkAddress:e}=w.getParams(),t=l.tokens?.find(n=>n.address===e);w.setSourceToken(t),w.setToToken(void 0)},getApprovalLoadingState(){return l.loadingApprovalTransaction},clearError(){l.transactionError=void 0},async initializeState(){if(!l.initializing){if(l.initializing=!0,!l.initialized)try{await w.fetchTokens(),l.initialized=!0}catch{l.initialized=!1,S.showError("Failed to initialize swap"),m.goBack()}l.initializing=!1}},async fetchTokens(){const{networkAddress:e}=w.getParams();await w.getNetworkTokenPrice(),await w.getMyTokensWithBalance();const t=l.myTokensWithBalance?.find(n=>n.address===e);t&&(l.networkTokenSymbol=t.symbol,w.setSourceToken(t),w.setSourceTokenAmount("0"))},async getTokenList(){const e=f.state.activeCaipNetwork?.caipNetworkId;if(!(l.caipNetworkId===e&&l.tokens))try{l.tokensLoading=!0;const t=await ve.getTokenList(e);l.tokens=t,l.caipNetworkId=e,l.popularTokens=t.sort((s,a)=>s.symbol<a.symbol?-1:s.symbol>a.symbol?1:0);const o=(e&&Xe.SUGGESTED_TOKENS_BY_CHAIN?.[e]||[]).map(s=>t.find(a=>a.symbol===s)).filter(s=>!!s),i=(Xe.SWAP_SUGGESTED_TOKENS||[]).map(s=>t.find(a=>a.symbol===s)).filter(s=>!!s).filter(s=>!o.some(a=>a.address===s.address));l.suggestedTokens=[...o,...i]}catch{l.tokens=[],l.popularTokens=[],l.suggestedTokens=[]}finally{l.tokensLoading=!1}},async getAddressPrice(e){const t=l.tokensPriceMap[e];if(t)return t;const o=(await be.fetchTokenPrice({addresses:[e]}))?.fungibles||[],i=[...l.tokens||[],...l.myTokensWithBalance||[]]?.find(b=>b.address===e)?.symbol,s=o.find(b=>b.symbol.toLowerCase()===i?.toLowerCase())?.price||0,a=parseFloat(s.toString());return l.tokensPriceMap[e]=a,a},async getNetworkTokenPrice(){const{networkAddress:e}=w.getParams(),n=(await be.fetchTokenPrice({addresses:[e]}).catch(()=>(S.showError("Failed to fetch network token price"),{fungibles:[]}))).fungibles?.[0],o=n?.price.toString()||"0";l.tokensPriceMap[e]=parseFloat(o),l.networkTokenSymbol=n?.symbol||"",l.networkPrice=o},async getMyTokensWithBalance(e){const t=await Rt.getMyTokensWithBalance({forceUpdate:e,caipNetwork:f.state.activeCaipNetwork,address:f.getAccountData()?.address}),n=ve.mapBalancesToSwapTokens(t);n&&(await w.getInitialGasPrice(),w.setBalances(n))},setBalances(e){const{networkAddress:t}=w.getParams(),n=f.state.activeCaipNetwork;if(!n)return;const o=e.find(r=>r.address===t);e.forEach(r=>{l.tokensPriceMap[r.address]=r.price||0}),l.myTokensWithBalance=e.filter(r=>r.address.startsWith(n.caipNetworkId)),l.networkBalanceInUSD=o?v.multiply(o.quantity.numeric,o.price).toString():"0"},async getInitialGasPrice(){const e=await ve.fetchGasPrice();if(!e)return{gasPrice:null,gasPriceInUSD:null};switch(f.state?.activeCaipNetwork?.chainNamespace){case I.CHAIN.SOLANA:return l.gasFee=e.standard??"0",l.gasPriceInUSD=v.multiply(e.standard,l.networkPrice).div(1e9).toNumber(),{gasPrice:BigInt(l.gasFee),gasPriceInUSD:Number(l.gasPriceInUSD)};case I.CHAIN.EVM:default:const t=e.standard??"0",n=BigInt(t),o=BigInt(bt),r=ne.getGasPriceInUSD(l.networkPrice,o,n);return l.gasFee=t,l.gasPriceInUSD=r,{gasPrice:n,gasPriceInUSD:r}}},async swapTokens(){const e=f.getAccountData()?.address,t=l.sourceToken,n=l.toToken,o=v.bigNumber(l.sourceTokenAmount).gt(0);if(o||w.setToTokenAmount(""),!n||!t||l.loadingPrices||!o||!e)return;l.loadingQuote=!0;const r=v.bigNumber(l.sourceTokenAmount).times(10**t.decimals).round(0).toFixed(0);try{const i=await be.fetchSwapQuote({userAddress:e,from:t.address,to:n.address,gasPrice:l.gasFee,amount:r.toString()});l.loadingQuote=!1;const s=i?.quotes?.[0]?.toAmount;if(!s){xe.open({displayMessage:"Incorrect amount",debugMessage:"Please enter a valid amount"},"error");return}const a=v.bigNumber(s).div(10**n.decimals).toString();w.setToTokenAmount(a),w.hasInsufficientToken(l.sourceTokenAmount,t.address)?l.inputError="Insufficient balance":(l.inputError=void 0,w.setTransactionDetails())}catch(i){const s=await ve.handleSwapError(i);l.loadingQuote=!1,l.inputError=s||"Insufficient balance"}},async getTransaction(){const{fromCaipAddress:e,availableToSwap:t}=w.getParams(),n=l.sourceToken,o=l.toToken;if(!(!e||!t||!n||!o||l.loadingQuote))try{l.loadingBuildTransaction=!0;const r=await ve.fetchSwapAllowance({userAddress:e,tokenAddress:n.address,sourceTokenAmount:l.sourceTokenAmount,sourceTokenDecimals:n.decimals});let i;return r?i=await w.createSwapTransaction():i=await w.createAllowanceTransaction(),l.loadingBuildTransaction=!1,l.fetchError=!1,i}catch{m.goBack(),S.showError("Failed to check allowance"),l.loadingBuildTransaction=!1,l.approvalTransaction=void 0,l.swapTransaction=void 0,l.fetchError=!0;return}},async createAllowanceTransaction(){const{fromCaipAddress:e,sourceTokenAddress:t,toTokenAddress:n}=w.getParams();if(!(!e||!n)){if(!t)throw new Error("createAllowanceTransaction - No source token address found.");try{const o=await be.generateApproveCalldata({from:t,to:n,userAddress:e}),r=z.getPlainAddress(o.tx.from);if(!r)throw new Error("SwapController:createAllowanceTransaction - address is required");const i={data:o.tx.data,to:r,gasPrice:BigInt(o.tx.eip155.gasPrice),value:BigInt(o.tx.value),toAmount:l.toTokenAmount};return l.swapTransaction=void 0,l.approvalTransaction={data:i.data,to:i.to,gasPrice:i.gasPrice,value:i.value,toAmount:i.toAmount},{data:i.data,to:i.to,gasPrice:i.gasPrice,value:i.value,toAmount:i.toAmount}}catch{m.goBack(),S.showError("Failed to create approval transaction"),l.approvalTransaction=void 0,l.swapTransaction=void 0,l.fetchError=!0;return}}},async createSwapTransaction(){const{networkAddress:e,fromCaipAddress:t,sourceTokenAmount:n}=w.getParams(),o=l.sourceToken,r=l.toToken;if(!t||!n||!o||!r)return;const i=W.parseUnits(n,o.decimals)?.toString();try{const s=await be.generateSwapCalldata({userAddress:t,from:o.address,to:r.address,amount:i,disableEstimate:!0}),a=o.address===e,b=BigInt(s.tx.eip155.gas),he=BigInt(s.tx.eip155.gasPrice),_e=z.getPlainAddress(s.tx.to);if(!_e)throw new Error("SwapController:createSwapTransaction - address is required");const ye={data:s.tx.data,to:_e,gas:b,gasPrice:he,value:BigInt(a?i??"0":"0"),toAmount:l.toTokenAmount};return l.gasPriceInUSD=ne.getGasPriceInUSD(l.networkPrice,b,he),l.approvalTransaction=void 0,l.swapTransaction=ye,ye}catch{m.goBack(),S.showError("Failed to create transaction"),l.approvalTransaction=void 0,l.swapTransaction=void 0,l.fetchError=!0;return}},onEmbeddedWalletApprovalSuccess(){S.showLoading("Approve limit increase in your wallet"),m.replace("SwapPreview")},async sendTransactionForApproval(e){const{fromAddress:t,isAuthConnector:n}=w.getParams();l.loadingApprovalTransaction=!0,n?m.pushTransactionStack({onSuccess:w.onEmbeddedWalletApprovalSuccess}):S.showLoading("Approve limit increase in your wallet");try{await W.sendTransaction({address:t,to:e.to,data:e.data,value:e.value,chainNamespace:I.CHAIN.EVM}),await w.swapTokens(),await w.getTransaction(),l.approvalTransaction=void 0,l.loadingApprovalTransaction=!1}catch(r){const i=r;l.transactionError=i?.displayMessage,l.loadingApprovalTransaction=!1,S.showError(i?.displayMessage||"Transaction error"),D.sendEvent({type:"track",event:"SWAP_APPROVAL_ERROR",properties:{message:i?.displayMessage||i?.message||"Unknown",network:f.state.activeCaipNetwork?.caipNetworkId||"",swapFromToken:w.state.sourceToken?.symbol||"",swapToToken:w.state.toToken?.symbol||"",swapFromAmount:w.state.sourceTokenAmount||"",swapToAmount:w.state.toTokenAmount||"",isSmartAccount:Ue(I.CHAIN.EVM)===We.ACCOUNT_TYPES.SMART_ACCOUNT}})}},async sendTransactionForSwap(e){if(!e)return;const{fromAddress:t,toTokenAmount:n,isAuthConnector:o}=w.getParams();l.loadingTransaction=!0;const r=`Swapping ${l.sourceToken?.symbol} to ${v.formatNumberToLocalString(n,3)} ${l.toToken?.symbol}`,i=`Swapped ${l.sourceToken?.symbol} to ${v.formatNumberToLocalString(n,3)} ${l.toToken?.symbol}`;o?m.pushTransactionStack({onSuccess(){m.replace("Account"),S.showLoading(r),De.resetState()}}):S.showLoading("Confirm transaction in your wallet");try{const s=[l.sourceToken?.address,l.toToken?.address].join(","),a=await W.sendTransaction({address:t,to:e.to,data:e.data,value:e.value,chainNamespace:I.CHAIN.EVM});return l.loadingTransaction=!1,S.showSuccess(i),D.sendEvent({type:"track",event:"SWAP_SUCCESS",properties:{network:f.state.activeCaipNetwork?.caipNetworkId||"",swapFromToken:w.state.sourceToken?.symbol||"",swapToToken:w.state.toToken?.symbol||"",swapFromAmount:w.state.sourceTokenAmount||"",swapToAmount:w.state.toTokenAmount||"",isSmartAccount:Ue(I.CHAIN.EVM)===We.ACCOUNT_TYPES.SMART_ACCOUNT}}),De.resetState(),o||m.replace("Account"),De.getMyTokensWithBalance(s),a}catch(s){const a=s;l.transactionError=a?.displayMessage,l.loadingTransaction=!1,S.showError(a?.displayMessage||"Transaction error"),D.sendEvent({type:"track",event:"SWAP_ERROR",properties:{message:a?.displayMessage||a?.message||"Unknown",network:f.state.activeCaipNetwork?.caipNetworkId||"",swapFromToken:w.state.sourceToken?.symbol||"",swapToToken:w.state.toToken?.symbol||"",swapFromAmount:w.state.sourceTokenAmount||"",swapToAmount:w.state.toTokenAmount||"",isSmartAccount:Ue(I.CHAIN.EVM)===We.ACCOUNT_TYPES.SMART_ACCOUNT}});return}},hasInsufficientToken(e,t){return ne.isInsufficientSourceTokenForSwap(e,t,l.myTokensWithBalance)},setTransactionDetails(){const{toTokenAddress:e,toTokenDecimals:t}=w.getParams();!e||!t||(l.gasPriceInUSD=ne.getGasPriceInUSD(l.networkPrice,BigInt(l.gasFee),BigInt(bt)),l.priceImpact=ne.getPriceImpact({sourceTokenAmount:l.sourceTokenAmount,sourceTokenPriceInUSD:l.sourceTokenPriceInUSD,toTokenPriceInUSD:l.toTokenPriceInUSD,toTokenAmount:l.toTokenAmount}),l.maxSlippage=ne.getMaxSlippage(l.slippage,l.toTokenAmount),l.providerFee=ne.getProviderFee(l.sourceTokenAmount))}},w=_t(De),q=at({message:"",open:!1,triggerRect:{width:0,height:0,top:0,left:0},variant:"shade"}),tn={state:q,subscribe(e){return st(q,()=>e(q))},subscribeKey(e,t){return rt(q,e,t)},showTooltip({message:e,triggerRect:t,variant:n}){q.open=!0,q.message=e,q.triggerRect=t,q.variant=n},hide(){q.open=!1,q.message="",q.triggerRect={width:0,height:0,top:0,left:0}}},F=_t(tn),Dt={isUnsupportedChainView(){return m.state.view==="UnsupportedChain"||m.state.view==="SwitchNetwork"&&m.state.history.includes("UnsupportedChain")},async safeClose(){if(this.isUnsupportedChainView()){O.shake();return}if(await Ot.isSIWXCloseDisabled()){O.shake();return}(m.state.view==="DataCapture"||m.state.view==="DataCaptureOtpConfirm")&&W.disconnect(),O.close()}},vt={interpolate(e,t,n){if(e.length!==2||t.length!==2)throw new Error("inputRange and outputRange must be an array of length 2");const o=e[0]||0,r=e[1]||0,i=t[0]||0,s=t[1]||0;return n<o?i:n>r?s:(s-i)/(r-o)*(n-o)+i}},nn=A`
+  :host {
+    display: block;
+    border-radius: clamp(0px, ${({borderRadius:e})=>e[8]}, 44px);
+    box-shadow: 0 0 0 1px ${({tokens:e})=>e.theme.foregroundPrimary};
+    overflow: hidden;
+  }
+`;var on=function(e,t,n,o){var r=arguments.length,i=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,n):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")i=Reflect.decorate(e,t,n,o);else for(var a=e.length-1;a>=0;a--)(s=e[a])&&(i=(r<3?s(i):r>3?s(t,n,i):s(t,n))||i);return r>3&&i&&Object.defineProperty(t,n,i),i};let Ze=class extends T{render(){return c`<slot></slot>`}};Ze.styles=[X,nn];Ze=on([x("wui-card")],Ze);const rn=A`
+  :host {
+    width: 100%;
+  }
+
+  :host > wui-flex {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: ${({spacing:e})=>e[2]};
+    padding: ${({spacing:e})=>e[3]};
+    border-radius: ${({borderRadius:e})=>e[6]};
+    border: 1px solid ${({tokens:e})=>e.theme.borderPrimary};
+    box-sizing: border-box;
+    background-color: ${({tokens:e})=>e.theme.foregroundPrimary};
+    box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.25);
+    color: ${({tokens:e})=>e.theme.textPrimary};
+  }
+
+  :host > wui-flex[data-type='info'] {
+    .icon-box {
+      background-color: ${({tokens:e})=>e.theme.foregroundSecondary};
+
+      wui-icon {
+        color: ${({tokens:e})=>e.theme.iconDefault};
+      }
+    }
+  }
+  :host > wui-flex[data-type='success'] {
+    .icon-box {
+      background-color: ${({tokens:e})=>e.core.backgroundSuccess};
+
+      wui-icon {
+        color: ${({tokens:e})=>e.core.borderSuccess};
+      }
+    }
+  }
+  :host > wui-flex[data-type='warning'] {
+    .icon-box {
+      background-color: ${({tokens:e})=>e.core.backgroundWarning};
+
+      wui-icon {
+        color: ${({tokens:e})=>e.core.borderWarning};
+      }
+    }
+  }
+  :host > wui-flex[data-type='error'] {
+    .icon-box {
+      background-color: ${({tokens:e})=>e.core.backgroundError};
+
+      wui-icon {
+        color: ${({tokens:e})=>e.core.borderError};
+      }
+    }
+  }
+
+  wui-flex {
+    width: 100%;
+  }
+
+  wui-text {
+    word-break: break-word;
+    flex: 1;
+  }
+
+  .close {
+    cursor: pointer;
+    color: ${({tokens:e})=>e.theme.iconDefault};
+  }
+
+  .icon-box {
+    height: 40px;
+    width: 40px;
+    border-radius: ${({borderRadius:e})=>e[2]};
+    background-color: var(--local-icon-bg-value);
+  }
+`;var ct=function(e,t,n,o){var r=arguments.length,i=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,n):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")i=Reflect.decorate(e,t,n,o);else for(var a=e.length-1;a>=0;a--)(s=e[a])&&(i=(r<3?s(i):r>3?s(t,n,i):s(t,n))||i);return r>3&&i&&Object.defineProperty(t,n,i),i};const sn={info:"info",success:"checkmark",warning:"warningCircle",error:"warning"};let Ae=class extends T{constructor(){super(...arguments),this.message="",this.type="info"}render(){return c`
       <wui-flex
         data-type=${k(this.type)}
         flexDirection="row"
@@ -417,7 +501,518 @@ import{N as v,v as _t,R as m,S,b as W,c as I,E as D,x as Ue,y as We,j as f,B as 
       --local-width: var(--apkt-spacing-10);
       --local-height: var(--apkt-spacing-10);
       --local-icon-size: var(--apkt-spacing-4);
-    `):th        </wui-flex>
+    `):this.style.cssText=`
+
+      --local-path: var(--apkt-path-network-${this.size});
+      --local-width:  var(--apkt-width-network-${this.size});
+      --local-height:  var(--apkt-height-network-${this.size});
+      --local-icon-size:  var(--apkt-spacing-${t[this.size]});
+    `,c`${this.templateVisual()} ${this.svgTemplate()} `}svgTemplate(){return this.round?null:this.networkImagesBySize[this.size]}templateVisual(){return this.imageSrc?c`<wui-image src=${this.imageSrc} alt=${this.name}></wui-image>`:c`<wui-icon size="inherit" color="default" name="networkPlaceholder"></wui-icon>`}};te.styles=[X,fn];pe([d()],te.prototype,"size",void 0);pe([d()],te.prototype,"name",void 0);pe([d({type:Object})],te.prototype,"networkImagesBySize",void 0);pe([d()],te.prototype,"imageSrc",void 0);pe([d({type:Boolean})],te.prototype,"selected",void 0);pe([d({type:Boolean})],te.prototype,"round",void 0);te=pe([x("wui-network-image")],te);const gn=A`
+  :host {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 1px;
+    background-color: ${({tokens:e})=>e.theme.borderPrimary};
+    justify-content: center;
+    align-items: center;
+  }
+
+  :host > wui-text {
+    position: absolute;
+    padding: 0px 8px;
+    transition: background-color ${({durations:e})=>e.lg}
+      ${({easings:e})=>e["ease-out-power-2"]};
+    will-change: background-color;
+  }
+
+  :host([data-bg-color='primary']) > wui-text {
+    background-color: ${({tokens:e})=>e.theme.backgroundPrimary};
+  }
+
+  :host([data-bg-color='secondary']) > wui-text {
+    background-color: ${({tokens:e})=>e.theme.foregroundPrimary};
+  }
+`;var lt=function(e,t,n,o){var r=arguments.length,i=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,n):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")i=Reflect.decorate(e,t,n,o);else for(var a=e.length-1;a>=0;a--)(s=e[a])&&(i=(r<3?s(i):r>3?s(t,n,i):s(t,n))||i);return r>3&&i&&Object.defineProperty(t,n,i),i};let Se=class extends T{constructor(){super(...arguments),this.text="",this.bgColor="primary"}render(){return this.dataset.bgColor=this.bgColor,c`${this.template()}`}template(){return this.text?c`<wui-text variant="md-regular" color="secondary">${this.text}</wui-text>`:null}};Se.styles=[X,gn];lt([d()],Se.prototype,"text",void 0);lt([d()],Se.prototype,"bgColor",void 0);Se=lt([x("wui-separator")],Se);const g={INVALID_PAYMENT_CONFIG:"INVALID_PAYMENT_CONFIG",INVALID_RECIPIENT:"INVALID_RECIPIENT",INVALID_ASSET:"INVALID_ASSET",INVALID_AMOUNT:"INVALID_AMOUNT",UNKNOWN_ERROR:"UNKNOWN_ERROR",UNABLE_TO_INITIATE_PAYMENT:"UNABLE_TO_INITIATE_PAYMENT",INVALID_CHAIN_NAMESPACE:"INVALID_CHAIN_NAMESPACE",GENERIC_PAYMENT_ERROR:"GENERIC_PAYMENT_ERROR",UNABLE_TO_GET_EXCHANGES:"UNABLE_TO_GET_EXCHANGES",ASSET_NOT_SUPPORTED:"ASSET_NOT_SUPPORTED",UNABLE_TO_GET_PAY_URL:"UNABLE_TO_GET_PAY_URL",UNABLE_TO_GET_BUY_STATUS:"UNABLE_TO_GET_BUY_STATUS",UNABLE_TO_GET_TOKEN_BALANCES:"UNABLE_TO_GET_TOKEN_BALANCES",UNABLE_TO_GET_QUOTE:"UNABLE_TO_GET_QUOTE",UNABLE_TO_GET_QUOTE_STATUS:"UNABLE_TO_GET_QUOTE_STATUS",INVALID_RECIPIENT_ADDRESS_FOR_ASSET:"INVALID_RECIPIENT_ADDRESS_FOR_ASSET"},ie={[g.INVALID_PAYMENT_CONFIG]:"Invalid payment configuration",[g.INVALID_RECIPIENT]:"Invalid recipient address",[g.INVALID_ASSET]:"Invalid asset specified",[g.INVALID_AMOUNT]:"Invalid payment amount",[g.INVALID_RECIPIENT_ADDRESS_FOR_ASSET]:"Invalid recipient address for the asset selected",[g.UNKNOWN_ERROR]:"Unknown payment error occurred",[g.UNABLE_TO_INITIATE_PAYMENT]:"Unable to initiate payment",[g.INVALID_CHAIN_NAMESPACE]:"Invalid chain namespace",[g.GENERIC_PAYMENT_ERROR]:"Unable to process payment",[g.UNABLE_TO_GET_EXCHANGES]:"Unable to get exchanges",[g.ASSET_NOT_SUPPORTED]:"Asset not supported by the selected exchange",[g.UNABLE_TO_GET_PAY_URL]:"Unable to get payment URL",[g.UNABLE_TO_GET_BUY_STATUS]:"Unable to get buy status",[g.UNABLE_TO_GET_TOKEN_BALANCES]:"Unable to get token balances",[g.UNABLE_TO_GET_QUOTE]:"Unable to get quote. Please choose a different token",[g.UNABLE_TO_GET_QUOTE_STATUS]:"Unable to get quote status"};class y extends Error{get message(){return ie[this.code]}constructor(t,n){super(ie[t]),this.name="AppKitPayError",this.code=t,this.details=n,Error.captureStackTrace&&Error.captureStackTrace(this,y)}}const yn="https://rpc.walletconnect.org/v1/json-rpc",xt="reown_test";function bn(){const{chainNamespace:e}=P.parseCaipNetworkId(p.state.paymentAsset.network);if(!z.isAddress(p.state.recipient,e))throw new y(g.INVALID_RECIPIENT_ADDRESS_FOR_ASSET,`Provide valid recipient address for namespace "${e}"`)}async function vn(e,t,n){if(t!==I.CHAIN.EVM)throw new y(g.INVALID_CHAIN_NAMESPACE);if(!n.fromAddress)throw new y(g.INVALID_PAYMENT_CONFIG,"fromAddress is required for native EVM payments.");const o=typeof n.amount=="string"?parseFloat(n.amount):n.amount;if(isNaN(o))throw new y(g.INVALID_PAYMENT_CONFIG);const r=e.metadata?.decimals??18,i=W.parseUnits(o.toString(),r);if(typeof i!="bigint")throw new y(g.GENERIC_PAYMENT_ERROR);return await W.sendTransaction({chainNamespace:t,to:n.recipient,address:n.fromAddress,value:i,data:"0x"})??void 0}async function xn(e,t){if(!t.fromAddress)throw new y(g.INVALID_PAYMENT_CONFIG,"fromAddress is required for ERC20 EVM payments.");const n=e.asset,o=t.recipient,r=Number(e.metadata.decimals),i=W.parseUnits(t.amount.toString(),r);if(i===void 0)throw new y(g.GENERIC_PAYMENT_ERROR);return await W.writeContract({fromAddress:t.fromAddress,tokenAddress:n,args:[o,i],method:"transfer",abi:Gt.getERC20Abi(n),chainNamespace:I.CHAIN.EVM})??void 0}async function kn(e,t){if(e!==I.CHAIN.SOLANA)throw new y(g.INVALID_CHAIN_NAMESPACE);if(!t.fromAddress)throw new y(g.INVALID_PAYMENT_CONFIG,"fromAddress is required for Solana payments.");const n=typeof t.amount=="string"?parseFloat(t.amount):t.amount;if(isNaN(n)||n<=0)throw new y(g.INVALID_PAYMENT_CONFIG,"Invalid payment amount.");try{if(!Ht.getProvider(e))throw new y(g.GENERIC_PAYMENT_ERROR,"No Solana provider available.");const r=await W.sendTransaction({chainNamespace:I.CHAIN.SOLANA,to:t.recipient,value:n,tokenMint:t.tokenMint});if(!r)throw new y(g.GENERIC_PAYMENT_ERROR,"Transaction failed.");return r}catch(o){throw o instanceof y?o:new y(g.GENERIC_PAYMENT_ERROR,`Solana payment failed: ${o}`)}}async function Tn({sourceToken:e,toToken:t,amount:n,recipient:o}){const r=W.parseUnits(n,e.metadata.decimals),i=W.parseUnits(n,t.metadata.decimals);return Promise.resolve({type:et,origin:{amount:r?.toString()??"0",currency:e},destination:{amount:i?.toString()??"0",currency:t},fees:[{id:"service",label:"Service Fee",amount:"0",currency:t}],steps:[{requestId:et,type:"deposit",deposit:{amount:r?.toString()??"0",currency:e.asset,receiver:o}}],timeInSeconds:6})}function Je(e){if(!e)return null;const t=e.steps[0];return!t||t.type!==Dn?null:t}function Ye(e,t=0){if(!e)return[];const n=e.steps.filter(r=>r.type===Ln),o=n.filter((r,i)=>i+1>t);return n.length>0&&n.length<3?o:[]}const ut=new Yt({baseUrl:z.getApiUrl(),clientId:null});class An extends Error{}function Sn(){const e=E.getSnapshot().projectId;return`${yn}?projectId=${e}`}function dt(){const{projectId:e,sdkType:t,sdkVersion:n}=E.state;return{projectId:e,st:t||"appkit",sv:n||"html-wagmi-4.2.2"}}async function pt(e,t){const n=Sn(),{sdkType:o,sdkVersion:r,projectId:i}=E.getSnapshot(),s={jsonrpc:"2.0",id:1,method:e,params:{...t||{},st:o,sv:r,projectId:i}},b=await(await fetch(n,{method:"POST",body:JSON.stringify(s),headers:{"Content-Type":"application/json"}})).json();if(b.error)throw new An(b.error.message);return b}async function kt(e){return(await pt("reown_getExchanges",e)).result}async function Tt(e){return(await pt("reown_getExchangePayUrl",e)).result}async function En(e){return(await pt("reown_getExchangeBuyStatus",e)).result}async function In(e){const t=v.bigNumber(e.amount).times(10**e.toToken.metadata.decimals).toString(),{chainId:n,chainNamespace:o}=P.parseCaipNetworkId(e.sourceToken.network),{chainId:r,chainNamespace:i}=P.parseCaipNetworkId(e.toToken.network),s=e.sourceToken.asset==="native"?yt(o):e.sourceToken.asset,a=e.toToken.asset==="native"?yt(i):e.toToken.asset;return await ut.post({path:"/appkit/v1/transfers/quote",body:{user:e.address,originChainId:n.toString(),originCurrency:s,destinationChainId:r.toString(),destinationCurrency:a,recipient:e.recipient,amount:t},params:dt()})}async function Cn(e){const t=V.isLowerCaseMatch(e.sourceToken.network,e.toToken.network),n=V.isLowerCaseMatch(e.sourceToken.asset,e.toToken.asset);return t&&n?Tn(e):In(e)}async function Pn(e){return await ut.get({path:"/appkit/v1/transfers/status",params:{requestId:e.requestId,...dt()}})}async function Nn(e){return await ut.get({path:`/appkit/v1/transfers/assets/exchanges/${e}`,params:dt()})}const $n=["eip155","solana"],_n={eip155:{native:{assetNamespace:"slip44",assetReference:"60"},defaultTokenNamespace:"erc20"},solana:{native:{assetNamespace:"slip44",assetReference:"501"},defaultTokenNamespace:"token"}},At={56:"714",204:"714"};function Qe(e,t){const{chainNamespace:n,chainId:o}=P.parseCaipNetworkId(e),r=_n[n];if(!r)throw new Error(`Unsupported chain namespace for CAIP-19 formatting: ${n}`);let i=r.native.assetNamespace,s=r.native.assetReference;return t!=="native"?(i=r.defaultTokenNamespace,s=t):n==="eip155"&&At[o]&&(s=At[o]),`${`${n}:${o}`}/${i}:${s}`}function Rn(e){const{chainNamespace:t}=P.parseCaipNetworkId(e);return $n.includes(t)}function On(e){const n=f.getAllRequestedCaipNetworks().find(r=>r.caipNetworkId===e.chainId);let o=e.address;if(!n)throw new Error(`Target network not found for balance chainId "${e.chainId}"`);if(V.isLowerCaseMatch(e.symbol,n.nativeCurrency.symbol))o="native";else if(z.isCaipAddress(o)){const{address:r}=P.parseCaipAddress(o);o=r}else if(!o)throw new Error(`Balance address not found for balance symbol "${e.symbol}"`);return{network:n.caipNetworkId,asset:o,metadata:{name:e.name,symbol:e.symbol,decimals:Number(e.quantity.decimals),logoURI:e.iconUrl},amount:e.quantity.numeric}}function Un(e){return{chainId:e.network,address:`${e.network}:${e.asset}`,symbol:e.metadata.symbol,name:e.metadata.name,iconUrl:e.metadata.logoURI||"",price:0,quantity:{numeric:"0",decimals:e.metadata.decimals.toString()}}}function Be(e){const t=v.bigNumber(e,{safe:!0});return t.lt(.001)?"<0.001":t.round(4).toString()}function Wn(e){const n=f.getAllRequestedCaipNetworks().find(o=>o.caipNetworkId===e.network);return n?!!n.testnet:!1}const St=0,Ke="unknown",et="direct-transfer",Dn="deposit",Ln="transaction",u=at({paymentAsset:{network:"eip155:1",asset:"0x0",metadata:{name:"0x0",symbol:"0x0",decimals:0}},recipient:"0x0",amount:0,isConfigured:!1,error:null,isPaymentInProgress:!1,exchanges:[],isLoading:!1,openInNewTab:!0,redirectUrl:void 0,payWithExchange:void 0,currentPayment:void 0,analyticsSet:!1,paymentId:void 0,choice:"pay",tokenBalances:{[I.CHAIN.EVM]:[],[I.CHAIN.SOLANA]:[]},isFetchingTokenBalances:!1,selectedPaymentAsset:null,quote:void 0,quoteStatus:"waiting",quoteError:null,isFetchingQuote:!1,selectedExchange:void 0,exchangeUrlForQuote:void 0,requestId:void 0}),p={state:u,subscribe(e){return st(u,()=>e(u))},subscribeKey(e,t){return rt(u,e,t)},async handleOpenPay(e){this.resetState(),this.setPaymentConfig(e),this.initializeAnalytics(),bn(),await this.prepareTokenLogo(),u.isConfigured=!0,D.sendEvent({type:"track",event:"PAY_MODAL_OPEN",properties:{exchanges:u.exchanges,configuration:{network:u.paymentAsset.network,asset:u.paymentAsset.asset,recipient:u.recipient,amount:u.amount}}}),await O.open({view:"Pay"})},resetState(){u.paymentAsset={network:"eip155:1",asset:"0x0",metadata:{name:"0x0",symbol:"0x0",decimals:0}},u.recipient="0x0",u.amount=0,u.isConfigured=!1,u.error=null,u.isPaymentInProgress=!1,u.isLoading=!1,u.currentPayment=void 0,u.selectedExchange=void 0,u.exchangeUrlForQuote=void 0,u.requestId=void 0},resetQuoteState(){u.quote=void 0,u.quoteStatus="waiting",u.quoteError=null,u.isFetchingQuote=!1,u.requestId=void 0},setPaymentConfig(e){if(!e.paymentAsset)throw new y(g.INVALID_PAYMENT_CONFIG);try{u.choice=e.choice??"pay",u.paymentAsset=e.paymentAsset,u.recipient=e.recipient,u.amount=e.amount,u.openInNewTab=e.openInNewTab??!0,u.redirectUrl=e.redirectUrl,u.payWithExchange=e.payWithExchange,u.error=null}catch(t){throw new y(g.INVALID_PAYMENT_CONFIG,t.message)}},setSelectedPaymentAsset(e){u.selectedPaymentAsset=e},setSelectedExchange(e){u.selectedExchange=e},setRequestId(e){u.requestId=e},setPaymentInProgress(e){u.isPaymentInProgress=e},getPaymentAsset(){return u.paymentAsset},getExchanges(){return u.exchanges},async fetchExchanges(){try{u.isLoading=!0;const e=await kt({page:St});u.exchanges=e.exchanges.slice(0,2)}catch{throw S.showError(ie.UNABLE_TO_GET_EXCHANGES),new y(g.UNABLE_TO_GET_EXCHANGES)}finally{u.isLoading=!1}},async getAvailableExchanges(e){try{const t=e?.asset&&e?.network?Qe(e.network,e.asset):void 0;return await kt({page:e?.page??St,asset:t,amount:e?.amount?.toString()})}catch{throw new y(g.UNABLE_TO_GET_EXCHANGES)}},async getPayUrl(e,t,n=!1){try{const o=Number(t.amount),r=await Tt({exchangeId:e,asset:Qe(t.network,t.asset),amount:o.toString(),recipient:`${t.network}:${t.recipient}`});return D.sendEvent({type:"track",event:"PAY_EXCHANGE_SELECTED",properties:{source:"pay",exchange:{id:e},configuration:{network:t.network,asset:t.asset,recipient:t.recipient,amount:o},currentPayment:{type:"exchange",exchangeId:e},headless:n}}),n&&(this.initiatePayment(),D.sendEvent({type:"track",event:"PAY_INITIATED",properties:{source:"pay",paymentId:u.paymentId||Ke,configuration:{network:t.network,asset:t.asset,recipient:t.recipient,amount:o},currentPayment:{type:"exchange",exchangeId:e}}})),r}catch(o){throw o instanceof Error&&o.message.includes("is not supported")?new y(g.ASSET_NOT_SUPPORTED):new Error(o.message)}},async generateExchangeUrlForQuote({exchangeId:e,paymentAsset:t,amount:n,recipient:o}){const r=await Tt({exchangeId:e,asset:Qe(t.network,t.asset),amount:n.toString(),recipient:o});u.exchangeSessionId=r.sessionId,u.exchangeUrlForQuote=r.url},async openPayUrl(e,t,n=!1){try{const o=await this.getPayUrl(e.exchangeId,t,n);if(!o)throw new y(g.UNABLE_TO_GET_PAY_URL);const i=e.openInNewTab??!0?"_blank":"_self";return z.openHref(o.url,i),o}catch(o){throw o instanceof y?u.error=o.message:u.error=ie.GENERIC_PAYMENT_ERROR,new y(g.UNABLE_TO_GET_PAY_URL)}},async onTransfer({chainNamespace:e,fromAddress:t,toAddress:n,amount:o,paymentAsset:r}){if(u.currentPayment={type:"wallet",status:"IN_PROGRESS"},!u.isPaymentInProgress)try{this.initiatePayment();const s=f.getAllRequestedCaipNetworks().find(b=>b.caipNetworkId===r.network);if(!s)throw new Error("Target network not found");const a=f.state.activeCaipNetwork;switch(V.isLowerCaseMatch(a?.caipNetworkId,s.caipNetworkId)||await f.switchActiveNetwork(s),e){case I.CHAIN.EVM:r.asset==="native"&&(u.currentPayment.result=await vn(r,e,{recipient:n,amount:o,fromAddress:t})),r.asset.startsWith("0x")&&(u.currentPayment.result=await xn(r,{recipient:n,amount:o,fromAddress:t})),u.currentPayment.status="SUCCESS";break;case I.CHAIN.SOLANA:u.currentPayment.result=await kn(e,{recipient:n,amount:o,fromAddress:t,tokenMint:r.asset==="native"?void 0:r.asset}),u.currentPayment.status="SUCCESS";break;default:throw new y(g.INVALID_CHAIN_NAMESPACE)}}catch(i){throw i instanceof y?u.error=i.message:u.error=ie.GENERIC_PAYMENT_ERROR,u.currentPayment.status="FAILED",S.showError(u.error),i}finally{u.isPaymentInProgress=!1}},async onSendTransaction(e){try{const{namespace:t,transactionStep:n}=e;p.initiatePayment();const r=f.getAllRequestedCaipNetworks().find(s=>s.caipNetworkId===u.paymentAsset?.network);if(!r)throw new Error("Target network not found");const i=f.state.activeCaipNetwork;if(V.isLowerCaseMatch(i?.caipNetworkId,r.caipNetworkId)||await f.switchActiveNetwork(r),t===I.CHAIN.EVM){const{from:s,to:a,data:b,value:he}=n.transaction;await W.sendTransaction({address:s,to:a,data:b,value:BigInt(he),chainNamespace:t})}else if(t===I.CHAIN.SOLANA){const{instructions:s}=n.transaction;await W.writeSolanaTransaction({instructions:s})}}catch(t){throw t instanceof y?u.error=t.message:u.error=ie.GENERIC_PAYMENT_ERROR,S.showError(u.error),t}finally{u.isPaymentInProgress=!1}},getExchangeById(e){return u.exchanges.find(t=>t.id===e)},validatePayConfig(e){const{paymentAsset:t,recipient:n,amount:o}=e;if(!t)throw new y(g.INVALID_PAYMENT_CONFIG);if(!n)throw new y(g.INVALID_RECIPIENT);if(!t.asset)throw new y(g.INVALID_ASSET);if(o==null||o<=0)throw new y(g.INVALID_AMOUNT)},async handlePayWithExchange(e){try{u.currentPayment={type:"exchange",exchangeId:e};const{network:t,asset:n}=u.paymentAsset,o={network:t,asset:n,amount:u.amount,recipient:u.recipient},r=await this.getPayUrl(e,o);if(!r)throw new y(g.UNABLE_TO_INITIATE_PAYMENT);return u.currentPayment.sessionId=r.sessionId,u.currentPayment.status="IN_PROGRESS",u.currentPayment.exchangeId=e,this.initiatePayment(),{url:r.url,openInNewTab:u.openInNewTab}}catch(t){return t instanceof y?u.error=t.message:u.error=ie.GENERIC_PAYMENT_ERROR,u.isPaymentInProgress=!1,S.showError(u.error),null}},async getBuyStatus(e,t){try{const n=await En({sessionId:t,exchangeId:e});return(n.status==="SUCCESS"||n.status==="FAILED")&&D.sendEvent({type:"track",event:n.status==="SUCCESS"?"PAY_SUCCESS":"PAY_ERROR",properties:{message:n.status==="FAILED"?z.parseError(u.error):void 0,source:"pay",paymentId:u.paymentId||Ke,configuration:{network:u.paymentAsset.network,asset:u.paymentAsset.asset,recipient:u.recipient,amount:u.amount},currentPayment:{type:"exchange",exchangeId:u.currentPayment?.exchangeId,sessionId:u.currentPayment?.sessionId,result:n.txHash}}}),n}catch{throw new y(g.UNABLE_TO_GET_BUY_STATUS)}},async fetchTokensFromEOA({caipAddress:e,caipNetwork:t,namespace:n}){if(!e)return[];const{address:o}=P.parseCaipAddress(e);let r=t;return n===I.CHAIN.EVM&&(r=void 0),await Rt.getMyTokensWithBalance({address:o,caipNetwork:r})},async fetchTokensFromExchange(){if(!u.selectedExchange)return[];const e=await Nn(u.selectedExchange.id),t=Object.values(e.assets).flat();return await Promise.all(t.map(async o=>{const r=Un(o),{chainNamespace:i}=P.parseCaipNetworkId(r.chainId);let s=r.address;if(z.isCaipAddress(s)){const{address:b}=P.parseCaipAddress(s);s=b}const a=await L.getImageByToken(s??"",i).catch(()=>{});return r.iconUrl=a??"",r}))},async fetchTokens({caipAddress:e,caipNetwork:t,namespace:n}){try{u.isFetchingTokenBalances=!0;const i=await(!!u.selectedExchange?this.fetchTokensFromExchange():this.fetchTokensFromEOA({caipAddress:e,caipNetwork:t,namespace:n}));u.tokenBalances={...u.tokenBalances,[n]:i}}catch(o){const r=o instanceof Error?o.message:"Unable to get token balances";S.showError(r)}finally{u.isFetchingTokenBalances=!1}},async fetchQuote({amount:e,address:t,sourceToken:n,toToken:o,recipient:r}){try{p.resetQuoteState(),u.isFetchingQuote=!0;const i=await Cn({amount:e,address:u.selectedExchange?void 0:t,sourceToken:n,toToken:o,recipient:r});if(u.selectedExchange){const s=Je(i);if(s){const a=`${n.network}:${s.deposit.receiver}`,b=v.formatNumber(s.deposit.amount,{decimals:n.metadata.decimals??0,round:8});await p.generateExchangeUrlForQuote({exchangeId:u.selectedExchange.id,paymentAsset:n,amount:b.toString(),recipient:a})}}u.quote=i}catch(i){let s=ie.UNABLE_TO_GET_QUOTE;if(i instanceof Error&&i.cause&&i.cause instanceof Response)try{const a=await i.cause.json();a.error&&typeof a.error=="string"&&(s=a.error)}catch{}throw u.quoteError=s,S.showError(s),new y(g.UNABLE_TO_GET_QUOTE)}finally{u.isFetchingQuote=!1}},async fetchQuoteStatus({requestId:e}){try{if(e===et){const n=u.selectedExchange,o=u.exchangeSessionId;if(n&&o){switch((await this.getBuyStatus(n.id,o)).status){case"IN_PROGRESS":u.quoteStatus="waiting";break;case"SUCCESS":u.quoteStatus="success",u.isPaymentInProgress=!1;break;case"FAILED":u.quoteStatus="failure",u.isPaymentInProgress=!1;break;case"UNKNOWN":u.quoteStatus="waiting";break;default:u.quoteStatus="waiting";break}return}u.quoteStatus="success";return}const{status:t}=await Pn({requestId:e});u.quoteStatus=t}catch{throw u.quoteStatus="failure",new y(g.UNABLE_TO_GET_QUOTE_STATUS)}},initiatePayment(){u.isPaymentInProgress=!0,u.paymentId=crypto.randomUUID()},initializeAnalytics(){u.analyticsSet||(u.analyticsSet=!0,this.subscribeKey("isPaymentInProgress",e=>{if(u.currentPayment?.status&&u.currentPayment.status!=="UNKNOWN"){const t={IN_PROGRESS:"PAY_INITIATED",SUCCESS:"PAY_SUCCESS",FAILED:"PAY_ERROR"}[u.currentPayment.status];D.sendEvent({type:"track",event:t,properties:{message:u.currentPayment.status==="FAILED"?z.parseError(u.error):void 0,source:"pay",paymentId:u.paymentId||Ke,configuration:{network:u.paymentAsset.network,asset:u.paymentAsset.asset,recipient:u.recipient,amount:u.amount},currentPayment:{type:u.currentPayment.type,exchangeId:u.currentPayment.exchangeId,sessionId:u.currentPayment.sessionId,result:u.currentPayment.result}}})}}))},async prepareTokenLogo(){if(!u.paymentAsset.metadata.logoURI)try{const{chainNamespace:e}=P.parseCaipNetworkId(u.paymentAsset.network),t=await L.getImageByToken(u.paymentAsset.asset,e);u.paymentAsset.metadata.logoURI=t}catch{}}},Bn=A`
+  wui-separator {
+    margin: var(--apkt-spacing-3) calc(var(--apkt-spacing-3) * -1) var(--apkt-spacing-2)
+      calc(var(--apkt-spacing-3) * -1);
+    width: calc(100% + var(--apkt-spacing-3) * 2);
+  }
+
+  .token-display {
+    padding: var(--apkt-spacing-3) var(--apkt-spacing-3);
+    border-radius: var(--apkt-borderRadius-5);
+    background-color: var(--apkt-tokens-theme-backgroundPrimary);
+    margin-top: var(--apkt-spacing-3);
+    margin-bottom: var(--apkt-spacing-3);
+  }
+
+  .token-display wui-text {
+    text-transform: none;
+  }
+
+  wui-loading-spinner {
+    padding: var(--apkt-spacing-2);
+  }
+
+  .left-image-container {
+    position: relative;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .token-image {
+    border-radius: ${({borderRadius:e})=>e.round};
+    width: 40px;
+    height: 40px;
+  }
+
+  .chain-image {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    bottom: -3px;
+    right: -5px;
+    border-radius: ${({borderRadius:e})=>e.round};
+    border: 2px solid ${({tokens:e})=>e.theme.backgroundPrimary};
+  }
+
+  .payment-methods-container {
+    background-color: ${({tokens:e})=>e.theme.foregroundPrimary};
+    border-top-right-radius: ${({borderRadius:e})=>e[8]};
+    border-top-left-radius: ${({borderRadius:e})=>e[8]};
+  }
+`;var ce=function(e,t,n,o){var r=arguments.length,i=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,n):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")i=Reflect.decorate(e,t,n,o);else for(var a=e.length-1;a>=0;a--)(s=e[a])&&(i=(r<3?s(i):r>3?s(t,n,i):s(t,n))||i);return r>3&&i&&Object.defineProperty(t,n,i),i};let Q=class extends T{constructor(){super(),this.unsubscribe=[],this.amount=p.state.amount,this.namespace=void 0,this.paymentAsset=p.state.paymentAsset,this.activeConnectorIds=U.state.activeConnectorIds,this.caipAddress=void 0,this.exchanges=p.state.exchanges,this.isLoading=p.state.isLoading,this.initializeNamespace(),this.unsubscribe.push(p.subscribeKey("amount",t=>this.amount=t)),this.unsubscribe.push(U.subscribeKey("activeConnectorIds",t=>this.activeConnectorIds=t)),this.unsubscribe.push(p.subscribeKey("exchanges",t=>this.exchanges=t)),this.unsubscribe.push(p.subscribeKey("isLoading",t=>this.isLoading=t)),p.fetchExchanges(),p.setSelectedExchange(void 0)}disconnectedCallback(){this.unsubscribe.forEach(t=>t())}render(){return c`
+      <wui-flex flexDirection="column">
+        ${this.paymentDetailsTemplate()} ${this.paymentMethodsTemplate()}
+      </wui-flex>
+    `}paymentMethodsTemplate(){return c`
+      <wui-flex flexDirection="column" padding="3" gap="2" class="payment-methods-container">
+        ${this.payWithWalletTemplate()} ${this.templateSeparator()}
+        ${this.templateExchangeOptions()}
+      </wui-flex>
+    `}initializeNamespace(){const t=f.state.activeChain;this.namespace=t,this.caipAddress=f.getAccountData(t)?.caipAddress,this.unsubscribe.push(f.subscribeChainProp("accountState",n=>{this.caipAddress=n?.caipAddress},t))}paymentDetailsTemplate(){const n=f.getAllRequestedCaipNetworks().find(o=>o.caipNetworkId===this.paymentAsset.network);return c`
+      <wui-flex
+        alignItems="center"
+        justifyContent="space-between"
+        .padding=${["6","8","6","8"]}
+        gap="2"
+      >
+        <wui-flex alignItems="center" gap="1">
+          <wui-text variant="h1-regular" color="primary">
+            ${Be(this.amount||"0")}
+          </wui-text>
+
+          <wui-flex flexDirection="column">
+            <wui-text variant="h6-regular" color="secondary">
+              ${this.paymentAsset.metadata.symbol||"Unknown"}
+            </wui-text>
+            <wui-text variant="md-medium" color="secondary"
+              >on ${n?.name||"Unknown"}</wui-text
+            >
+          </wui-flex>
+        </wui-flex>
+
+        <wui-flex class="left-image-container">
+          <wui-image
+            src=${k(this.paymentAsset.metadata.logoURI)}
+            class="token-image"
+          ></wui-image>
+          <wui-image
+            src=${k(L.getNetworkImage(n))}
+            class="chain-image"
+          ></wui-image>
+        </wui-flex>
+      </wui-flex>
+    `}payWithWalletTemplate(){return Rn(this.paymentAsset.network)?this.caipAddress?this.connectedWalletTemplate():this.disconnectedWalletTemplate():c``}connectedWalletTemplate(){const{name:t,image:n}=this.getWalletProperties({namespace:this.namespace});return c`
+      <wui-flex flexDirection="column" gap="3">
+        <wui-list-item
+          type="secondary"
+          boxColor="foregroundSecondary"
+          @click=${this.onWalletPayment}
+          .boxed=${!1}
+          ?chevron=${!0}
+          ?fullSize=${!1}
+          ?rounded=${!0}
+          data-testid="wallet-payment-option"
+          imageSrc=${k(n)}
+          imageSize="3xl"
+        >
+          <wui-text variant="lg-regular" color="primary">Pay with ${t}</wui-text>
+        </wui-list-item>
+
+        <wui-list-item
+          type="secondary"
+          icon="power"
+          iconColor="error"
+          @click=${this.onDisconnect}
+          data-testid="disconnect-button"
+          ?chevron=${!1}
+          boxColor="foregroundSecondary"
+        >
+          <wui-text variant="lg-regular" color="secondary">Disconnect</wui-text>
+        </wui-list-item>
+      </wui-flex>
+    `}disconnectedWalletTemplate(){return c`<wui-list-item
+      type="secondary"
+      boxColor="foregroundSecondary"
+      variant="icon"
+      iconColor="default"
+      iconVariant="overlay"
+      icon="wallet"
+      @click=${this.onWalletPayment}
+      ?chevron=${!0}
+      data-testid="wallet-payment-option"
+    >
+      <wui-text variant="lg-regular" color="primary">Pay with wallet</wui-text>
+    </wui-list-item>`}templateExchangeOptions(){if(this.isLoading)return c`<wui-flex justifyContent="center" alignItems="center">
+        <wui-loading-spinner size="md"></wui-loading-spinner>
+      </wui-flex>`;const t=this.exchanges.filter(n=>Wn(this.paymentAsset)?n.id===xt:n.id!==xt);return t.length===0?c`<wui-flex justifyContent="center" alignItems="center">
+        <wui-text variant="md-medium" color="primary">No exchanges available</wui-text>
+      </wui-flex>`:t.map(n=>c`
+        <wui-list-item
+          type="secondary"
+          boxColor="foregroundSecondary"
+          @click=${()=>this.onExchangePayment(n)}
+          data-testid="exchange-option-${n.id}"
+          ?chevron=${!0}
+          imageSrc=${k(n.imageUrl)}
+        >
+          <wui-text flexGrow="1" variant="lg-regular" color="primary">
+            Pay with ${n.name}
+          </wui-text>
+        </wui-list-item>
+      `)}templateSeparator(){return c`<wui-separator text="or" bgColor="secondary"></wui-separator>`}async onWalletPayment(){if(!this.namespace)throw new Error("Namespace not found");this.caipAddress?m.push("PayQuote"):(await U.connect(),await O.open({view:"PayQuote"}))}onExchangePayment(t){p.setSelectedExchange(t),m.push("PayQuote")}async onDisconnect(){try{await W.disconnect(),await O.open({view:"Pay"})}catch{console.error("Failed to disconnect"),S.showError("Failed to disconnect")}}getWalletProperties({namespace:t}){if(!t)return{name:void 0,image:void 0};const n=this.activeConnectorIds[t];if(!n)return{name:void 0,image:void 0};const o=U.getConnector({id:n,namespace:t});if(!o)return{name:void 0,image:void 0};const r=L.getConnectorImage(o);return{name:o.name,image:r}}};Q.styles=Bn;ce([h()],Q.prototype,"amount",void 0);ce([h()],Q.prototype,"namespace",void 0);ce([h()],Q.prototype,"paymentAsset",void 0);ce([h()],Q.prototype,"activeConnectorIds",void 0);ce([h()],Q.prototype,"caipAddress",void 0);ce([h()],Q.prototype,"exchanges",void 0);ce([h()],Q.prototype,"isLoading",void 0);Q=ce([x("w3m-pay-view")],Q);const Fn=A`
+  :host {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pulse-container {
+    position: relative;
+    width: var(--pulse-size);
+    height: var(--pulse-size);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pulse-rings {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .pulse-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 2px solid var(--pulse-color);
+    opacity: 0;
+    animation: pulse var(--pulse-duration, 2s) ease-out infinite;
+  }
+
+  .pulse-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(0.5);
+      opacity: var(--pulse-opacity, 0.3);
+    }
+    50% {
+      opacity: calc(var(--pulse-opacity, 0.3) * 0.5);
+    }
+    100% {
+      transform: scale(1.2);
+      opacity: 0;
+    }
+  }
+`;var ge=function(e,t,n,o){var r=arguments.length,i=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,n):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")i=Reflect.decorate(e,t,n,o);else for(var a=e.length-1;a>=0;a--)(s=e[a])&&(i=(r<3?s(i):r>3?s(t,n,i):s(t,n))||i);return r>3&&i&&Object.defineProperty(t,n,i),i};const zn=3,jn=2,Mn=.3,qn="200px",Vn={"accent-primary":Te.tokens.core.backgroundAccentPrimary};let se=class extends T{constructor(){super(...arguments),this.rings=zn,this.duration=jn,this.opacity=Mn,this.size=qn,this.variant="accent-primary"}render(){const t=Vn[this.variant];this.style.cssText=`
+      --pulse-size: ${this.size};
+      --pulse-duration: ${this.duration}s;
+      --pulse-color: ${t};
+      --pulse-opacity: ${this.opacity};
+    `;const n=Array.from({length:this.rings},(o,r)=>this.renderRing(r,this.rings));return c`
+      <div class="pulse-container">
+        <div class="pulse-rings">${n}</div>
+        <div class="pulse-content">
+          <slot></slot>
+        </div>
+      </div>
+    `}renderRing(t,n){const r=`animation-delay: ${t/n*this.duration}s;`;return c`<div class="pulse-ring" style=${r}></div>`}};se.styles=[X,Fn];ge([d({type:Number})],se.prototype,"rings",void 0);ge([d({type:Number})],se.prototype,"duration",void 0);ge([d({type:Number})],se.prototype,"opacity",void 0);ge([d()],se.prototype,"size",void 0);ge([d()],se.prototype,"variant",void 0);se=ge([x("wui-pulse")],se);const Et=[{id:"received",title:"Receiving funds",icon:"dollar"},{id:"processing",title:"Swapping asset",icon:"recycleHorizontal"},{id:"sending",title:"Sending asset to the recipient address",icon:"send"}],It=["success","submitted","failure","timeout","refund"],Hn=A`
+  :host {
+    display: block;
+    height: 100%;
+    width: 100%;
+  }
+
+  wui-image {
+    border-radius: ${({borderRadius:e})=>e.round};
+  }
+
+  .token-badge-container {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: ${({borderRadius:e})=>e[4]};
+    z-index: 3;
+    min-width: 105px;
+  }
+
+  .token-badge-container.loading {
+    background-color: ${({tokens:e})=>e.theme.backgroundPrimary};
+    border: 3px solid ${({tokens:e})=>e.theme.backgroundPrimary};
+  }
+
+  .token-badge-container.success {
+    background-color: ${({tokens:e})=>e.theme.backgroundPrimary};
+    border: 3px solid ${({tokens:e})=>e.theme.backgroundPrimary};
+  }
+
+  .token-image-container {
+    position: relative;
+  }
+
+  .token-image {
+    border-radius: ${({borderRadius:e})=>e.round};
+    width: 64px;
+    height: 64px;
+  }
+
+  .token-image.success {
+    background-color: ${({tokens:e})=>e.theme.foregroundPrimary};
+  }
+
+  .token-image.error {
+    background-color: ${({tokens:e})=>e.theme.foregroundPrimary};
+  }
+
+  .token-image.loading {
+    background: ${({colors:e})=>e.accent010};
+  }
+
+  .token-image wui-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .token-badge {
+    background-color: ${({tokens:e})=>e.theme.foregroundPrimary};
+    border: 1px solid ${({tokens:e})=>e.theme.foregroundSecondary};
+    border-radius: ${({borderRadius:e})=>e[4]};
+  }
+
+  .token-badge wui-text {
+    white-space: nowrap;
+  }
+
+  .payment-lifecycle-container {
+    background-color: ${({tokens:e})=>e.theme.foregroundPrimary};
+    border-top-right-radius: ${({borderRadius:e})=>e[6]};
+    border-top-left-radius: ${({borderRadius:e})=>e[6]};
+  }
+
+  .payment-step-badge {
+    padding: ${({spacing:e})=>e[1]} ${({spacing:e})=>e[2]};
+    border-radius: ${({borderRadius:e})=>e[1]};
+  }
+
+  .payment-step-badge.loading {
+    background-color: ${({tokens:e})=>e.theme.foregroundSecondary};
+  }
+
+  .payment-step-badge.error {
+    background-color: ${({tokens:e})=>e.core.backgroundError};
+  }
+
+  .payment-step-badge.success {
+    background-color: ${({tokens:e})=>e.core.backgroundSuccess};
+  }
+
+  .step-icon-container {
+    position: relative;
+    height: 40px;
+    width: 40px;
+    border-radius: ${({borderRadius:e})=>e.round};
+    background-color: ${({tokens:e})=>e.theme.foregroundSecondary};
+  }
+
+  .step-icon-box {
+    position: absolute;
+    right: -4px;
+    bottom: -1px;
+    padding: 2px;
+    border-radius: ${({borderRadius:e})=>e.round};
+    border: 2px solid ${({tokens:e})=>e.theme.backgroundPrimary};
+    background-color: ${({tokens:e})=>e.theme.foregroundPrimary};
+  }
+
+  .step-icon-box.success {
+    background-color: ${({tokens:e})=>e.core.backgroundSuccess};
+  }
+`;var Z=function(e,t,n,o){var r=arguments.length,i=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,n):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")i=Reflect.decorate(e,t,n,o);else for(var a=e.length-1;a>=0;a--)(s=e[a])&&(i=(r<3?s(i):r>3?s(t,n,i):s(t,n))||i);return r>3&&i&&Object.defineProperty(t,n,i),i};const Gn={received:["pending","success","submitted"],processing:["success","submitted"],sending:["success","submitted"]},Yn=3e3;let j=class extends T{constructor(){super(),this.unsubscribe=[],this.pollingInterval=null,this.paymentAsset=p.state.paymentAsset,this.quoteStatus=p.state.quoteStatus,this.quote=p.state.quote,this.amount=p.state.amount,this.namespace=void 0,this.caipAddress=void 0,this.profileName=null,this.activeConnectorIds=U.state.activeConnectorIds,this.selectedExchange=p.state.selectedExchange,this.initializeNamespace(),this.unsubscribe.push(p.subscribeKey("quoteStatus",t=>this.quoteStatus=t),p.subscribeKey("quote",t=>this.quote=t),U.subscribeKey("activeConnectorIds",t=>this.activeConnectorIds=t),p.subscribeKey("selectedExchange",t=>this.selectedExchange=t))}connectedCallback(){super.connectedCallback(),this.startPolling()}disconnectedCallback(){super.disconnectedCallback(),this.stopPolling(),this.unsubscribe.forEach(t=>t())}render(){return c`
+      <wui-flex flexDirection="column" .padding=${["3","0","0","0"]} gap="2">
+        ${this.tokenTemplate()} ${this.paymentTemplate()} ${this.paymentLifecycleTemplate()}
+      </wui-flex>
+    `}tokenTemplate(){const t=Be(this.amount||"0"),n=this.paymentAsset.metadata.symbol??"Unknown",r=f.getAllRequestedCaipNetworks().find(a=>a.caipNetworkId===this.paymentAsset.network),i=this.quoteStatus==="failure"||this.quoteStatus==="timeout"||this.quoteStatus==="refund";return this.quoteStatus==="success"||this.quoteStatus==="submitted"?c`<wui-flex alignItems="center" justifyContent="center">
+        <wui-flex justifyContent="center" alignItems="center" class="token-image success">
+          <wui-icon name="checkmark" color="success" size="inherit"></wui-icon>
+        </wui-flex>
+      </wui-flex>`:i?c`<wui-flex alignItems="center" justifyContent="center">
+        <wui-flex justifyContent="center" alignItems="center" class="token-image error">
+          <wui-icon name="close" color="error" size="inherit"></wui-icon>
+        </wui-flex>
+      </wui-flex>`:c`
+      <wui-flex alignItems="center" justifyContent="center">
+        <wui-flex class="token-image-container">
+          <wui-pulse size="125px" rings="3" duration="4" opacity="0.5" variant="accent-primary">
+            <wui-flex justifyContent="center" alignItems="center" class="token-image loading">
+              <wui-icon name="paperPlaneTitle" color="accent-primary" size="inherit"></wui-icon>
+            </wui-flex>
+          </wui-pulse>
+
+          <wui-flex
+            justifyContent="center"
+            alignItems="center"
+            class="token-badge-container loading"
+          >
+            <wui-flex
+              alignItems="center"
+              justifyContent="center"
+              gap="01"
+              padding="1"
+              class="token-badge"
+            >
+              <wui-image
+                src=${k(L.getNetworkImage(r))}
+                class="chain-image"
+                size="mdl"
+              ></wui-image>
+
+              <wui-text variant="lg-regular" color="primary">${t} ${n}</wui-text>
+            </wui-flex>
+          </wui-flex>
+        </wui-flex>
+      </wui-flex>
+    `}paymentTemplate(){return c`
+      <wui-flex flexDirection="column" gap="2" .padding=${["0","6","0","6"]}>
+        ${this.renderPayment()}
+        <wui-separator></wui-separator>
+        ${this.renderWallet()}
+      </wui-flex>
+    `}paymentLifecycleTemplate(){const t=this.getStepsWithStatus();return c`
+      <wui-flex flexDirection="column" padding="4" gap="2" class="payment-lifecycle-container">
+        <wui-flex alignItems="center" justifyContent="space-between">
+          <wui-text variant="md-regular" color="secondary">PAYMENT CYCLE</wui-text>
+
+          ${this.renderPaymentCycleBadge()}
+        </wui-flex>
+
+        <wui-flex flexDirection="column" gap="5" .padding=${["2","0","2","0"]}>
+          ${t.map(n=>this.renderStep(n))}
+        </wui-flex>
+      </wui-flex>
+    `}renderPaymentCycleBadge(){const t=this.quoteStatus==="failure"||this.quoteStatus==="timeout"||this.quoteStatus==="refund",n=this.quoteStatus==="success"||this.quoteStatus==="submitted";if(t)return c`
+        <wui-flex
+          justifyContent="center"
+          alignItems="center"
+          class="payment-step-badge error"
+          gap="1"
+        >
+          <wui-icon name="close" color="error" size="xs"></wui-icon>
+          <wui-text variant="sm-regular" color="error">Failed</wui-text>
+        </wui-flex>
+      `;if(n)return c`
+        <wui-flex
+          justifyContent="center"
+          alignItems="center"
+          class="payment-step-badge success"
+          gap="1"
+        >
+          <wui-icon name="checkmark" color="success" size="xs"></wui-icon>
+          <wui-text variant="sm-regular" color="success">Completed</wui-text>
+        </wui-flex>
+      `;const o=this.quote?.timeInSeconds??0;return c`
+      <wui-flex alignItems="center" justifyContent="space-between" gap="3">
+        <wui-flex
+          justifyContent="center"
+          alignItems="center"
+          class="payment-step-badge loading"
+          gap="1"
+        >
+          <wui-icon name="clock" color="default" size="xs"></wui-icon>
+          <wui-text variant="sm-regular" color="primary">Est. ${o} sec</wui-text>
+        </wui-flex>
+
+        <wui-icon name="chevronBottom" color="default" size="xxs"></wui-icon>
+      </wui-flex>
+    `}renderPayment(){const n=f.getAllRequestedCaipNetworks().find(s=>{const a=this.quote?.origin.currency.network;if(!a)return!1;const{chainId:b}=P.parseCaipNetworkId(a);return V.isLowerCaseMatch(s.id.toString(),b.toString())}),o=v.formatNumber(this.quote?.origin.amount||"0",{decimals:this.quote?.origin.currency.metadata.decimals??0}).toString(),r=Be(o),i=this.quote?.origin.currency.metadata.symbol??"Unknown";return c`
+      <wui-flex
+        alignItems="flex-start"
+        justifyContent="space-between"
+        .padding=${["3","0","3","0"]}
+      >
+        <wui-text variant="lg-regular" color="secondary">Payment Method</wui-text>
+
+        <wui-flex flexDirection="column" alignItems="flex-end" gap="1">
+          <wui-flex alignItems="center" gap="01">
+            <wui-text variant="lg-regular" color="primary">${r}</wui-text>
+            <wui-text variant="lg-regular" color="secondary">${i}</wui-text>
+          </wui-flex>
+
+          <wui-flex alignItems="center" gap="1">
+            <wui-text variant="md-regular" color="secondary">on</wui-text>
+            <wui-image
+              src=${k(L.getNetworkImage(n))}
+              size="xs"
+            ></wui-image>
+            <wui-text variant="md-regular" color="secondary">${n?.name}</wui-text>
+          </wui-flex>
+        </wui-flex>
+      </wui-flex>
+    `}renderWallet(){return c`
+      <wui-flex
+        alignItems="flex-start"
+        justifyContent="space-between"
+        .padding=${["3","0","3","0"]}
+      >
+        <wui-text variant="lg-regular" color="secondary"
+          >${this.selectedExchange?"Exchange":"Wallet"}</wui-text
+        >
+
+        ${this.renderWalletText()}
+      </wui-flex>
+    `}renderWalletText(){const{image:t}=this.getWalletProperties({namespace:this.namespace}),{address:n}=this.caipAddress?P.parseCaipAddress(this.caipAddress):{},o=this.selectedExchange?.name;return this.selectedExchange?c`
+        <wui-flex alignItems="center" justifyContent="flex-end" gap="1">
+          <wui-text variant="lg-regular" color="primary">${o}</wui-text>
+          <wui-image src=${k(this.selectedExchange.imageUrl)} size="mdl"></wui-image>
+        </wui-flex>
+      `:c`
+      <wui-flex alignItems="center" justifyContent="flex-end" gap="1">
+        <wui-text variant="lg-regular" color="primary">
+          ${He.getTruncateString({string:this.profileName||n||o||"",charsStart:this.profileName?16:4,charsEnd:this.profileName?0:6,truncate:this.profileName?"end":"middle"})}
+        </wui-text>
+
+        <wui-image src=${k(t)} size="mdl"></wui-image>
+      </wui-flex>
+    `}getStepsWithStatus(){return this.quoteStatus==="failure"||this.quoteStatus==="timeout"||this.quoteStatus==="refund"?Et.map(n=>({...n,status:"failed"})):Et.map(n=>{const r=(Gn[n.id]??[]).includes(this.quoteStatus)?"completed":"pending";return{...n,status:r}})}renderStep({title:t,icon:n,status:o}){return c`
+      <wui-flex alignItems="center" gap="3">
+        <wui-flex justifyContent="center" alignItems="center" class="step-icon-container">
+          <wui-icon name=${n} color="default" size="mdl"></wui-icon>
+
+          <wui-flex alignItems="center" justifyContent="center" class=${Wt({"step-icon-box":!0,success:o==="completed"})}>
+            ${this.renderStatusIndicator(o)}
+          </wui-flex>
+        </wui-flex>
 
         <wui-text variant="md-regular" color="primary">${t}</wui-text>
       </wui-flex>
@@ -755,7 +1350,84 @@ import{N as v,v as _t,R as m,S,b as W,c as I,E as D,x as Ue,y as We,j as f,B as 
       background-color: ${({tokens:e})=>e.theme.foregroundPrimary};
     }
   }
-`;var Ge=function(e,t,n,o){var r=arguments.length,i=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,n):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")i=Reflect.decorate(e,t,n,o);else for(var a=e.length-1;a>=0;a--)(s=e[a])&&(i=(r<3?s(i):r>3?s(t,n,i):s(t,n))||i);return r>3&&i&&Object.defineProperty(t,n,i),i};const ii=300;let me=class extends T{constructor(){super(),this.unsubscribe=[],this.options=[],this.selectedPaymentAsset=null}disconnectedCallback(){this.unsubscribe.forEach(n=>n()),this.resizeObserver?.disconnect(),this.shadowRoot?.querySelector(".pay-options-container")?.removeEventListener("scroll",this.handleOptionsListScroll.bind(this))}firstUpdated(){const t=this.shadowRoot?.querySelector(".pay-options-container");t&&(requestAnimationFrame(this   flexDirection="column"
+`;var Ge=function(e,t,n,o){var r=arguments.length,i=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,n):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")i=Reflect.decorate(e,t,n,o);else for(var a=e.length-1;a>=0;a--)(s=e[a])&&(i=(r<3?s(i):r>3?s(t,n,i):s(t,n))||i);return r>3&&i&&Object.defineProperty(t,n,i),i};const ii=300;let me=class extends T{constructor(){super(),this.unsubscribe=[],this.options=[],this.selectedPaymentAsset=null}disconnectedCallback(){this.unsubscribe.forEach(n=>n()),this.resizeObserver?.disconnect(),this.shadowRoot?.querySelector(".pay-options-container")?.removeEventListener("scroll",this.handleOptionsListScroll.bind(this))}firstUpdated(){const t=this.shadowRoot?.querySelector(".pay-options-container");t&&(requestAnimationFrame(this.handleOptionsListScroll.bind(this)),t?.addEventListener("scroll",this.handleOptionsListScroll.bind(this)),this.resizeObserver=new ResizeObserver(()=>{this.handleOptionsListScroll()}),this.resizeObserver?.observe(t),this.handleOptionsListScroll())}render(){return c`
+      <wui-flex flexDirection="column" gap="2" class="pay-options-container">
+        ${this.options.map(t=>this.payOptionTemplate(t))}
+      </wui-flex>
+    `}payOptionTemplate(t){const{network:n,metadata:o,asset:r,amount:i="0"}=t,a=f.getAllRequestedCaipNetworks().find(qt=>qt.caipNetworkId===n),b=`${n}:${r}`,he=`${this.selectedPaymentAsset?.network}:${this.selectedPaymentAsset?.asset}`,_e=b===he,ye=v.bigNumber(i,{safe:!0}),Mt=ye.gt(0);return c`
+      <wui-flex
+        alignItems="center"
+        justifyContent="space-between"
+        gap="2"
+        @click=${()=>this.onSelect?.(t)}
+        class="pay-option-container"
+      >
+        <wui-flex alignItems="center" gap="2">
+          <wui-flex class="token-images-container">
+            <wui-image
+              src=${k(o.logoURI)}
+              class="token-image"
+              size="3xl"
+            ></wui-image>
+            <wui-image
+              src=${k(L.getNetworkImage(a))}
+              class="chain-image"
+              size="md"
+            ></wui-image>
+          </wui-flex>
+
+          <wui-flex flexDirection="column" gap="1">
+            <wui-text variant="lg-regular" color="primary">${o.symbol}</wui-text>
+            ${Mt?c`<wui-text variant="sm-regular" color="secondary">
+                  ${ye.round(6).toString()} ${o.symbol}
+                </wui-text>`:null}
+          </wui-flex>
+        </wui-flex>
+
+        ${_e?c`<wui-icon name="checkmark" size="md" color="success"></wui-icon>`:null}
+      </wui-flex>
+    `}handleOptionsListScroll(){const t=this.shadowRoot?.querySelector(".pay-options-container");if(!t)return;t.scrollHeight>ii?(t.style.setProperty("--options-mask-image",`linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, calc(1 - var(--options-scroll--top-opacity))) 0px,
+          rgba(200, 200, 200, calc(1 - var(--options-scroll--top-opacity))) 1px,
+          black 50px,
+          black calc(100% - 50px),
+          rgba(155, 155, 155, calc(1 - var(--options-scroll--bottom-opacity))) calc(100% - 1px),
+          rgba(0, 0, 0, calc(1 - var(--options-scroll--bottom-opacity))) 100%
+        )`),t.style.setProperty("--options-scroll--top-opacity",vt.interpolate([0,50],[0,1],t.scrollTop).toString()),t.style.setProperty("--options-scroll--bottom-opacity",vt.interpolate([0,50],[0,1],t.scrollHeight-t.scrollTop-t.offsetHeight).toString())):(t.style.setProperty("--options-mask-image","none"),t.style.setProperty("--options-scroll--top-opacity","0"),t.style.setProperty("--options-scroll--bottom-opacity","0"))}};me.styles=[ni];Ge([d({type:Array})],me.prototype,"options",void 0);Ge([d()],me.prototype,"selectedPaymentAsset",void 0);Ge([d()],me.prototype,"onSelect",void 0);me=Ge([x("w3m-pay-options")],me);const oi=A`
+  .payment-methods-container {
+    background-color: ${({tokens:e})=>e.theme.foregroundPrimary};
+    border-top-right-radius: ${({borderRadius:e})=>e[5]};
+    border-top-left-radius: ${({borderRadius:e})=>e[5]};
+  }
+
+  .pay-options-container {
+    background-color: ${({tokens:e})=>e.theme.foregroundSecondary};
+    border-radius: ${({borderRadius:e})=>e[5]};
+    padding: ${({spacing:e})=>e[1]};
+  }
+
+  w3m-tooltip-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: fit-content;
+  }
+
+  wui-image {
+    border-radius: ${({borderRadius:e})=>e.round};
+  }
+
+  w3m-pay-options.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+`;var $=function(e,t,n,o){var r=arguments.length,i=r<3?t:o===null?o=Object.getOwnPropertyDescriptor(t,n):o,s;if(typeof Reflect=="object"&&typeof Reflect.decorate=="function")i=Reflect.decorate(e,t,n,o);else for(var a=e.length-1;a>=0;a--)(s=e[a])&&(i=(r<3?s(i):r>3?s(t,n,i):s(t,n))||i);return r>3&&i&&Object.defineProperty(t,n,i),i};const Oe={eip155:"ethereum",solana:"solana",bip122:"bitcoin",ton:"ton"},ri={eip155:{icon:Oe.eip155,label:"EVM"},solana:{icon:Oe.solana,label:"Solana"},bip122:{icon:Oe.bip122,label:"Bitcoin"},ton:{icon:Oe.ton,label:"Ton"}};let C=class extends T{constructor(){super(),this.unsubscribe=[],this.profileName=null,this.paymentAsset=p.state.paymentAsset,this.namespace=void 0,this.caipAddress=void 0,this.amount=p.state.amount,this.recipient=p.state.recipient,this.activeConnectorIds=U.state.activeConnectorIds,this.selectedPaymentAsset=p.state.selectedPaymentAsset,this.selectedExchange=p.state.selectedExchange,this.isFetchingQuote=p.state.isFetchingQuote,this.quoteError=p.state.quoteError,this.quote=p.state.quote,this.isFetchingTokenBalances=p.state.isFetchingTokenBalances,this.tokenBalances=p.state.tokenBalances,this.isPaymentInProgress=p.state.isPaymentInProgress,this.exchangeUrlForQuote=p.state.exchangeUrlForQuote,this.completedTransactionsCount=0,this.unsubscribe.push(p.subscribeKey("paymentAsset",t=>this.paymentAsset=t)),this.unsubscribe.push(p.subscribeKey("tokenBalances",t=>this.onTokenBalancesChanged(t))),this.unsubscribe.push(p.subscribeKey("isFetchingTokenBalances",t=>this.isFetchingTokenBalances=t)),this.unsubscribe.push(U.subscribeKey("activeConnectorIds",t=>this.activeConnectorIds=t)),this.unsubscribe.push(p.subscribeKey("selectedPaymentAsset",t=>this.selectedPaymentAsset=t)),this.unsubscribe.push(p.subscribeKey("isFetchingQuote",t=>this.isFetchingQuote=t)),this.unsubscribe.push(p.subscribeKey("quoteError",t=>this.quoteError=t)),this.unsubscribe.push(p.subscribeKey("quote",t=>this.quote=t)),this.unsubscribe.push(p.subscribeKey("amount",t=>this.amount=t)),this.unsubscribe.push(p.subscribeKey("recipient",t=>this.recipient=t)),this.unsubscribe.push(p.subscribeKey("isPaymentInProgress",t=>this.isPaymentInProgress=t)),this.unsubscribe.push(p.subscribeKey("selectedExchange",t=>this.selectedExchange=t)),this.unsubscribe.push(p.subscribeKey("exchangeUrlForQuote",t=>this.exchangeUrlForQuote=t)),this.resetQuoteState(),this.initializeNamespace(),this.fetchTokens()}disconnectedCallback(){super.disconnectedCallback(),this.resetAssetsState(),this.unsubscribe.forEach(t=>t())}updated(t){super.updated(t),t.has("selectedPaymentAsset")&&this.fetchQuote()}render(){return c`
+      <wui-flex flexDirection="column">
+        ${this.profileTemplate()}
+
+        <wui-flex
+          flexDirection="column"
           gap="4"
           class="payment-methods-container"
           .padding=${["4","4","5","4"]}
@@ -1744,4 +2416,3 @@ import{N as v,v as _t,R as m,S,b as W,c as I,E as D,x as Ue,y as We,j as f,B as 
         </div>
       </div>
     `}onViewChange(t){const n=t.split(",").filter(Boolean),o=this.historyState.split(",").filter(Boolean),r=o.length,i=n.length,s=n[n.length-1]||"",a=He.cssDurationToNumber(this.transitionDuration);let b="";i>r?b="next":i<r?b="prev":i===r&&n[i-1]!==o[r-1]&&(b="next"),this.viewDirection=`${b}-${s}`,setTimeout(()=>{this.historyState=t,this.setView?.(s)},a),setTimeout(()=>{this.viewDirection=""},a*2)}getWrapper(){return this.shadowRoot?.querySelector("div.page")}updateContainerHeight(){const t=this.getWrapper();if(!t)return;const n=parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--apkt-footer-height")||"0");let o=0;if(this.mobileFullScreen){const r=window.visualViewport?.height||window.innerHeight,i=this.getHeaderHeight();o=r-i-n,this.style.setProperty("--local-border-bottom-radius","0px")}else o=t.getBoundingClientRect().height+n,this.style.setProperty("--local-border-bottom-radius",n?"var(--apkt-borderRadius-5)":"0px");this.style.setProperty("--local-container-height",`${o}px`),this.previousHeight!=="0px"&&this.style.setProperty("--local-duration-height",this.transitionDuration),this.previousHeight=`${o}px`}getHeaderHeight(){return Si}};M.styles=[Ai];ee([d({type:String})],M.prototype,"transitionDuration",void 0);ee([d({type:String})],M.prototype,"transitionFunction",void 0);ee([d({type:String})],M.prototype,"history",void 0);ee([d({type:String})],M.prototype,"view",void 0);ee([d({attribute:!1})],M.prototype,"setView",void 0);ee([h()],M.prototype,"viewDirection",void 0);ee([h()],M.prototype,"historyState",void 0);ee([h()],M.prototype,"previousHeight",void 0);ee([h()],M.prototype,"mobileFullScreen",void 0);M=ee([x("w3m-router-container")],M);export{$t as AppKitModal,N as W3mListWallet,Nt as W3mModal,G as W3mModalBase,M as W3mRouterContainer,ot as W3mUsageExceededView};
-

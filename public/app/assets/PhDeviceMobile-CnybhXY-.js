@@ -12,4 +12,3 @@ import{n as l,Y as n,t as r,p as Z,O as s,s as A}from"./property-CnFDNXw5.js";va
       display: contents;
     }
   `;h([s({type:String,reflect:!0})],t.prototype,"size",2);h([s({type:String,reflect:!0})],t.prototype,"weight",2);h([s({type:String,reflect:!0})],t.prototype,"color",2);h([s({type:Boolean,reflect:!0})],t.prototype,"mirrored",2);t=h([A("ph-device-mobile")],t);export{t as PhDeviceMobile};
-

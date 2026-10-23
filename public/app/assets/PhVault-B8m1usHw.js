@@ -12,4 +12,3 @@ import{n as v,Y as l,t as e,p as n,O as i,s as g}from"./property-CnFDNXw5.js";va
       display: contents;
     }
   `;o([i({type:String,reflect:!0})],t.prototype,"size",2);o([i({type:String,reflect:!0})],t.prototype,"weight",2);o([i({type:String,reflect:!0})],t.prototype,"color",2);o([i({type:Boolean,reflect:!0})],t.prototype,"mirrored",2);t=o([g("ph-vault")],t);export{t as PhVault};
-

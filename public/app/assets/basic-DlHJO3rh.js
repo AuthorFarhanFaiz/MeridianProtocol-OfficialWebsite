@@ -1327,4 +1327,3 @@ Minimum version required to store current data is: `+x+`.
         <wui-text variant="md-medium" color="primary">Website</wui-text>
       </wui-list-item>
     `:null}openStore(t){t.href&&this.wallet&&(H.sendEvent({type:"track",event:"GET_WALLET",properties:{name:this.wallet.name,walletRank:this.wallet.order,explorerId:this.wallet.id,type:t.type}}),M.openHref(t.href,"_blank"))}onChromeStore(){this.wallet?.chrome_store&&this.openStore({href:this.wallet.chrome_store,type:"chrome_store"})}onAppStore(){this.wallet?.app_store&&this.openStore({href:this.wallet.app_store,type:"app_store"})}onPlayStore(){this.wallet?.play_store&&this.openStore({href:this.wallet.play_store,type:"play_store"})}onHomePage(){this.wallet?.homepage&&this.openStore({href:this.wallet.homepage,type:"homepage"})}};Rn=sr([N("w3m-downloads-view")],Rn);export{Ye as W3mAllWalletsView,He as W3mConnectingWcBasicView,Rn as W3mDownloadsView};
-

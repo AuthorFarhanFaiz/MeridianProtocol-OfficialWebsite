@@ -12,4 +12,3 @@ import{n as g,Y as d,t as r,p as u,O as p,s as c}from"./property-CnFDNXw5.js";va
       display: contents;
     }
   `;o([p({type:String,reflect:!0})],t.prototype,"size",2);o([p({type:String,reflect:!0})],t.prototype,"weight",2);o([p({type:String,reflect:!0})],t.prototype,"color",2);o([p({type:Boolean,reflect:!0})],t.prototype,"mirrored",2);t=o([c("ph-arrow-up")],t);export{t as PhArrowUp};
-

@@ -12,4 +12,3 @@ import{n as l,Y as n,t as r,p as Z,O as p,s as g}from"./property-CnFDNXw5.js";va
       display: contents;
     }
   `;s([p({type:String,reflect:!0})],t.prototype,"size",2);s([p({type:String,reflect:!0})],t.prototype,"weight",2);s([p({type:String,reflect:!0})],t.prototype,"color",2);s([p({type:Boolean,reflect:!0})],t.prototype,"mirrored",2);t=s([g("ph-question")],t);export{t as PhQuestion};
-

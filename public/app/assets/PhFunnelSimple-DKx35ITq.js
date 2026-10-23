@@ -12,4 +12,3 @@ import{n,Y as g,t as e,p as m,O as i,s as Z}from"./property-CnFDNXw5.js";var u=O
       display: contents;
     }
   `;s([i({type:String,reflect:!0})],t.prototype,"size",2);s([i({type:String,reflect:!0})],t.prototype,"weight",2);s([i({type:String,reflect:!0})],t.prototype,"color",2);s([i({type:Boolean,reflect:!0})],t.prototype,"mirrored",2);t=s([Z("ph-funnel-simple")],t);export{t as PhFunnelSimple};
-

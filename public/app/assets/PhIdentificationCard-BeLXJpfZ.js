@@ -12,4 +12,3 @@ import{n as p,Y as l,t as e,p as n,O as o,s as M}from"./property-CnFDNXw5.js";va
       display: contents;
     }
   `;s([o({type:String,reflect:!0})],a.prototype,"size",2);s([o({type:String,reflect:!0})],a.prototype,"weight",2);s([o({type:String,reflect:!0})],a.prototype,"color",2);s([o({type:Boolean,reflect:!0})],a.prototype,"mirrored",2);a=s([M("ph-identification-card")],a);export{a as PhIdentificationCard};
-

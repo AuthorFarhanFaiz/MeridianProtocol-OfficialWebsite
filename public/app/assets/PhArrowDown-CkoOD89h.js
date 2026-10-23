@@ -12,4 +12,3 @@ import{n as g,Y as d,t as r,p as w,O as s,s as c}from"./property-CnFDNXw5.js";va
       display: contents;
     }
   `;l([s({type:String,reflect:!0})],t.prototype,"size",2);l([s({type:String,reflect:!0})],t.prototype,"weight",2);l([s({type:String,reflect:!0})],t.prototype,"color",2);l([s({type:Boolean,reflect:!0})],t.prototype,"mirrored",2);t=l([c("ph-arrow-down")],t);export{t as PhArrowDown};
-
