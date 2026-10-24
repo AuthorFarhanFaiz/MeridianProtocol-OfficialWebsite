@@ -1,6 +1,6 @@
 const APP_BASE = new URL('./', self.location.href).pathname
 const CACHE_PREFIX = `meridian-app-shell-${APP_BASE.replace(/[^a-z0-9]+/gi, '-')}-`
-const CACHE_NAME = `${CACHE_PREFIX}v10`
+const CACHE_NAME = `${CACHE_PREFIX}v11`
 const SHELL = [APP_BASE, `${APP_BASE}manifest.webmanifest`, `${APP_BASE}brand/meridian-icon-maskable.png`]
 
 self.addEventListener('install', event => {
