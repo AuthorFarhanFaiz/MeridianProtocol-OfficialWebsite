@@ -1,6 +1,6 @@
 const APP_BASE = new URL('./', self.location.href).pathname
 const CACHE_PREFIX = `meridian-app-shell-${APP_BASE.replace(/[^a-z0-9]+/gi, '-')}-`
-const CACHE_NAME = `${CACHE_PREFIX}v11`
+const CACHE_NAME = `${CACHE_PREFIX}v12`
 const SHELL = [APP_BASE, `${APP_BASE}manifest.webmanifest`, `${APP_BASE}brand/meridian-icon-maskable.png`]
 
 self.addEventListener('install', event => {
@@ -16,7 +16,8 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   const request = event.request
   if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return
-  if (!new URL(request.url).pathname.startsWith(APP_BASE)) return
+  const url = new URL(request.url)
+  if (!url.pathname.startsWith(APP_BASE)) return
   if (request.mode === 'navigate') {
     event.respondWith(fetch(request).then(response => {
       if (response.ok) caches.open(CACHE_NAME).then(cache => cache.put(APP_BASE, response.clone()))
@@ -24,7 +25,10 @@ self.addEventListener('fetch', event => {
     }).catch(() => caches.match(APP_BASE)))
     return
   }
-  event.respondWith(caches.match(request).then(cached => cached || fetch(request).then(response => {
+  const networkUrl = new URL(request.url)
+  if (networkUrl.pathname.endsWith('/index-CMPWtBVI.js')) networkUrl.searchParams.set('mpReactRuntime', '7d83b6a')
+  const networkRequest = networkUrl.href === request.url ? request : new Request(networkUrl.href, request)
+  event.respondWith(caches.match(request).then(cached => cached || fetch(networkRequest).then(response => {
     if (response.ok) caches.open(CACHE_NAME).then(cache => cache.put(request, response.clone()))
     return response
   })))
