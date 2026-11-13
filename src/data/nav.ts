@@ -11,6 +11,7 @@ export const PRIMARY_NAV: NavLink[] = [
   { label: "Roadmap", href: "/roadmap" },
   { label: "Security", href: "/security" },
   { label: "Docs", href: "/documentation" },
+  { label: "Pi Network", href: "/pi" },
 ];
 
 export const FOOTER_NAV = {
@@ -20,6 +21,7 @@ export const FOOTER_NAV = {
     { label: "Token", href: "/token" },
     { label: "Staking", href: "/staking" },
     { label: "Dashboard", href: "/dashboard" },
+    { label: "Pi Network", href: "/pi" },
     { label: "Tokenomics", href: "/tokenomics" },
     { label: "Ecosystem", href: "/ecosystem" },
     { label: "Roadmap", href: "/roadmap" },
