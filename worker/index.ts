@@ -6,6 +6,7 @@
 
 import { handleGuideOptions, handleGuidePost, type GuideEnv } from "./guide";
 import { handlePiVerifyPost, type PiAuthEnv } from "./pi-auth";
+import { handlePiTransparencyGet } from "./pi-transparency";
 
 export interface Env extends GuideEnv, PiAuthEnv {
   ASSETS: { fetch(request: Request): Promise<Response> };
@@ -23,6 +24,10 @@ export default {
 
     if (url.pathname === "/api/pi/verify") {
       return handlePiVerifyPost(request, env);
+    }
+
+    if (url.pathname === "/api/pi/transparency") {
+      return handlePiTransparencyGet(request, env);
     }
 
     const response = await env.ASSETS.fetch(request);
@@ -43,6 +48,6 @@ function extendPiPageCsp(csp: string): string {
       `script-src ${sources} https://sdk.minepi.com`,
     )
     .replace(/connect-src ([^;]+)/, (_directive, sources: string) =>
-      `connect-src ${sources} https://api.minepi.com https://bsc-dataseed.bnbchain.org`,
+      `connect-src ${sources} https://api.minepi.com`,
     );
 }
