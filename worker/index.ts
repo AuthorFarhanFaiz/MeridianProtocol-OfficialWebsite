@@ -5,8 +5,9 @@
  */
 
 import { handleGuideOptions, handleGuidePost, type GuideEnv } from "./guide";
+import { handlePiVerifyPost, type PiAuthEnv } from "./pi-auth";
 
-export interface Env extends GuideEnv {
+export interface Env extends GuideEnv, PiAuthEnv {
   ASSETS: { fetch(request: Request): Promise<Response> };
 }
 
@@ -20,6 +21,28 @@ export default {
       return new Response("Method not allowed", { status: 405 });
     }
 
-    return env.ASSETS.fetch(request);
+    if (url.pathname === "/api/pi/verify") {
+      return handlePiVerifyPost(request, env);
+    }
+
+    const response = await env.ASSETS.fetch(request);
+    if ((url.pathname === "/pi" || url.pathname === "/pi/") && response.headers.get("Content-Type")?.includes("text/html")) {
+      const headers = new Headers(response.headers);
+      const csp = headers.get("Content-Security-Policy") ?? "default-src 'self'; script-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'";
+      headers.set("Content-Security-Policy", extendPiPageCsp(csp));
+      headers.set("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+      return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+    }
+    return response;
   },
 };
+
+function extendPiPageCsp(csp: string): string {
+  return csp
+    .replace(/script-src ([^;]+)/, (_directive, sources: string) =>
+      `script-src ${sources} https://sdk.minepi.com`,
+    )
+    .replace(/connect-src ([^;]+)/, (_directive, sources: string) =>
+      `connect-src ${sources} https://api.minepi.com https://bsc-dataseed.bnbchain.org`,
+    );
+}
