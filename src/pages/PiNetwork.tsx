@@ -60,11 +60,15 @@ export default function PiNetwork() {
   const [notice, setNotice] = useState("");
   const [snapshot, setSnapshot] = useState<PiTransparencySnapshot | null>(null);
   const [loadingData, setLoadingData] = useState(true);
+  const [dataError, setDataError] = useState("");
 
   const refreshData = useCallback(async () => {
     setLoadingData(true);
+    setDataError("");
     try {
       setSnapshot(await fetchPiTransparency());
+    } catch (error) {
+      setDataError(error instanceof Error ? error.message : "Live BNB contract data is temporarily unavailable.");
     } finally {
       setLoadingData(false);
     }
@@ -210,6 +214,8 @@ export default function PiNetwork() {
               </div>
 
               {loadingData && !snapshot ? <p className="mt-7 text-sm text-ink-faint">Reading public BNB contracts…</p> : null}
+              {dataError ? <p role="alert" className="mt-5 rounded-xl border border-amber-200/20 bg-amber-200/5 p-3 text-[12px] leading-relaxed text-amber-100">{dataError}</p> : null}
+              {snapshot?.status === "partial" ? <p role="status" className="mt-5 rounded-xl border border-amber-200/20 bg-amber-200/5 p-3 text-[12px] leading-relaxed text-amber-100">Some contract reads did not respond. Available values below are live; unavailable values can be retried.</p> : null}
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
                 <Metric label="MRDN total supply" value={formatMrdn(snapshot?.totalSupply.raw ?? null)} href={CONTRACTS.token.explorer} />
                 <Metric label="Total staked" value={formatMrdn(snapshot?.totalStaked.raw ?? null)} href={CONTRACTS.staking.explorer} />
