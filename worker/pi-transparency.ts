@@ -121,14 +121,18 @@ async function readPendingWithdrawal(): Promise<TransparencySnapshot["pendingWit
 
 export async function handlePiTransparencyGet(request: Request, env: PiAuthEnv): Promise<Response> {
   if (request.method !== "GET") return json({ error: "Method not allowed" }, 405);
-  if (!env.PI_AUTH_LIMITER) return json({ error: "Pi Testnet Worker rate limiter is not configured" }, 503);
 
-  const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
-  try {
-    const allowed = await env.PI_AUTH_LIMITER.limit({ key: `pi-data:${ip}` });
-    if (!allowed.success) return json({ error: "Too many BNB data refreshes. Wait a minute and try again." }, 429);
-  } catch {
-    return json({ error: "BNB data service is temporarily unavailable" }, 503);
+  // Transparency data is public and read-only. Enforce the Cloudflare limit
+  // when this deployment has the optional binding, but don't make the public
+  // dashboard unavailable solely because a Testnet-only binding is absent.
+  if (env.PI_AUTH_LIMITER) {
+    const ip = request.headers.get("CF-Connecting-IP") ?? "unknown";
+    try {
+      const allowed = await env.PI_AUTH_LIMITER.limit({ key: `pi-data:${ip}` });
+      if (!allowed.success) return json({ error: "Too many BNB data refreshes. Wait a minute and try again." }, 429);
+    } catch {
+      return json({ error: "BNB data service is temporarily unavailable" }, 503);
+    }
   }
 
   const [totalSupply, totalStaked, rewardPool, vestingAllocation, vestingReleased, treasuryBalance, treasuryMinDelay, pendingWithdrawal] = await Promise.all([
