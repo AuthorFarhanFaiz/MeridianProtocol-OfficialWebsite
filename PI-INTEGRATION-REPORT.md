@@ -19,7 +19,7 @@ This is an additive `/pi` section in an isolated copy of the official website so
 
 - Changed `src/App.tsx`, `src/data/nav.ts`, `package.json`, and `worker/index.ts`.
 - Added `src/pages/PiNetwork.tsx`, `src/lib/piSdk.ts`, and `src/lib/piTransparency.ts`.
-- Added `worker/pi-auth.ts` and `worker/pi-auth.test.ts`.
+- Added `worker/pi-auth.ts`, `worker/pi-auth.test.ts`, `worker/pi-transparency.ts`, and `worker/pi-transparency.test.ts`.
 - Added `wrangler.pi-testnet.jsonc` as a separate Worker deployment configuration. It does not attach a custom domain and enables only `workers.dev`.
 - Added this report.
 
@@ -35,7 +35,7 @@ This is an additive `/pi` section in an isolated copy of the official website so
 
 ## Transparency data
 
-The `/pi` dashboard makes read-only `eth_call` requests to BNB Smart Chain against the existing token, staking, vesting, and treasury contracts. It displays unavailable values if a contract read fails. It also links to each BscScan record. No trusted transaction indexer exists in this ZIP, so transaction history opens the public BscScan record instead of showing a fabricated feed.
+The `/pi` page requests a same-origin `GET /api/pi/transparency` from the Cloudflare Worker. The Worker makes read-only `eth_call` requests against the existing token, staking, vesting, and treasury contracts, with three public BNB RPC endpoints tried in order. This keeps RPC access out of the mobile browser's cross-origin path. It applies the Testnet Worker rate-limit binding and returns per-field unavailable states when only some reads fail; if all reads fail, it returns an explicit service error. The page displays a retryable error instead of silently rendering all fields as unavailable. The API response is not cached. It also links to each BscScan record. No trusted transaction indexer exists in this ZIP, so transaction history opens the public BscScan record instead of showing a fabricated feed.
 
 ## Required setup before a Testnet deployment
 
@@ -49,9 +49,9 @@ No `PI_API_KEY` secret is required for this read-only authentication verificatio
 
 ## Tests and remaining limitations
 
-The added mocked tests cover origin/content-type checks, request-size validation, rate limiting, verified identity sourcing, expired tokens, and upstream failures. They do not contact Pi or BNB mainnet. Use Node 22.8+ to run `pnpm test:pi-auth`.
+The added mocked tests cover origin/content-type checks, request-size validation, Pi rate limiting, verified identity sourcing, expired tokens, upstream failures, BNB RPC fallback, BNB rate limiting, partial response parsing, and total RPC failure. They stub external requests and do not contact Pi or BNB mainnet. Use Node 22.8+ to run `pnpm test:pi`.
 
-The Pi Developer Portal development URL must be configured by the project owner. Live Pi authentication, domain/hosting approval, and deployment remain unverified. A focused lint of all changed TS/TSX files passed. The added Worker tests passed (9/9). Frontend and Worker TypeScript checks passed after fixes. Full project lint reports 12 pre-existing violations in `src/pages/Dashboard.tsx` and `src/pages/Token.tsx`; the changed Pi files pass. Full Vite build was blocked because the local environment forbids esbuild child-process spawning (`spawn EPERM`), so a successful production build is not claimed.
+The Pi Developer Portal development URL must be configured by the project owner. Live Pi authentication, live BNB RPC reads, domain/hosting approval, and deployment remain unverified. The focused `pnpm test:pi` suite passed (15/15) with Pi and BNB requests mocked; frontend and Worker TypeScript checks passed, and the changed Pi files pass focused lint. Full project lint reports 12 pre-existing violations in `src/pages/Dashboard.tsx` and `src/pages/Token.tsx`. The production build reaches Vite but is blocked because this local environment forbids esbuild child-process spawning (`spawn EPERM`), so a successful production build is not claimed.
 
 ## Official references
 

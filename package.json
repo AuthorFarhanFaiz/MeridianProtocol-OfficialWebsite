@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "typecheck": "tsc -b --noEmit",
-    "test:pi-auth": "node --experimental-strip-types --experimental-test-isolation=none --test worker/pi-auth.test.ts"
+    "test:pi-auth": "node --experimental-strip-types --experimental-test-isolation=none --test worker/pi-auth.test.ts",
+    "test:pi": "node --experimental-strip-types --experimental-test-isolation=none --test worker/pi-auth.test.ts worker/pi-transparency.test.ts"
   },
   "dependencies": {
     "framer-motion": "^11.11.17",
