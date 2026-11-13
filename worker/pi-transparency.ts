@@ -5,6 +5,9 @@ const BSC_RPC_ENDPOINTS = [
   "https://bsc-dataseed.bnbchain.org",
   "https://bsc-dataseed-public.bnbchain.org",
   "https://bsc-dataseed.nariox.org",
+  "https://bsc-dataseed.defibit.io",
+  "https://bsc-dataseed.ninicoin.io",
+  "https://rpc-bnb.blockmachine.io",
 ];
 const WORD_BYTES = 64;
 
@@ -54,8 +57,7 @@ async function ethCall(address: string, data: string): Promise<string> {
           params: [{ to: address, data }, "latest"],
           id: 1,
         }),
-        redirect: "error",
-        signal: AbortSignal.timeout(6_000),
+        signal: AbortSignal.timeout(4_000),
       });
 
       if (!response.ok) {
