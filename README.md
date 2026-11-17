@@ -104,3 +104,4 @@ See `CONTRIBUTING.md`.
 - Telegram: https://t.me/MeridianProtocol
 - Discord: https://meridianprotocol.site/community
 - Contact: admin@meridianprotocol.site
+- Pi Testnet validation asset: /pi/pi-app-validation.txt
