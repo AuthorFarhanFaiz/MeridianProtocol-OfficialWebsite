@@ -6,10 +6,22 @@ import MeridianGuide from "@/components/MeridianGuide";
 
 export default function RootLayout() {
   const location = useLocation();
+  const isPiExperience = location.pathname === "/pi" || location.pathname.startsWith("/pi/");
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [location.pathname]);
+
+  if (isPiExperience) {
+    return (
+      <div className="relative min-h-screen overflow-x-hidden bg-base text-ink">
+        <div className="pointer-events-none fixed inset-0 hero-glow opacity-60" />
+        <div key={location.pathname} className="relative z-10 min-h-screen animate-page-in">
+          <Outlet />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative flex min-h-screen flex-col bg-base text-ink">
@@ -23,8 +35,7 @@ export default function RootLayout() {
 
       <Footer />
 
-      {/* Official chatbot — har page pe */}
-      <MeridianGuide />
+      {!isPiExperience ? <MeridianGuide /> : null}
     </div>
   );
 }

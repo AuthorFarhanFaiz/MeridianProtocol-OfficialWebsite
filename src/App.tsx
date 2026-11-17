@@ -34,6 +34,8 @@ import CommunityGuidelines from "@/pages/CommunityGuidelines";
 import SecurityPolicy from "@/pages/SecurityPolicy";
 import IncidentResponse from "@/pages/IncidentResponse";
 import PiNetwork from "@/pages/PiNetwork";
+import PiPrivacyPolicy from "@/pages/pi/PiPrivacyPolicy";
+import PiTermsOfService from "@/pages/pi/PiTermsOfService";
 import NotFound from "@/pages/NotFound";
 
 import Privacy from "@/pages/legal/Privacy";
@@ -80,6 +82,8 @@ export default function App() {
         <Route path="/security-policy" element={<SecurityPolicy />} />
         <Route path="/incident-response" element={<IncidentResponse />} />
         <Route path="/pi" element={<PiNetwork />} />
+        <Route path="/pi/privacy" element={<PiPrivacyPolicy />} />
+        <Route path="/pi/terms" element={<PiTermsOfService />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/risk-disclosure" element={<RiskDisclosure />} />

@@ -4,10 +4,20 @@
   "compatibility_date": "2026-08-01",
   "main": "worker/index.ts",
   "workers_dev": true,
+  "vars": {
+    "PI_TESTNET_MODE": "true"
+  },
+  "routes": [
+    {
+      "pattern": "testnet.meridianprotocol.site",
+      "custom_domain": true
+    }
+  ],
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
-    "not_found_handling": "single-page-application"
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/pi", "/pi/*"]
   },
   "ratelimits": [
     {
